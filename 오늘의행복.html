@@ -1,0 +1,1306 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="오늘의 행복">
+<meta name="theme-color" content="#0f0f13">
+<title>오늘의 행복</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Nanum+Myeongjo:wght@400;700;800&family=Noto+Sans+KR:wght@300;400;500;700&display=swap');
+
+:root {
+  --bg: #0f0f13;
+  --surface: #1a1a22;
+  --card: #22222e;
+  --accent: #e8c97a;
+  --accent2: #7ab8e8;
+  --accent3: #e87a9a;
+  --text: #f0ede6;
+  --muted: #888899;
+  --success: #7ae8a8;
+  --border: #333344;
+  --xp-color: #b97ae8;
+}
+
+* { margin:0; padding:0; box-sizing:border-box; }
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'Noto Sans KR', sans-serif;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+body::before {
+  content:'';
+  position:fixed; top:-50%; left:-50%;
+  width:200%; height:200%;
+  background: radial-gradient(ellipse at 30% 20%, rgba(232,201,122,0.04) 0%, transparent 50%),
+              radial-gradient(ellipse at 70% 80%, rgba(122,184,232,0.04) 0%, transparent 50%);
+  pointer-events:none; z-index:0;
+}
+
+.wrapper {
+  position:relative; z-index:1;
+  max-width:780px; margin:0 auto;
+  padding:0 20px 80px;
+}
+
+/* ── 헤더 ── */
+.header {
+  padding:36px 0 24px;
+  border-bottom:1px solid var(--border);
+  margin-bottom:28px;
+}
+
+.header-top {
+  display:flex; align-items:center; justify-content:space-between;
+  margin-bottom:16px;
+}
+
+.header-brand {
+  font-family:'Nanum Myeongjo',serif;
+  font-size:12px; letter-spacing:5px;
+  color:var(--accent); text-transform:uppercase;
+}
+
+.header-cal-btn {
+  background:var(--surface); border:1px solid var(--border);
+  color:var(--muted); font-family:'Noto Sans KR',sans-serif;
+  font-size:12px; padding:7px 14px; border-radius:100px;
+  cursor:pointer; transition:all 0.2s; letter-spacing:1px;
+}
+.header-cal-btn:hover { border-color:var(--accent2); color:var(--accent2); }
+
+.header-center { text-align:center; margin-bottom:16px; }
+
+.header-date {
+  font-family:'Nanum Myeongjo',serif;
+  font-size:38px; font-weight:800;
+  color:var(--text); line-height:1; margin-bottom:4px;
+  cursor:pointer; transition:color 0.2s;
+}
+.header-date:hover { color:var(--accent); }
+
+.header-day { font-size:14px; color:var(--muted); font-weight:300; letter-spacing:2px; }
+
+/* ── 레벨 바 ── */
+.level-bar-wrap {
+  background:var(--surface); border:1px solid var(--border);
+  border-radius:12px; padding:14px 18px;
+  margin-bottom:24px;
+  display:flex; align-items:center; gap:14px;
+}
+
+.level-badge {
+  width:44px; height:44px; border-radius:50%;
+  background:linear-gradient(135deg, var(--xp-color), #7ae8e8);
+  display:flex; align-items:center; justify-content:center;
+  font-family:'Nanum Myeongjo',serif;
+  font-size:16px; font-weight:800; color:#0f0f13;
+  flex-shrink:0; box-shadow:0 0 16px rgba(185,122,232,0.4);
+}
+
+.level-info { flex:1; }
+
+.level-title {
+  font-size:14px; font-weight:700; color:var(--text);
+  margin-bottom:4px;
+}
+
+.level-sub { font-size:11px; color:var(--muted); margin-bottom:8px; }
+
+.xp-bar-bg {
+  background:var(--border); border-radius:100px;
+  height:5px; overflow:hidden;
+}
+
+.xp-bar-fill {
+  height:100%;
+  background:linear-gradient(90deg, var(--xp-color), #7ae8e8);
+  border-radius:100px; transition:width 0.5s ease;
+}
+
+.level-xp { font-size:11px; color:var(--xp-color); font-weight:700; margin-top:5px; }
+
+/* ── 명언 ── */
+.quote-card {
+  background:var(--card);
+  border:1px solid var(--border);
+  border-left:4px solid var(--accent);
+  border-radius:12px; padding:18px 22px;
+  margin-bottom:24px;
+}
+
+.quote-label {
+  font-size:10px; letter-spacing:4px;
+  color:var(--accent); font-family:'Nanum Myeongjo',serif;
+  margin-bottom:10px;
+}
+
+.quote-text {
+  font-family:'Nanum Myeongjo',serif;
+  font-size:18px; font-weight:700;
+  color:var(--text); line-height:1.6; margin-bottom:6px;
+}
+
+.quote-author {
+  font-size:12px; color:var(--muted); font-weight:300;
+}
+
+/* ── 요일 선택 ── */
+.day-selector {
+  display:flex; gap:7px; justify-content:center;
+  flex-wrap:wrap; margin-bottom:28px;
+}
+
+.day-btn {
+  background:var(--surface); border:1px solid var(--border);
+  color:var(--muted); font-family:'Noto Sans KR',sans-serif;
+  font-size:12px; font-weight:500;
+  padding:8px 14px; border-radius:100px;
+  cursor:pointer; transition:all 0.2s; letter-spacing:1px;
+  position:relative;
+}
+
+.day-btn:hover { border-color:var(--accent); color:var(--accent); }
+
+.day-btn.active {
+  background:var(--accent); border-color:var(--accent);
+  color:#0f0f13; font-weight:700;
+}
+
+.day-btn .done-dot {
+  position:absolute; top:4px; right:4px;
+  width:6px; height:6px; border-radius:50%;
+  background:var(--success);
+}
+
+/* ── 배너 ── */
+.today-banner {
+  background:var(--card); border:1px solid var(--border);
+  border-radius:12px; padding:18px 22px;
+  margin-bottom:22px;
+  display:flex; align-items:center; gap:14px;
+}
+
+.today-emoji { font-size:30px; }
+.today-info h2 {
+  font-family:'Nanum Myeongjo',serif;
+  font-size:19px; font-weight:700; color:var(--text); margin-bottom:3px;
+}
+.today-info p { font-size:12px; color:var(--muted); font-weight:300; }
+
+/* ── 레벨 업그레이드 배지 ── */
+.upgrade-badge {
+  background:rgba(185,122,232,0.12);
+  border:1px solid var(--xp-color);
+  border-radius:8px; padding:10px 14px;
+  font-size:12px; color:var(--xp-color);
+  margin-bottom:14px; display:flex; align-items:center; gap:8px;
+}
+
+/* ── 섹션 ── */
+.section { margin-bottom:24px; }
+
+.section-header {
+  display:flex; align-items:center; gap:12px; margin-bottom:14px;
+}
+
+.section-label {
+  font-family:'Nanum Myeongjo',serif;
+  font-size:10px; letter-spacing:4px;
+  color:var(--accent); text-transform:uppercase;
+}
+
+.section-line { flex:1; height:1px; background:var(--border); }
+
+/* ── 운동 아이템 ── */
+.exercise-list { display:flex; flex-direction:column; gap:7px; }
+
+.exercise-item {
+  background:var(--card); border:1px solid var(--border);
+  border-radius:10px; overflow:hidden;
+  cursor:pointer; transition:all 0.2s; user-select:none;
+}
+
+.exercise-item:hover { border-color:var(--accent2); }
+.exercise-item.done { border-color:var(--success); background:rgba(122,232,168,0.06); }
+.exercise-item.warm-item { opacity:0.65; }
+
+.exercise-main {
+  padding:13px 16px;
+  display:flex; align-items:center; gap:12px;
+}
+
+.check-circle {
+  width:21px; height:21px; border-radius:50%;
+  border:2px solid var(--border); flex-shrink:0;
+  display:flex; align-items:center; justify-content:center;
+  font-size:11px; transition:all 0.2s;
+}
+
+.exercise-item.done .check-circle {
+  background:var(--success); border-color:var(--success); color:#0f0f13;
+}
+
+.exercise-name {
+  font-size:14px; font-weight:500; color:var(--text); flex:1;
+  transition:all 0.2s;
+}
+
+.exercise-item.done .exercise-name {
+  text-decoration:line-through; color:var(--muted);
+}
+
+.exercise-meta { font-size:11px; color:var(--muted); text-align:right; }
+
+.detail-btn {
+  background:none; border:1px solid var(--border);
+  color:var(--muted); font-size:10px; padding:2px 8px;
+  border-radius:100px; cursor:pointer;
+  font-family:'Noto Sans KR',sans-serif;
+  transition:all 0.2s; letter-spacing:0.5px;
+  display:block; margin-top:4px; margin-left:auto;
+}
+.detail-btn:hover { border-color:var(--accent2); color:var(--accent2); }
+
+.exercise-detail {
+  display:none; background:var(--surface);
+  border-top:1px solid var(--border);
+  padding:12px 16px 12px 49px;
+  font-size:12px; color:var(--muted); line-height:1.8; font-weight:300;
+}
+
+.exercise-item.expanded .exercise-detail { display:block; }
+
+/* 진행률 */
+.progress-bar-wrap {
+  background:var(--surface); border-radius:100px;
+  height:3px; margin-top:12px; overflow:hidden;
+}
+
+.progress-bar-fill {
+  height:100%;
+  background:linear-gradient(90deg, var(--accent2), var(--success));
+  border-radius:100px; transition:width 0.4s ease;
+}
+
+.progress-text { font-size:11px; color:var(--muted); text-align:right; margin-top:5px; }
+
+/* 완료 축하 */
+.congrats {
+  background:linear-gradient(135deg, rgba(122,232,168,0.08), rgba(122,184,232,0.08));
+  border:1px solid var(--success); border-radius:10px;
+  padding:16px 20px; text-align:center;
+  display:none; margin-top:12px; animation:fadeIn 0.4s ease;
+}
+.congrats.show { display:block; }
+.congrats h3 { font-family:'Nanum Myeongjo',serif; font-size:18px; color:var(--success); margin-bottom:4px; }
+.congrats p { font-size:12px; color:var(--muted); }
+
+/* 손글씨 */
+.writing-card {
+  background:var(--card); border:1px solid var(--border);
+  border-left:4px solid var(--accent3); border-radius:12px;
+  padding:18px 22px;
+}
+
+.writing-steps { display:flex; flex-direction:column; gap:8px; margin-top:12px; }
+
+.writing-step {
+  display:flex; align-items:center; gap:10px;
+  cursor:pointer; padding:7px 0; transition:all 0.2s;
+}
+
+.writing-step.done .step-text { text-decoration:line-through; color:var(--muted); }
+
+.step-num {
+  width:24px; height:24px; border-radius:50%;
+  background:var(--surface); border:1px solid var(--border);
+  display:flex; align-items:center; justify-content:center;
+  font-size:10px; font-weight:700; color:var(--accent3);
+  flex-shrink:0; transition:all 0.2s;
+}
+
+.writing-step.done .step-num {
+  background:var(--accent3); border-color:var(--accent3); color:#0f0f13;
+}
+
+.step-text { font-size:13px; color:var(--text); flex:1; }
+.step-time { font-size:11px; color:var(--muted); font-weight:300; }
+
+/* 맨발걷기 */
+.walk-card {
+  background:var(--card); border:1px solid var(--border);
+  border-left:4px solid #7ae87a;
+  border-radius:12px; padding:14px 18px;
+  display:flex; align-items:center; gap:14px;
+  cursor:pointer; transition:all 0.2s; margin-bottom:8px;
+}
+.walk-card:hover { border-color:#7ae87a; }
+.walk-card.done { background:rgba(122,232,122,0.06); }
+.walk-card.done .walk-name { text-decoration:line-through; color:var(--muted); }
+.walk-name { font-size:14px; font-weight:500; color:var(--text); flex:1; }
+.walk-meta { font-size:12px; color:var(--muted); }
+
+/* 타이머 */
+.timer-section {
+  background:var(--surface); border:1px solid var(--border);
+  border-radius:12px; padding:22px; text-align:center; margin-top:12px;
+}
+
+.timer-label {
+  font-size:11px; letter-spacing:3px; color:var(--muted);
+  font-family:'Nanum Myeongjo',serif; margin-bottom:10px;
+}
+
+.timer-display {
+  font-family:'Nanum Myeongjo',serif;
+  font-size:52px; font-weight:800;
+  color:var(--accent); letter-spacing:4px;
+  margin-bottom:14px; line-height:1; transition:color 0.3s;
+}
+.timer-display.running { color:var(--success); }
+.timer-display.done-color { color:var(--muted); }
+
+.timer-btns { display:flex; gap:8px; justify-content:center; }
+
+.timer-btn {
+  background:transparent; border:1px solid var(--border);
+  color:var(--text); font-family:'Noto Sans KR',sans-serif;
+  font-size:13px; font-weight:500; padding:9px 22px;
+  border-radius:100px; cursor:pointer; transition:all 0.2s; letter-spacing:1px;
+}
+.timer-btn.primary {
+  background:var(--accent); border-color:var(--accent);
+  color:#0f0f13; font-weight:700;
+}
+.timer-btn:hover { opacity:0.8; }
+
+/* 메모 */
+.memo-section { margin-top:24px; }
+.memo-box {
+  background:var(--card); border:1px solid var(--border);
+  border-radius:12px; padding:16px 18px;
+}
+.memo-label {
+  font-size:10px; letter-spacing:3px; color:var(--accent);
+  font-family:'Nanum Myeongjo',serif; margin-bottom:8px;
+}
+.memo-input {
+  width:100%; background:transparent; border:none;
+  color:var(--text); font-family:'Noto Sans KR',sans-serif;
+  font-size:13px; font-weight:300; line-height:1.9;
+  resize:none; outline:none; min-height:80px;
+}
+.memo-input::placeholder { color:var(--border); }
+
+/* 휴식일 */
+.rest-card {
+  background:var(--card); border:1px solid var(--border);
+  border-radius:14px; padding:44px 24px; text-align:center;
+}
+.rest-emoji { font-size:46px; margin-bottom:14px; }
+.rest-card h2 {
+  font-family:'Nanum Myeongjo',serif;
+  font-size:22px; font-weight:700; color:var(--text); margin-bottom:8px;
+}
+.rest-card p { font-size:13px; color:var(--muted); line-height:1.9; font-weight:300; }
+
+/* ── 달력 모달 ── */
+.modal-overlay {
+  position:fixed; inset:0;
+  background:rgba(0,0,0,0.7); backdrop-filter:blur(6px);
+  z-index:100; display:none;
+  align-items:center; justify-content:center;
+}
+.modal-overlay.show { display:flex; animation:fadeIn 0.2s ease; }
+
+.cal-modal {
+  background:var(--card); border:1px solid var(--border);
+  border-radius:16px; padding:28px; width:360px; max-width:94vw;
+}
+
+.cal-header {
+  display:flex; align-items:center; justify-content:space-between;
+  margin-bottom:20px;
+}
+
+.cal-title {
+  font-family:'Nanum Myeongjo',serif;
+  font-size:18px; font-weight:800; color:var(--text);
+}
+
+.cal-nav {
+  background:none; border:1px solid var(--border);
+  color:var(--muted); font-size:14px; padding:5px 12px;
+  border-radius:100px; cursor:pointer; font-family:'Noto Sans KR',sans-serif;
+  transition:all 0.2s;
+}
+.cal-nav:hover { border-color:var(--accent); color:var(--accent); }
+
+.cal-close {
+  background:none; border:none; color:var(--muted);
+  font-size:18px; cursor:pointer; padding:4px 8px;
+  transition:color 0.2s;
+}
+.cal-close:hover { color:var(--text); }
+
+.cal-days-header {
+  display:grid; grid-template-columns:repeat(7,1fr);
+  text-align:center; font-size:11px; color:var(--muted);
+  margin-bottom:8px; gap:2px;
+}
+
+.cal-grid {
+  display:grid; grid-template-columns:repeat(7,1fr);
+  gap:4px;
+}
+
+.cal-cell {
+  aspect-ratio:1; border-radius:8px;
+  display:flex; align-items:center; justify-content:center;
+  font-size:12px; position:relative; cursor:default;
+  font-family:'Noto Sans KR',sans-serif;
+}
+
+.cal-cell.empty { }
+.cal-cell.today { border:1px solid var(--accent); color:var(--accent); font-weight:700; }
+.cal-cell.done-day { background:rgba(122,232,168,0.2); color:var(--success); }
+.cal-cell.partial-day { background:rgba(232,201,122,0.15); color:var(--accent); }
+.cal-cell.missed { color:var(--muted); }
+
+.cal-legend {
+  display:flex; gap:14px; margin-top:16px;
+  font-size:11px; color:var(--muted); flex-wrap:wrap;
+}
+
+.cal-legend-item { display:flex; align-items:center; gap:6px; }
+.legend-dot {
+  width:10px; height:10px; border-radius:3px; flex-shrink:0;
+}
+
+/* ── 모바일 최적화 ── */
+@media (max-width: 600px) {
+  .wrapper { padding: 0 14px 100px; }
+  .header { padding: 24px 0 18px; }
+  .header-date { font-size: 30px; }
+  .header-day { font-size: 13px; }
+  .level-bar-wrap { padding: 12px 14px; gap: 10px; }
+  .level-badge { width: 38px; height: 38px; font-size: 14px; }
+  .level-title { font-size: 13px; }
+  .level-sub { font-size: 10px; }
+  .quote-text { font-size: 16px; }
+  .day-selector { gap: 5px; }
+  .day-btn { font-size: 11px; padding: 7px 11px; }
+  .today-banner { padding: 14px 16px; gap: 10px; }
+  .today-emoji { font-size: 24px; }
+  .today-info h2 { font-size: 16px; }
+  .exercise-main { padding: 11px 13px; gap: 10px; }
+  .exercise-name { font-size: 13px; }
+  .exercise-meta { font-size: 10px; }
+  .exercise-detail { padding: 10px 13px 10px 43px; font-size: 11px; }
+  .timer-display { font-size: 44px; }
+  .timer-btn { font-size: 12px; padding: 8px 18px; }
+  .memo-input { font-size: 14px; }
+  .walk-card { padding: 12px 14px; }
+  .walk-name { font-size: 13px; }
+  .writing-card { padding: 14px 16px; }
+  .step-text { font-size: 12px; }
+  .cal-modal { padding: 20px 16px; }
+  .cal-cell { font-size: 11px; border-radius: 6px; }
+  .rest-card { padding: 32px 16px; }
+  .rest-card h2 { font-size: 20px; }
+}
+
+/* iOS 홈 화면 추가 안내 배너 */
+.install-banner {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 12px 16px;
+  margin-bottom: 16px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 12px;
+  color: var(--muted);
+}
+.install-banner .install-icon { font-size: 20px; flex-shrink: 0; }
+.install-banner .install-close {
+  background: none; border: none;
+  color: var(--muted); cursor: pointer;
+  font-size: 14px; margin-left: auto;
+  padding: 2px 6px;
+}
+
+.save-toast {
+  position:fixed; bottom:24px; right:24px;
+  background:var(--success); color:#0f0f13;
+  font-size:12px; font-weight:700; padding:9px 18px;
+  border-radius:100px; opacity:0;
+  transform:translateY(8px); transition:all 0.3s ease;
+  pointer-events:none; letter-spacing:1px;
+  font-family:'Noto Sans KR',sans-serif;
+}
+.save-toast.show { opacity:1; transform:translateY(0); }
+
+/* ── 레벨업 팝업 ── */
+.levelup-popup {
+  position:fixed; inset:0;
+  background:rgba(0,0,0,0.8);
+  z-index:200; display:none;
+  align-items:center; justify-content:center;
+}
+.levelup-popup.show { display:flex; }
+.levelup-card {
+  background:var(--card); border:1px solid var(--xp-color);
+  border-radius:20px; padding:40px 32px;
+  text-align:center; max-width:320px;
+  box-shadow:0 0 60px rgba(185,122,232,0.3);
+  animation:popIn 0.4s ease;
+}
+.levelup-emoji { font-size:56px; margin-bottom:16px; }
+.levelup-title {
+  font-family:'Nanum Myeongjo',serif;
+  font-size:28px; font-weight:800;
+  color:var(--xp-color); margin-bottom:8px;
+}
+.levelup-sub { font-size:14px; color:var(--text); margin-bottom:6px; }
+.levelup-desc { font-size:12px; color:var(--muted); line-height:1.7; margin-bottom:24px; }
+.levelup-btn {
+  background:var(--xp-color); border:none; color:#0f0f13;
+  font-family:'Noto Sans KR',sans-serif;
+  font-size:14px; font-weight:700;
+  padding:12px 32px; border-radius:100px; cursor:pointer;
+  letter-spacing:1px;
+}
+
+@keyframes fadeIn { from{opacity:0;transform:translateY(12px)} to{opacity:1;transform:translateY(0)} }
+@keyframes popIn { from{opacity:0;transform:scale(0.85)} to{opacity:1;transform:scale(1)} }
+.fade-in { animation:fadeIn 0.3s ease forwards; }
+</style>
+</head>
+<body>
+
+<div class="wrapper">
+
+  <!-- iOS 홈 화면 안내 (처음 1번만) -->
+  <div class="install-banner" id="installBanner" style="display:none">
+    <span class="install-icon">📲</span>
+    <span>Safari → <b>공유 버튼</b> → <b>홈 화면에 추가</b> 하면 앱처럼 쓸 수 있어!</span>
+    <button class="install-close" onclick="dismissInstall()">✕</button>
+  </div>
+
+  <!-- 헤더 -->
+  <div class="header">
+    <div class="header-top">
+      <div class="header-brand">오늘의 행복</div>
+      <button class="header-cal-btn" onclick="openCal()">📅 기록 달력</button>
+    </div>
+    <div class="header-center">
+      <div class="header-date" id="headerDate" onclick="openCal()"></div>
+      <div class="header-day" id="headerDay"></div>
+    </div>
+  </div>
+
+  <!-- 레벨 바 -->
+  <div class="level-bar-wrap">
+    <div class="level-badge" id="levelBadge">1</div>
+    <div class="level-info">
+      <div class="level-title" id="levelTitle">Lv.1 — 시작하는 자</div>
+      <div class="level-sub" id="levelSub">꾸준함이 모든 것의 시작이야</div>
+      <div class="xp-bar-bg"><div class="xp-bar-fill" id="xpFill" style="width:0%"></div></div>
+      <div class="level-xp" id="xpText">0 XP</div>
+    </div>
+  </div>
+
+  <!-- 명언 -->
+  <div class="quote-card">
+    <div class="quote-label">오늘의 명언 — 필사해봐</div>
+    <div class="quote-text" id="quoteText"></div>
+    <div class="quote-author" id="quoteAuthor"></div>
+  </div>
+
+  <!-- 요일 선택 -->
+  <div class="day-selector" id="daySelector">
+    <button class="day-btn" onclick="selectDay(0)">월 · 상체</button>
+    <button class="day-btn" onclick="selectDay(1)">화 · 걷기</button>
+    <button class="day-btn" onclick="selectDay(2)">수 · 하체</button>
+    <button class="day-btn" onclick="selectDay(3)">목 · 휴식</button>
+    <button class="day-btn" onclick="selectDay(4)">금 · 서킷</button>
+    <button class="day-btn" onclick="selectDay(5)">토 · 보강</button>
+    <button class="day-btn" onclick="selectDay(6)">일 · 휴식</button>
+  </div>
+
+  <!-- 메인 콘텐츠 -->
+  <div id="mainContent"></div>
+
+</div>
+
+<!-- 달력 모달 -->
+<div class="modal-overlay" id="calModal" onclick="closeCal(event)">
+  <div class="cal-modal">
+    <div class="cal-header">
+      <button class="cal-nav" onclick="calPrev()">‹</button>
+      <div class="cal-title" id="calTitle"></div>
+      <button class="cal-nav" onclick="calNext()">›</button>
+      <button class="cal-close" onclick="closeCalBtn()">✕</button>
+    </div>
+    <div class="cal-days-header">
+      <div>일</div><div>월</div><div>화</div><div>수</div><div>목</div><div>금</div><div>토</div>
+    </div>
+    <div class="cal-grid" id="calGrid"></div>
+    <div class="cal-legend">
+      <div class="cal-legend-item"><div class="legend-dot" style="background:rgba(122,232,168,0.3)"></div>완주</div>
+      <div class="cal-legend-item"><div class="legend-dot" style="background:rgba(232,201,122,0.2)"></div>부분 완료</div>
+      <div class="cal-legend-item"><div class="legend-dot" style="border:1px solid var(--accent)"></div>오늘</div>
+    </div>
+  </div>
+</div>
+
+<!-- 레벨업 팝업 -->
+<div class="levelup-popup" id="levelupPopup">
+  <div class="levelup-card">
+    <div class="levelup-emoji">🎉</div>
+    <div class="levelup-title" id="levelupTitle">레벨 업!</div>
+    <div class="levelup-sub" id="levelupSub"></div>
+    <div class="levelup-desc" id="levelupDesc"></div>
+    <button class="levelup-btn" onclick="closeLevelup()">계속하기</button>
+  </div>
+</div>
+
+<div class="save-toast" id="saveToast">저장됨 ✓</div>
+
+<script>
+// ════════════════════════════
+// 데이터
+// ════════════════════════════
+
+const QUOTES = [
+  { text: "시작이 반이다.", author: "아리스토텔레스" },
+  { text: "천 리 길도 한 걸음부터.", author: "노자" },
+  { text: "오늘 할 수 있는 일을 내일로 미루지 마라.", author: "벤자민 프랭클린" },
+  { text: "땀 흘리지 않으면 얻는 것도 없다.", author: "격언" },
+  { text: "작은 것들이 완벽함을 만든다.", author: "미켈란젤로" },
+  { text: "고통은 일시적이다. 포기는 영원하다.", author: "랜스 암스트롱" },
+  { text: "당신이 멈추지 않는 한 얼마나 천천히 가는지는 중요하지 않다.", author: "공자" },
+  { text: "실패란 더 현명하게 다시 시작할 기회다.", author: "헨리 포드" },
+  { text: "규칙적인 습관이 재능을 이긴다.", author: "격언" },
+  { text: "오늘의 나는 어제의 내가 만든 것이다.", author: "격언" },
+  { text: "불가능이란 아무것도 아니다.", author: "무하마드 알리" },
+  { text: "자신을 믿어라. 할 수 있다.", author: "격언" },
+  { text: "매일 조금씩. 그것이 전부다.", author: "격언" },
+  { text: "몸이 건강해야 마음도 건강하다.", author: "유베날리스" },
+  { text: "강해지고 싶다면, 도전을 피하지 마라.", author: "격언" },
+  { text: "기적은 꾸준한 노력의 다른 이름이다.", author: "격언" },
+  { text: "오늘의 땀이 내일의 나를 만든다.", author: "격언" },
+  { text: "변명 대신 행동을 선택하라.", author: "격언" },
+  { text: "어제보다 나은 오늘이면 충분하다.", author: "격언" },
+  { text: "포기하지 않는 사람이 이긴다.", author: "격언" },
+  { text: "인내는 쓰나 열매는 달다.", author: "루소" },
+  { text: "꿈꾸고, 믿고, 행동하라.", author: "월트 디즈니" },
+  { text: "한 번에 하나씩. 그게 충분하다.", author: "격언" },
+  { text: "몸을 단련하면 정신도 단련된다.", author: "격언" },
+  { text: "지금 이 순간이 가장 중요하다.", author: "격언" },
+  { text: "루틴이 자유를 만든다.", author: "격언" },
+  { text: "성공은 매일 반복되는 작은 노력의 합이다.", author: "로버트 콜리어" },
+  { text: "쉬는 것은 약함이 아니라 지혜다.", author: "격언" },
+  { text: "지금 힘들다면 올바른 방향으로 가고 있는 것이다.", author: "격언" },
+  { text: "잘 자라나는 것은 모두 처음에는 작다.", author: "격언" },
+];
+
+const LEVELS = [
+  { lv:1, name:"시작하는 자",    sub:"꾸준함이 모든 것의 시작이야",       xpNeeded:0,   unlock:"기본 루틴" },
+  { lv:2, name:"습관이 생기는 중", sub:"몸이 조금씩 기억하기 시작해",      xpNeeded:70,  unlock:"세트 수 +1" },
+  { lv:3, name:"의지가 굳은 자",  sub:"이제 안 하면 이상한 느낌이 들지",  xpNeeded:200, unlock:"운동 강도 업그레이드" },
+  { lv:4, name:"단련된 몸",       sub:"눈에 보이는 변화가 시작됐어",       xpNeeded:420, unlock:"고급 동작 해금" },
+  { lv:5, name:"강철 루틴",       sub:"의지가 근육이 됐어",               xpNeeded:700, unlock:"최고 강도 루틴 해금" },
+];
+
+// 레벨별 운동 데이터
+function getExercises(dayIdx, lv) {
+  const ex = {
+    0: { // 월 - 상체
+      emoji:'💪', title:'상체 — 철봉 & 평행봉', color:'var(--accent2)',
+      sub: lv >= 3 ? '이제 자세보다 강도에 집중할 때' : '준비운동 → 상체 근력 → 마무리',
+      exercises: [
+        { name:'준비운동 (팔 돌리기·어깨 풀기)', sets:'5분', warm:true, detail:'팔을 크게 원을 그리며 앞·뒤 각 10회. 어깨를 귀 쪽으로 올렸다 내리기 10회.' },
+        { name:'철봉 매달리기', sets: lv >= 3 ? '60초 × 4세트' : lv >= 2 ? '45초 × 3세트' : '30초 × 3세트', detail:'어깨 너비로 잡기. 등 살짝 조이는 느낌. 처음엔 10초도 OK.' },
+        { name: lv >= 4 ? '철봉 턱걸이 (템포 3-1-3)' : '철봉 턱걸이', sets: lv >= 3 ? '최대+1 × 4세트' : '최대 × 3세트', detail: lv >= 4 ? '3초 올라가고, 1초 버티고, 3초 내려오기. 느리게 = 강하게.' : '팔꿈치를 아래·뒤로 당기며 올리기. 0개면 네거티브로 대체.' },
+        { name: lv >= 3 ? '평행봉 딥스 (깊이 최대)' : '평행봉 딥스', sets: lv >= 3 ? '12개 × 4세트' : '10개 × 3세트', detail:'팔 완전히 펴고 시작. 어깨 아래까지. 처음엔 얕게.' },
+        { name: lv >= 3 ? '다이아몬드 푸시업' : '푸시업', sets: lv >= 3 ? '15개 × 4세트' : '15개 × 3세트', detail: lv >= 3 ? '손을 모아 다이아몬드 형태로. 삼두 집중 자극.' : '어깨 너비보다 넓게. 가슴 바닥에 거의 닿도록.' },
+        { name:'마무리 스트레칭', sets:'5분', warm:true, detail:'가슴 근육 펴기. 어깨 교차. 삼두근.' },
+      ]
+    },
+    2: { // 수 - 하체
+      emoji:'🦵', title:'하체 + 코어', color:'var(--accent)',
+      sub: lv >= 3 ? '뱃살은 하체에서 빠진다 — 지금 증명 중' : '뱃살은 하체에서 빠진다',
+      exercises: [
+        { name:'준비운동', sets:'5분', warm:true, detail:'발목 돌리기. 무릎 돌리기. 고관절 풀기.' },
+        { name: lv >= 4 ? '점프 스쿼트' : '스쿼트', sets: lv >= 3 ? '25개 × 4세트' : '20개 × 3세트', detail: lv >= 4 ? '스쿼트 내려가서 폭발적으로 점프. 착지는 부드럽게.' : '발 어깨 너비. 엉덩이 뒤로 빼며 앉기. 허벅지 지면 평행.' },
+        { name: lv >= 3 ? '불가리안 스플릿 스쿼트' : '런지 (한쪽씩)', sets: lv >= 3 ? '10개 × 3세트' : '10개 × 3세트', detail: lv >= 3 ? '뒷발을 벤치나 계단에 올리고 한쪽 다리로 스쿼트. 매우 힘듦.' : '한 발 앞으로 크게. 뒤 무릎 바닥에 거의 닿도록.' },
+        { name:'플랭크', sets: lv >= 3 ? '60초 × 3세트' : '30초 × 3세트', detail:'몸 일직선. 엉덩이 올리거나 내리지 않기. 호흡 멈추지 말기.' },
+        { name: lv >= 3 ? '행잉 레그레이즈' : '레그레이즈', sets:'10개 × 3세트', detail: lv >= 3 ? '철봉에 매달려서 다리 올리기. 일반보다 훨씬 강도 높음.' : '등 바닥. 다리 붙여 90도까지. 천천히 내리기.' },
+        { name:'마무리 스트레칭', sets:'5분', warm:true, detail:'허벅지 앞뒤 스트레칭. 장경인대. 고관절.' },
+      ]
+    },
+    4: { // 금 - 서킷
+      emoji:'🔥', title:'전신 서킷', color:'var(--accent3)',
+      sub: lv >= 3 ? '쉬면 지는 거야' : '3라운드. 쉬지 않고.',
+      exercises: [
+        { name:'서킷 1라운드', sets:'라운드 1', detail: lv >= 3 ? '푸시업 12개 → 스쿼트 20개 → 딥스 12개 → 플랭크 40초 → 점프스쿼트 12개' : '푸시업 10개 → 스쿼트 15개 → 딥스 10개 → 플랭크 30초 → 점프스쿼트 10개' },
+        { name:'서킷 2라운드', sets:'라운드 2', detail:'동작 사이 쉬지 않기. 라운드 사이 1분 휴식.' },
+        { name:'서킷 3라운드', sets:'라운드 3', detail:'마지막. 할 수 있는 데까지. 완주가 목표.' },
+        ...(lv >= 4 ? [{ name:'보너스 라운드 4', sets:'라운드 4 ★', detail:'레벨 4 이상만 도전. 완주하면 XP +5 보너스.' }] : []),
+      ]
+    },
+    5: { // 토 - 보강
+      emoji:'⚡', title:'상체 보강 + 맨발걷기', color:'var(--accent)',
+      sub:'가볍게. 하지만 제대로.',
+      exercises: [
+        { name:'철봉 매달리기', sets: lv >= 2 ? '45초 × 3세트' : '30초 × 3세트', detail:'등 조이는 느낌.' },
+        { name:'철봉 턱걸이', sets:'가볍게', detail:'자세에 집중. 무리하지 않기.' },
+      ]
+    },
+  };
+  return ex[dayIdx] || null;
+}
+
+const writingStepsByLevel = {
+  1: [
+    { text:'가로선 긋기 (팔 전체로, 힘 빼고)', time:'2분' },
+    { text:'세로선 → 대각선 긋기', time:'1분' },
+    { text:'ㄱ ㄴ ㄷ ㄹ 기본 획 연습', time:'3분' },
+    { text:'소방 단어 쓰기 (연소·화재·제연)', time:'2분' },
+    { text:'오늘의 명언 필사', time:'2분' },
+  ],
+  2: [
+    { text:'선 긋기 (속도와 힘 조절)', time:'1분' },
+    { text:'기본 획 + 복합 획 (기역+니은 연결)', time:'2분' },
+    { text:'소방 전문 용어 10개 쓰기', time:'3분' },
+    { text:'실제 답안 문장 2줄 써보기', time:'4분' },
+  ],
+  3: [
+    { text:'정해진 속도로 선 긋기 (빠르게/느리게 교차)', time:'1분' },
+    { text:'소방기술사 답안 형식으로 한 단락 쓰기', time:'4분' },
+    { text:'오늘의 명언 필사 + 자기 생각 한 문장', time:'2분' },
+    { text:'어제보다 글씨 크기·간격 일정하게', time:'3분' },
+  ],
+  4: [
+    { text:'눈 감고 선 긋기 (근육 기억 훈련)', time:'1분' },
+    { text:'기술사 답안 실전 — 정의·원리·특징·대책 작성', time:'6분' },
+    { text:'오늘의 명언 필사 (가장 예쁘게)', time:'3분' },
+  ],
+  5: [
+    { text:'워밍업 — 자유롭게 한 줄', time:'1분' },
+    { text:'기술사 실전 답안 작성 — A4 반 페이지', time:'7분' },
+    { text:'오늘의 명언 필사 — 명필처럼', time:'2분' },
+  ],
+};
+
+// ════════════════════════════
+// 상태 & 스토리지
+// ════════════════════════════
+
+let currentDay = 0;
+let calYear, calMonth;
+let state = {};
+let timerInterval = null;
+let timerSeconds = 10 * 60;
+let timerRunning = false;
+const now = new Date();
+
+function getTodayKey() {
+  return `${now.getFullYear()}_${now.getMonth()}_${now.getDate()}`;
+}
+
+function getDayKey(d) {
+  return `habit_${d}_d${currentDay}`;
+}
+
+function loadState() {
+  try {
+    const saved = localStorage.getItem(getDayKey(getTodayKey()));
+    state = saved ? JSON.parse(saved) : { exercises:{}, writing:{}, walk:false, memo:'' };
+  } catch { state = { exercises:{}, writing:{}, walk:false, memo:'' }; }
+}
+
+function saveState() {
+  try {
+    localStorage.setItem(getDayKey(getTodayKey()), JSON.stringify(state));
+    markDayRecord();
+    showToast();
+  } catch {}
+}
+
+function markDayRecord() {
+  // 오늘 완료 여부 기록
+  const lv = getCurrentLevel();
+  const routine = getExercises(currentDay, lv.lv);
+  let total = 0, done = 0;
+  if (routine) {
+    total += routine.exercises.length;
+    done += routine.exercises.filter((_,i) => state.exercises[i]).length;
+  }
+  const wSteps = writingStepsByLevel[lv.lv];
+  total += wSteps.length;
+  done += wSteps.filter((_,i) => state.writing[i]).length;
+  if (state.walk) done++, total++;
+
+  const key = `record_${getTodayKey()}`;
+  const pct = total > 0 ? done / total : 0;
+  localStorage.setItem(key, JSON.stringify({ pct, done, total }));
+}
+
+// XP 계산
+function getTotalXP() {
+  let xp = 0;
+  for (let i = 0; i < localStorage.length; i++) {
+    const k = localStorage.key(i);
+    if (k && k.startsWith('record_')) {
+      try {
+        const rec = JSON.parse(localStorage.getItem(k));
+        xp += Math.round((rec.pct || 0) * 10);
+      } catch {}
+    }
+  }
+  return xp;
+}
+
+function getCurrentLevel() {
+  const xp = getTotalXP();
+  let lv = LEVELS[0];
+  for (const l of LEVELS) {
+    if (xp >= l.xpNeeded) lv = l;
+  }
+  return lv;
+}
+
+function getNextLevel() {
+  const xp = getTotalXP();
+  for (let i = 1; i < LEVELS.length; i++) {
+    if (xp < LEVELS[i].xpNeeded) return LEVELS[i];
+  }
+  return null;
+}
+
+// ════════════════════════════
+// 초기화
+// ════════════════════════════
+
+function initDate() {
+  const y = now.getFullYear();
+  const m = String(now.getMonth()+1).padStart(2,'0');
+  const d = String(now.getDate()).padStart(2,'0');
+  document.getElementById('headerDate').textContent = `${y}.${m}.${d}`;
+  const days = ['일요일','월요일','화요일','수요일','목요일','금요일','토요일'];
+  document.getElementById('headerDay').textContent = days[now.getDay()];
+  const map = {0:6,1:0,2:1,3:2,4:3,5:4,6:5};
+  currentDay = map[now.getDay()] ?? 0;
+  calYear = now.getFullYear();
+  calMonth = now.getMonth();
+}
+
+function initQuote() {
+  const idx = (now.getDate() + now.getMonth() * 31) % QUOTES.length;
+  const q = QUOTES[idx];
+  document.getElementById('quoteText').textContent = `"${q.text}"`;
+  document.getElementById('quoteAuthor').textContent = `— ${q.author}`;
+}
+
+function updateLevelUI() {
+  const xp = getTotalXP();
+  const lv = getCurrentLevel();
+  const next = getNextLevel();
+  document.getElementById('levelBadge').textContent = lv.lv;
+  document.getElementById('levelTitle').textContent = `Lv.${lv.lv} — ${lv.name}`;
+  document.getElementById('levelSub').textContent = lv.sub;
+  const pct = next ? Math.round(((xp - lv.xpNeeded) / (next.xpNeeded - lv.xpNeeded)) * 100) : 100;
+  document.getElementById('xpFill').style.width = Math.min(pct,100) + '%';
+  document.getElementById('xpText').textContent = next ? `${xp} XP → 다음 레벨까지 ${next.xpNeeded - xp} XP` : `${xp} XP — 최고 레벨 달성!`;
+}
+
+// ════════════════════════════
+// 요일 선택
+// ════════════════════════════
+
+function selectDay(idx) {
+  currentDay = idx;
+  document.querySelectorAll('.day-btn').forEach((b,i) => b.classList.toggle('active', i===idx));
+  loadState();
+  resetTimer();
+  renderMain();
+}
+
+function updateDayDots() {
+  document.querySelectorAll('.day-btn').forEach((btn, i) => {
+    const key = `record_${getTodayKey()}`;
+    // 오늘 날짜 기준 각 요일의 기록은 같은 날이라 생략 (주간 기록이라면 별도 처리 필요)
+    btn.querySelectorAll('.done-dot').forEach(d => d.remove());
+  });
+}
+
+// ════════════════════════════
+// 메인 렌더
+// ════════════════════════════
+
+function renderMain() {
+  const lv = getCurrentLevel();
+  const routine = getExercises(currentDay, lv.lv);
+  const container = document.getElementById('mainContent');
+  container.innerHTML = '';
+  container.className = 'fade-in';
+  void container.offsetWidth;
+
+  // 휴식일 (목·일)
+  const isRest = (currentDay === 3 || currentDay === 6);
+
+  if (routine) {
+    // 레벨 업그레이드 배지
+    if (lv.lv >= 2) {
+      const badge = document.createElement('div');
+      badge.className = 'upgrade-badge';
+      badge.innerHTML = `✨ <span>Lv.${lv.lv} 운동 적용 중 — ${lv.unlock}</span>`;
+      container.appendChild(badge);
+    }
+
+    // 배너
+    const banner = document.createElement('div');
+    banner.className = 'today-banner';
+    banner.style.borderLeftColor = routine.color;
+    banner.innerHTML = `<div class="today-emoji">${routine.emoji}</div><div class="today-info"><h2>${routine.title}</h2><p>${routine.sub}</p></div>`;
+    container.appendChild(banner);
+
+    // 운동 섹션
+    const sec = document.createElement('div');
+    sec.className = 'section';
+    sec.innerHTML = `<div class="section-header"><span class="section-label">운동</span><div class="section-line"></div></div>`;
+
+    const list = document.createElement('div');
+    list.className = 'exercise-list';
+
+    routine.exercises.forEach((ex, i) => {
+      const item = document.createElement('div');
+      item.className = 'exercise-item' + (ex.warm ? ' warm-item' : '') + (state.exercises[i] ? ' done' : '');
+      item.innerHTML = `
+        <div class="exercise-main">
+          <div class="check-circle">${state.exercises[i] ? '✓' : ''}</div>
+          <span class="exercise-name">${ex.name}</span>
+          <span class="exercise-meta">${ex.sets}${ex.detail ? `<button class="detail-btn" onclick="toggleDetail(event,this)">설명</button>` : ''}</span>
+        </div>
+      `;
+      if (ex.detail) {
+        const det = document.createElement('div');
+        det.className = 'exercise-detail';
+        det.textContent = ex.detail;
+        item.appendChild(det);
+      }
+      item.addEventListener('click', e => {
+        if (e.target.classList.contains('detail-btn')) return;
+        state.exercises[i] = !state.exercises[i];
+        item.classList.toggle('done', state.exercises[i]);
+        item.querySelector('.check-circle').textContent = state.exercises[i] ? '✓' : '';
+        saveState(); updateLevelUI(); updateProgress(routine, sec);
+      });
+      list.appendChild(item);
+    });
+
+    sec.appendChild(list);
+
+    // 진행률
+    const prog = document.createElement('div');
+    prog.id = 'progWrap';
+    prog.innerHTML = `<div class="progress-bar-wrap"><div class="progress-bar-fill" id="progFill" style="width:0%"></div></div><div class="progress-text" id="progText"></div>`;
+    sec.appendChild(prog);
+
+    const cg = document.createElement('div');
+    cg.className = 'congrats'; cg.id = 'congrats';
+    cg.innerHTML = `<h3>🎉 운동 완주!</h3><p>기록이 쌓이고 있어. XP +10 획득!</p>`;
+    sec.appendChild(cg);
+
+    container.appendChild(sec);
+    updateProgress(routine, sec);
+  } else if (isRest) {
+    const card = document.createElement('div');
+    card.className = 'rest-card';
+    card.innerHTML = `
+      <div class="rest-emoji">${currentDay===3 ? '🛌' : '☀️'}</div>
+      <h2>완전 휴식</h2>
+      <p>${currentDay===3 ? '근육은 쉴 때 자란다.<br>오늘은 맨발걷기만. 몸을 회복시켜.' : '이번 주 수고했어.<br>오늘은 진짜 쉬어. 다음 주도 잘 하자.'}</p>
+    `;
+    container.appendChild(card);
+  }
+
+  // 맨발걷기 (매일)
+  const walkSec = document.createElement('div');
+  walkSec.className = 'section';
+  walkSec.innerHTML = `<div class="section-header"><span class="section-label" style="color:#7ae87a">맨발걷기</span><div class="section-line"></div></div>`;
+
+  const walkCard = document.createElement('div');
+  walkCard.className = 'walk-card' + (state.walk ? ' done' : '');
+  walkCard.innerHTML = `
+    <div class="check-circle" style="${state.walk ? 'background:#7ae87a;border-color:#7ae87a;color:#0f0f13' : 'border-color:#7ae87a'}">${state.walk ? '✓' : ''}</div>
+    <span class="walk-name">봉서산 맨발걷기</span>
+    <span class="walk-meta">20~30분</span>
+  `;
+  walkCard.addEventListener('click', () => {
+    state.walk = !state.walk;
+    walkCard.classList.toggle('done', state.walk);
+    const cc = walkCard.querySelector('.check-circle');
+    cc.textContent = state.walk ? '✓' : '';
+    cc.style.cssText = state.walk ? 'background:#7ae87a;border-color:#7ae87a;color:#0f0f13;width:21px;height:21px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;' : 'border-color:#7ae87a;width:21px;height:21px;border-radius:50%;border:2px solid #7ae87a;display:flex;align-items:center;justify-content:center;font-size:11px;';
+    saveState(); updateLevelUI();
+  });
+  walkSec.appendChild(walkCard);
+  container.appendChild(walkSec);
+
+  // 손글씨 섹션
+  const writeSec = document.createElement('div');
+  writeSec.className = 'section';
+  writeSec.innerHTML = `<div class="section-header"><span class="section-label" style="color:var(--accent3)">손글씨 훈련</span><div class="section-line"></div></div>`;
+
+  const wCard = document.createElement('div');
+  wCard.className = 'writing-card';
+  wCard.innerHTML = `
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:4px;">
+      <span style="font-size:15px;font-weight:700;">✍️ Lv.${lv.lv} 훈련 — 매일 10분</span>
+      <span style="font-size:11px;color:var(--muted)">오전, 공부 전에</span>
+    </div>
+    <div style="font-size:11px;color:var(--muted);margin-bottom:2px;">팔꿈치 책상 · 손목 일자 · 펜 45도 · 힘 빼기</div>
+  `;
+
+  const wSteps = writingStepsByLevel[lv.lv];
+  const steps = document.createElement('div');
+  steps.className = 'writing-steps';
+  wSteps.forEach((s, i) => {
+    const step = document.createElement('div');
+    step.className = 'writing-step' + (state.writing[i] ? ' done' : '');
+    step.innerHTML = `<div class="step-num">${state.writing[i] ? '✓' : i+1}</div><span class="step-text">${s.text}</span><span class="step-time">${s.time}</span>`;
+    step.addEventListener('click', () => {
+      state.writing[i] = !state.writing[i];
+      step.classList.toggle('done', state.writing[i]);
+      step.querySelector('.step-num').textContent = state.writing[i] ? '✓' : i+1;
+      saveState(); updateLevelUI();
+    });
+    steps.appendChild(step);
+  });
+  wCard.appendChild(steps);
+  writeSec.appendChild(wCard);
+
+  // 타이머
+  const timerSec = document.createElement('div');
+  timerSec.className = 'timer-section';
+  timerSec.innerHTML = `
+    <div class="timer-label">손글씨 타이머</div>
+    <div class="timer-display" id="timerDisplay">10:00</div>
+    <div class="timer-btns">
+      <button class="timer-btn primary" onclick="toggleTimer()">시작</button>
+      <button class="timer-btn" onclick="resetTimer()">초기화</button>
+    </div>
+  `;
+  writeSec.appendChild(timerSec);
+  container.appendChild(writeSec);
+
+  // 메모
+  const memoSec = document.createElement('div');
+  memoSec.className = 'memo-section';
+  memoSec.innerHTML = `
+    <div class="memo-box">
+      <div class="memo-label">오늘의 기록</div>
+      <textarea class="memo-input" id="memoInput" placeholder="오늘 느낀 점, 힘들었던 것, 잘 한 것을 자유롭게 써봐...">${state.memo||''}</textarea>
+    </div>
+  `;
+  container.appendChild(memoSec);
+
+  document.getElementById('memoInput').addEventListener('input', e => {
+    state.memo = e.target.value; saveState();
+  });
+
+  updateTimerDisplay();
+}
+
+function toggleDetail(e, btn) {
+  e.stopPropagation();
+  const item = btn.closest('.exercise-item');
+  item.classList.toggle('expanded');
+  btn.textContent = item.classList.contains('expanded') ? '닫기' : '설명';
+}
+
+function updateProgress(routine, sec) {
+  const total = routine.exercises.length;
+  const done = routine.exercises.filter((_,i) => state.exercises[i]).length;
+  const pct = Math.round((done/total)*100);
+  const fill = document.getElementById('progFill');
+  const text = document.getElementById('progText');
+  const cg = document.getElementById('congrats');
+  if (fill) fill.style.width = pct+'%';
+  if (text) text.textContent = `${done} / ${total} 완료`;
+  if (cg) cg.classList.toggle('show', done===total);
+}
+
+// ════════════════════════════
+// 달력
+// ════════════════════════════
+
+function openCal() {
+  calYear = now.getFullYear(); calMonth = now.getMonth();
+  renderCal();
+  document.getElementById('calModal').classList.add('show');
+}
+
+function closeCal(e) {
+  if (e.target === document.getElementById('calModal')) closeCalBtn();
+}
+function closeCalBtn() { document.getElementById('calModal').classList.remove('show'); }
+function calPrev() { calMonth--; if(calMonth<0){calMonth=11;calYear--;} renderCal(); }
+function calNext() { calMonth++; if(calMonth>11){calMonth=0;calYear++;} renderCal(); }
+
+function renderCal() {
+  const months = ['1월','2월','3월','4월','5월','6월','7월','8월','9월','10월','11월','12월'];
+  document.getElementById('calTitle').textContent = `${calYear}년 ${months[calMonth]}`;
+  const grid = document.getElementById('calGrid');
+  grid.innerHTML = '';
+
+  const firstDay = new Date(calYear, calMonth, 1).getDay();
+  const daysInMonth = new Date(calYear, calMonth+1, 0).getDate();
+
+  for (let i = 0; i < firstDay; i++) {
+    const cell = document.createElement('div');
+    cell.className = 'cal-cell empty';
+    grid.appendChild(cell);
+  }
+
+  for (let d = 1; d <= daysInMonth; d++) {
+    const cell = document.createElement('div');
+    cell.className = 'cal-cell';
+
+    const key = `record_${calYear}_${calMonth}_${d}`;
+    const rec = (() => { try { return JSON.parse(localStorage.getItem(key)); } catch { return null; } })();
+
+    const isToday = calYear===now.getFullYear() && calMonth===now.getMonth() && d===now.getDate();
+    if (isToday) cell.classList.add('today');
+
+    if (rec) {
+      if (rec.pct >= 0.85) cell.classList.add('done-day');
+      else if (rec.pct > 0) cell.classList.add('partial-day');
+    } else if (!isToday && new Date(calYear, calMonth, d) < now) {
+      cell.classList.add('missed');
+    }
+
+    cell.textContent = d;
+    if (rec) cell.title = `${rec.done}/${rec.total} 완료`;
+    grid.appendChild(cell);
+  }
+}
+
+// ════════════════════════════
+// 타이머
+// ════════════════════════════
+
+function toggleTimer() {
+  const btn = document.querySelector('.timer-btn.primary');
+  if (!btn) return;
+  if (timerRunning) {
+    clearInterval(timerInterval); timerRunning = false;
+    btn.textContent = '계속';
+    document.getElementById('timerDisplay')?.classList.remove('running');
+  } else {
+    if (timerSeconds <= 0) { resetTimer(); return; }
+    timerRunning = true; btn.textContent = '일시정지';
+    document.getElementById('timerDisplay')?.classList.add('running');
+    timerInterval = setInterval(() => {
+      timerSeconds--;
+      updateTimerDisplay();
+      if (timerSeconds <= 0) {
+        clearInterval(timerInterval); timerRunning = false;
+        btn.textContent = '완료!';
+        const disp = document.getElementById('timerDisplay');
+        if (disp) { disp.classList.remove('running'); disp.classList.add('done-color'); disp.textContent = '완료! ✓'; }
+      }
+    }, 1000);
+  }
+}
+
+function resetTimer() {
+  clearInterval(timerInterval); timerRunning = false; timerSeconds = 10*60;
+  const disp = document.getElementById('timerDisplay');
+  if (disp) { disp.classList.remove('running','done-color'); }
+  const btn = document.querySelector('.timer-btn.primary');
+  if (btn) btn.textContent = '시작';
+  updateTimerDisplay();
+}
+
+function updateTimerDisplay() {
+  const disp = document.getElementById('timerDisplay');
+  if (!disp || disp.classList.contains('done-color')) return;
+  const m = Math.floor(timerSeconds/60);
+  const s = timerSeconds % 60;
+  disp.textContent = `${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;
+}
+
+// ════════════════════════════
+// 레벨업 체크
+// ════════════════════════════
+
+function checkLevelup() {
+  const prevXP = parseInt(localStorage.getItem('prev_xp') || '0');
+  const currXP = getTotalXP();
+  const prevLv = (() => { let l=LEVELS[0]; for(const ll of LEVELS){ if(prevXP>=ll.xpNeeded)l=ll; } return l; })();
+  const currLv = getCurrentLevel();
+  if (currLv.lv > prevLv.lv) {
+    document.getElementById('levelupTitle').textContent = `Lv.${currLv.lv} 달성!`;
+    document.getElementById('levelupSub').textContent = currLv.name;
+    document.getElementById('levelupDesc').textContent = `🔓 ${currLv.unlock} 해금!\n${currLv.sub}`;
+    document.getElementById('levelupPopup').classList.add('show');
+  }
+  localStorage.setItem('prev_xp', currXP);
+}
+
+function closeLevelup() {
+  document.getElementById('levelupPopup').classList.remove('show');
+  updateLevelUI(); renderMain();
+}
+
+// ════════════════════════════
+// 토스트
+// ════════════════════════════
+
+function showToast() {
+  const t = document.getElementById('saveToast');
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 1500);
+}
+
+// ════════════════════════════
+// 시작
+// ════════════════════════════
+
+initDate();
+initQuote();
+loadState();
+updateLevelUI();
+renderMain();
+
+document.querySelectorAll('.day-btn').forEach((b,i) => b.classList.toggle('active', i===currentDay));
+
+// iOS 홈 화면 추가 안내 (모바일에서 처음만)
+function dismissInstall() {
+  localStorage.setItem('install_dismissed', '1');
+  document.getElementById('installBanner').style.display = 'none';
+}
+
+const isIOS = /iphone|ipad|ipod/i.test(navigator.userAgent);
+const isStandalone = window.navigator.standalone;
+const dismissed = localStorage.getItem('install_dismissed');
+if (isIOS && !isStandalone && !dismissed) {
+  document.getElementById('installBanner').style.display = 'flex';
+}
+</script>
+</body>
+</html>
