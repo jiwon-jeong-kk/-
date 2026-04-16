@@ -7,6 +7,7 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="오늘의 행복">
 <meta name="theme-color" content="#0f0f13">
+<link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='22' fill='%230f0f13'/%3E%3Ctext y='.9em' font-size='72' x='12'%3E🌟%3C/text%3E%3C/svg%3E">
 <title>오늘의 행복</title>
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Nanum+Myeongjo:wght@400;700;800&family=Noto+Sans+KR:wght@300;400;500;700&display=swap');
@@ -25,7 +26,7 @@
   --xp-color: #b97ae8;
 }
 
-* { margin:0; padding:0; box-sizing:border-box; }  
+* { margin:0; padding:0; box-sizing:border-box; }
 
 body {
   background: var(--bg);
@@ -208,7 +209,7 @@ body::before {
 .section { margin-bottom:24px; }
 
 .section-header {
-  display:flex; align-items:center; gap:12px; margin-bottom:14px;
+  display:flex; align-items:center; gap:12px; margin-bottom:8px;
 }
 
 .section-label {
@@ -602,7 +603,7 @@ body::before {
     <div class="header-top">
       <div class="header-brand">오늘의 행복</div>
       <button class="header-cal-btn" onclick="openCal()">📅 기록 달력</button>
-      <button class="header-cal-btn" onclick="pushData()" style="background:var(--success);border-color:var(--success);color:#0f0f13;">☁️ 동기화</button>
+      <button class="header-cal-btn" onclick="pushData()" style="background:var(--success);border-color:var(--success);color:#0f0f13;font-weight:700;">☁️ 동기화</button>
     </div>
     <div class="header-center">
       <div class="header-date" id="headerDate" onclick="openCal()"></div>
@@ -626,8 +627,10 @@ body::before {
     <div class="quote-label">오늘의 명언 — 필사해봐</div>
     <div class="quote-text" id="quoteText"></div>
     <div class="quote-author" id="quoteAuthor"></div>
-    <div style="margin-top:10px;"><button onclick="toggleMeaning()" id="meaningBtn" style="background:none;border:1px solid var(--border);color:var(--muted);font-family:'Noto Sans KR',sans-serif;font-size:11px;padding:5px 14px;border-radius:100px;cursor:pointer;letter-spacing:1px;">의미 보기 ▼</button></div>
-<div id="meaningBox" style="display:none;margin-top:12px;padding:12px 14px;background:var(--surface);border-radius:8px;font-size:13px;color:var(--muted);line-height:1.8;font-weight:300;"></div>
+    <div style="margin-top:10px;">
+      <button onclick="toggleMeaning()" id="meaningBtn" style="background:none;border:1px solid var(--border);color:var(--muted);font-family:'Noto Sans KR',sans-serif;font-size:11px;padding:5px 14px;border-radius:100px;cursor:pointer;letter-spacing:1px;transition:all 0.2s;">의미 보기 ▼</button>
+    </div>
+    <div id="meaningBox" style="display:none;margin-top:12px;padding:12px 14px;background:var(--surface);border-radius:8px;font-size:13px;color:var(--muted);line-height:1.8;font-weight:300;"></div>
   </div>
 
   <!-- 요일 선택 -->
@@ -713,9 +716,28 @@ const QUOTES = [
   { text: "지금 이 순간은 다시 오지 않는다.", author: "세네카 (로마 철학자, BC 4~AD 65)", meaning: "오늘 이 하루는 두 번 다시 없다. 지금을 허비하는 것은 인생을 허비하는 것과 같다." },
   { text: "자유는 규율에서 온다.", author: "조코 윌링크 (미국 해군 특수부대 지휘관)", meaning: "아이러니하게도 엄격한 루틴과 자기 규율이 오히려 더 큰 자유를 준다. 규칙이 없는 자유는 혼돈이다." },
   { text: "성공은 매일 반복되는 작은 노력의 합이다.", author: "로버트 콜리어 (미국 작가)", meaning: "화려한 순간은 평범한 날들의 축적으로 만들어진다. 오늘의 평범한 노력이 내일의 특별함이 된다." },
-  { text: "쉬는 것도 훈련이다.", author: "스포츠 과학 원칙", meaning: "회복 없이는 성장도 없다. 쉬는 것은 게으름이 아니라 다음 훈련을 위한 준비다." },
+  { text: "쉬는 것도 훈련이다.", author: "스포츠 과학 원칙", meaning: "회복 없이는 성장도 없다. 쉬는 것은 게으름이 아니라 다음 훈련을 위한 준비다. 몸에게 회복의 시간을 줘라." },
   { text: "불편함이 성장의 통화다.", author: "브레네 브라운 (미국 연구교수)", meaning: "편안함 속에서는 성장하기 어렵다. 불편하고 힘든 상황이 바로 내가 성장하고 있다는 신호다." },
   { text: "작은 씨앗도 올바른 환경에서는 큰 나무가 된다.", author: "중국 속담", meaning: "지금 당장 결과가 보이지 않아도 괜찮다. 꾸준히 좋은 환경과 습관을 만들어가면 반드시 크게 성장한다." },
+  { text: "천천히 가도 괜찮다. 멈추지만 않으면.", author: "마틴 루터 킹 (미국 인권운동가, 1929~1968)", meaning: "속도보다 방향이 중요하다. 느려도 포기하지 않고 나아가는 사람이 결국 목적지에 닿는다." },
+  { text: "오늘 걷지 않으면 내일은 뛰어야 한다.", author: "한국 속담", meaning: "지금의 작은 노력이 나중의 큰 부담을 덜어준다. 오늘 미루면 내일 더 힘들어진다." },
+  { text: "당신이 포기하고 싶은 그 순간이 바로 전환점이다.", author: "밥 피트먼 (미국 기업인)", meaning: "가장 힘든 순간이 사실 가장 중요한 순간이다. 지금 버티는 것이 성공과 실패를 가르는 분기점이다." },
+  { text: "두려움은 꿈을 죽이는 가장 큰 적이다.", author: "오프라 윈프리 (방송인)", meaning: "실패가 두려워 시작하지 않는 것이 진짜 실패다. 두려움을 인정하되, 그것에 지배당하지 마라." },
+  { text: "매일 1%씩 나아지면 1년 후 37배가 된다.", author: "제임스 클리어 (원자적 습관 저자)", meaning: "작은 개선의 복리 효과는 상상을 초월한다. 오늘 1%의 노력이 쌓여 엄청난 차이를 만들어낸다." },
+  { text: "나를 죽이지 못하는 것은 나를 더 강하게 만든다.", author: "프리드리히 니체 (철학자, 1844~1900)", meaning: "역경은 파괴하거나 단련시킨다. 살아남은 모든 고난은 결국 나를 더 강한 사람으로 만들어왔다." },
+  { text: "탁월함은 행위가 아니라 습관이다.", author: "윌 듀란트 (아리스토텔레스 해석)", meaning: "한 번의 훌륭한 행동이 아니라, 매일의 꾸준한 반복이 탁월한 사람을 만든다." },
+  { text: "지금 이 고통이 훗날 너의 힘이 된다.", author: "세네카 (로마 철학자)", meaning: "지금 느끼는 힘듦은 사라지지 않는다. 나중에 힘이 필요할 때 꺼낼 수 있는 경험으로 쌓인다." },
+  { text: "배움에는 지름길이 없다. 하지만 올바른 길은 있다.", author: "베벌리 실스 (성악가)", meaning: "빠른 방법은 없지만 효율적인 방법은 있다. 제대로 된 방향으로 꾸준히 가는 것이 가장 빠른 길이다." },
+  { text: "실천 없는 비전은 단순한 꿈이다.", author: "조엘 바커 (미래학자)", meaning: "머릿속의 계획은 행동으로 옮겨야만 의미가 있다. 오늘 하루를 실천으로 채워라." },
+  { text: "자신을 극복하는 자가 가장 강한 자다.", author: "공자 (중국 사상가, BC 551~479)", meaning: "진짜 싸움은 남과의 경쟁이 아니라 자기 자신과의 싸움이다. 오늘의 나를 이기는 것이 진정한 승리다." },
+  { text: "피로는 성취의 증거다.", author: "스포츠 격언", meaning: "힘든 것은 열심히 했다는 뜻이다. 오늘의 피로가 쌓여 내일의 실력이 된다." },
+  { text: "좋은 습관은 만들기 어렵고, 나쁜 습관은 깨기 어렵다. 그래서 오늘이 중요하다.", author: "아리스토텔레스 (그리스 철학자)", meaning: "습관의 형성과 파괴 모두 의식적인 노력이 필요하다. 오늘 하루의 선택이 내일의 나를 결정한다." },
+  { text: "성공한 사람들은 남들이 쉬는 시간에도 한다.", author: "무명", meaning: "차이는 결정적인 순간이 아니라 아무도 보지 않는 평범한 날에 만들어진다." },
+  { text: "모든 전문가는 처음엔 초보자였다.", author: "헬렌 헤이스 (배우)", meaning: "지금 서툴러도 괜찮다. 모든 대가도 처음엔 형편없었다. 중요한 건 계속하는 것이다." },
+  { text: "하루하루 살아라. 이 하루가 당신의 인생이다.", author: "오마르 하이얌 (페르시아 시인, 1048~1131)", meaning: "거창한 미래보다 오늘 이 하루에 집중하라. 인생은 오늘의 집합이다." },
+  { text: "준비가 기회를 만날 때 행운이 된다.", author: "세네카 (로마 철학자)", meaning: "행운은 우연이 아니다. 꾸준히 준비한 사람에게 기회가 왔을 때 그것이 행운으로 보일 뿐이다." },
+  { text: "지식은 경험 없이는 공허하고, 경험은 지식 없이는 맹목적이다.", author: "임마누엘 칸트 (철학자, 1724~1804)", meaning: "이론과 실전은 함께 가야 한다. 공부와 현장 경험을 연결하는 것이 진짜 전문가의 길이다." },
+  { text: "반복은 모든 기술의 어머니다.", author: "토니 로빈스 (동기부여 강사)", meaning: "처음엔 어색해도 반복하면 자연스러워진다. 손글씨도, 운동도, 공부도 반복이 전부다." },
 ];
 
 const LEVELS = [
@@ -777,33 +799,33 @@ function getExercises(dayIdx, lv) {
 
 const writingStepsByLevel = {
   1: [
-    { text:'가로선 긋기 (팔 전체로, 힘 빼고)', time:'2분' },
-    { text:'세로선 → 대각선 긋기', time:'1분' },
-    { text:'ㄱ ㄴ ㄷ ㄹ 기본 획 연습', time:'3분' },
-    { text:'소방 단어 쓰기 (연소·화재·제연)', time:'2분' },
-    { text:'오늘의 명언 필사', time:'2분' },
+    { text:'가로선 긋기 — A4 한 줄 길이(18cm)로 10줄. 힘 빼고 팔꿈치 축으로 천천히.', time:'2분' },
+    { text:'세로선 10줄 → 대각선(왼쪽위→오른쪽아래) 10줄. 방향만 바꿔서 같은 방식으로.', time:'2분' },
+    { text:'ㄱㄴㄷㄹ 각 10번씩. 시간 보지 말고 글자 수만 세기.', time:'3분' },
+    { text:'소방 단어 쓰기 — 연소·화재·제연·스프링클러 각 5번씩.', time:'2분' },
+    { text:'오늘의 명언 필사 — 천천히 한 번만. 예쁘게.', time:'1분' },
   ],
   2: [
-    { text:'선 긋기 (속도와 힘 조절)', time:'1분' },
-    { text:'기본 획 + 복합 획 (기역+니은 연결)', time:'2분' },
-    { text:'소방 전문 용어 10개 쓰기', time:'3분' },
-    { text:'실제 답안 문장 2줄 써보기', time:'4분' },
+    { text:'가로·세로선 각 5줄. 속도 조금 높여서.', time:'1분' },
+    { text:'기본 획 + 복합 획 (기역+니은 연결) 각 10번씩.', time:'2분' },
+    { text:'소방 전문 용어 10개 — 각 3번씩.', time:'3분' },
+    { text:'실제 답안 문장 2줄 써보기. 글씨 크기·간격 일정하게.', time:'4분' },
   ],
   3: [
-    { text:'정해진 속도로 선 긋기 (빠르게/느리게 교차)', time:'1분' },
-    { text:'소방기술사 답안 형식으로 한 단락 쓰기', time:'4분' },
-    { text:'오늘의 명언 필사 + 자기 생각 한 문장', time:'2분' },
-    { text:'어제보다 글씨 크기·간격 일정하게', time:'3분' },
+    { text:'선 긋기 — 빠르게 5줄, 느리게 5줄 교차.', time:'1분' },
+    { text:'소방기술사 답안 형식으로 한 단락 쓰기.', time:'4분' },
+    { text:'오늘의 명언 필사 + 자기 생각 한 문장.', time:'2분' },
+    { text:'어제보다 글씨 크기·간격 일정하게 의식하기.', time:'3분' },
   ],
   4: [
-    { text:'눈 감고 선 긋기 (근육 기억 훈련)', time:'1분' },
-    { text:'기술사 답안 실전 — 정의·원리·특징·대책 작성', time:'6분' },
-    { text:'오늘의 명언 필사 (가장 예쁘게)', time:'3분' },
+    { text:'눈 감고 가로선 5줄 — 근육 기억 훈련.', time:'1분' },
+    { text:'기술사 답안 실전 — 정의·원리·특징·대책 작성.', time:'6분' },
+    { text:'오늘의 명언 필사 — 가장 예쁘게.', time:'3분' },
   ],
   5: [
-    { text:'워밍업 — 자유롭게 한 줄', time:'1분' },
-    { text:'기술사 실전 답안 작성 — A4 반 페이지', time:'7분' },
-    { text:'오늘의 명언 필사 — 명필처럼', time:'2분' },
+    { text:'워밍업 — 자유롭게 한 줄.', time:'1분' },
+    { text:'기술사 실전 답안 — A4 반 페이지.', time:'7분' },
+    { text:'오늘의 명언 필사 — 명필처럼.', time:'2분' },
   ],
 };
 
@@ -1292,32 +1314,11 @@ function showToast() {
 }
 
 // ════════════════════════════
-// 시작
+// ☁️ 클라우드 동기화 (JSONBin)
 // ════════════════════════════
 
-initDate();
-initQuote();
-loadState();
-updateLevelUI();
-renderMain();
-
-document.querySelectorAll('.day-btn').forEach((b,i) => b.classList.toggle('active', i===currentDay));
-
-// iOS 홈 화면 추가 안내 (모바일에서 처음만)
-function dismissInstall() {
-  localStorage.setItem('install_dismissed', '1');
-  document.getElementById('installBanner').style.display = 'none';
-}
-
-const isIOS = /iphone|ipad|ipod/i.test(navigator.userAgent);
-const isStandalone = window.navigator.standalone;
-const dismissed = localStorage.getItem('install_dismissed');
-if (isIOS && !isStandalone && !dismissed) {
-  document.getElementById('installBanner').style.display = 'flex';
-}
-  // ── 클라우드 동기화 ──
 const BIN_ID = '69e029c936566621a8ba3891';
-const API_KEY = '$2a$10$GmXIwyo5n3LB7JIEvjSycumI89.62DFRm8UGsH4FBgJs4jBdm/kBq';
+const API_KEY = '$2a$10$GmXIwyo5n3LB7JIEvjSycumI89.62DFRm8UGsH4FBgJs4jBdm/kBq'; // ← 여기에 메모장의 API 키 붙여넣기
 
 async function cloudSave(data) {
   try {
@@ -1357,8 +1358,33 @@ async function pushData() {
   showToast();
 }
 
-// 페이지 로드 시 클라우드에서 불러오기
+// ════════════════════════════
+// 시작
+// ════════════════════════════
+
+initDate();
+initQuote();
+loadState();
+updateLevelUI();
+renderMain();
+
+document.querySelectorAll('.day-btn').forEach((b,i) => b.classList.toggle('active', i===currentDay));
+
+// 페이지 로드 시 클라우드에서 자동 불러오기
 syncData().then(() => { loadState(); updateLevelUI(); renderMain(); });
+
+// iOS 홈 화면 추가 안내 (모바일에서 처음만)
+function dismissInstall() {
+  localStorage.setItem('install_dismissed', '1');
+  document.getElementById('installBanner').style.display = 'none';
+}
+
+const isIOS = /iphone|ipad|ipod/i.test(navigator.userAgent);
+const isStandalone = window.navigator.standalone;
+const dismissed = localStorage.getItem('install_dismissed');
+if (isIOS && !isStandalone && !dismissed) {
+  document.getElementById('installBanner').style.display = 'flex';
+}
 </script>
 </body>
 </html>
