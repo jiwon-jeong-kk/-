@@ -1301,6 +1301,50 @@ const dismissed = localStorage.getItem('install_dismissed');
 if (isIOS && !isStandalone && !dismissed) {
   document.getElementById('installBanner').style.display = 'flex';
 }
+  // ── 클라우드 동기화 ──
+const BIN_ID = '69e029c936566621a8ba3891';
+const API_KEY = '$2a$10$GmXIwyo5n3LB7JIEvjSycumI89.62DFRm8UGsH4FBgJs4jBdm/kBq';
+
+async function cloudSave(data) {
+  try {
+    await fetch(`https://api.jsonbin.io/v3/b/${BIN_ID}`, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json', 'X-Master-Key': API_KEY },
+      body: JSON.stringify(data)
+    });
+  } catch(e) { console.log('동기화 실패', e); }
+}
+
+async function cloudLoad() {
+  try {
+    const res = await fetch(`https://api.jsonbin.io/v3/b/${BIN_ID}/latest`, {
+      headers: { 'X-Master-Key': API_KEY }
+    });
+    const json = await res.json();
+    return json.record;
+  } catch(e) { return null; }
+}
+
+async function syncData() {
+  const cloud = await cloudLoad();
+  if (!cloud) return;
+  Object.keys(cloud).forEach(k => {
+    if (k !== 'timestamp') localStorage.setItem(k, JSON.stringify(cloud[k]));
+  });
+}
+
+async function pushData() {
+  const data = { timestamp: Date.now() };
+  for (let i = 0; i < localStorage.length; i++) {
+    const k = localStorage.key(i);
+    try { data[k] = JSON.parse(localStorage.getItem(k)); } catch { data[k] = localStorage.getItem(k); }
+  }
+  await cloudSave(data);
+  showToast();
+}
+
+// 페이지 로드 시 클라우드에서 불러오기
+syncData().then(() => { loadState(); updateLevelUI(); renderMain(); });
 </script>
 </body>
 </html>
