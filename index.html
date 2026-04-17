@@ -24,6 +24,7 @@
   --success: #7ae8a8;
   --border: #333344;
   --xp-color: #b97ae8;
+  --walk-color: #7ae87a;
 }
 
 * { margin:0; padding:0; box-sizing:border-box; }
@@ -59,15 +60,18 @@ body::before {
 }
 
 .header-top {
-  display:flex; align-items:center; justify-content:space-between;
-  margin-bottom:16px;
+  display:flex; align-items:flex-start; justify-content:space-between;
+  margin-bottom:16px; gap:8px; flex-wrap:wrap;
 }
 
 .header-brand {
   font-family:'Nanum Myeongjo',serif;
   font-size:12px; letter-spacing:5px;
   color:var(--accent); text-transform:uppercase;
+  padding-top:4px;
 }
+
+.header-btns { display:flex; flex-direction:column; gap:4px; align-items:flex-end; }
 
 .header-cal-btn {
   background:var(--surface); border:1px solid var(--border);
@@ -76,6 +80,22 @@ body::before {
   cursor:pointer; transition:all 0.2s; letter-spacing:1px;
 }
 .header-cal-btn:hover { border-color:var(--accent2); color:var(--accent2); }
+
+.sync-btn {
+  background:var(--success); border:1px solid var(--success);
+  color:#0f0f13; font-weight:700;
+  font-family:'Noto Sans KR',sans-serif;
+  font-size:12px; padding:7px 14px; border-radius:100px;
+  cursor:pointer; transition:all 0.2s; letter-spacing:1px;
+  position:relative;
+}
+.sync-btn:hover { opacity:0.85; transform:scale(1.02); }
+.sync-btn:disabled { opacity:0.6; cursor:not-allowed; }
+
+.sync-time {
+  font-size:10px; color:var(--muted);
+  text-align:right; letter-spacing:0.5px;
+}
 
 .header-center { text-align:center; margin-bottom:16px; }
 
@@ -96,7 +116,6 @@ body::before {
   margin-bottom:24px;
   display:flex; align-items:center; gap:14px;
 }
-
 .level-badge {
   width:44px; height:44px; border-radius:50%;
   background:linear-gradient(135deg, var(--xp-color), #7ae8e8);
@@ -105,60 +124,32 @@ body::before {
   font-size:16px; font-weight:800; color:#0f0f13;
   flex-shrink:0; box-shadow:0 0 16px rgba(185,122,232,0.4);
 }
-
 .level-info { flex:1; }
-
-.level-title {
-  font-size:14px; font-weight:700; color:var(--text);
-  margin-bottom:4px;
-}
-
+.level-title { font-size:14px; font-weight:700; color:var(--text); margin-bottom:4px; }
 .level-sub { font-size:11px; color:var(--muted); margin-bottom:8px; }
-
-.xp-bar-bg {
-  background:var(--border); border-radius:100px;
-  height:5px; overflow:hidden;
-}
-
+.xp-bar-bg { background:var(--border); border-radius:100px; height:5px; overflow:hidden; }
 .xp-bar-fill {
   height:100%;
   background:linear-gradient(90deg, var(--xp-color), #7ae8e8);
   border-radius:100px; transition:width 0.5s ease;
 }
-
 .level-xp { font-size:11px; color:var(--xp-color); font-weight:700; margin-top:5px; }
 
 /* ── 명언 ── */
 .quote-card {
-  background:var(--card);
-  border:1px solid var(--border);
+  background:var(--card); border:1px solid var(--border);
   border-left:4px solid var(--accent);
-  border-radius:12px; padding:18px 22px;
-  margin-bottom:24px;
+  border-radius:12px; padding:18px 22px; margin-bottom:24px;
 }
-
-.quote-label {
-  font-size:10px; letter-spacing:4px;
-  color:var(--accent); font-family:'Nanum Myeongjo',serif;
-  margin-bottom:10px;
-}
-
-.quote-text {
-  font-family:'Nanum Myeongjo',serif;
-  font-size:18px; font-weight:700;
-  color:var(--text); line-height:1.6; margin-bottom:6px;
-}
-
-.quote-author {
-  font-size:12px; color:var(--muted); font-weight:300;
-}
+.quote-label { font-size:10px; letter-spacing:4px; color:var(--accent); font-family:'Nanum Myeongjo',serif; margin-bottom:10px; }
+.quote-text { font-family:'Nanum Myeongjo',serif; font-size:18px; font-weight:700; color:var(--text); line-height:1.6; margin-bottom:6px; }
+.quote-author { font-size:12px; color:var(--muted); font-weight:300; }
 
 /* ── 요일 선택 ── */
 .day-selector {
   display:flex; gap:7px; justify-content:center;
   flex-wrap:wrap; margin-bottom:28px;
 }
-
 .day-btn {
   background:var(--surface); border:1px solid var(--border);
   color:var(--muted); font-family:'Noto Sans KR',sans-serif;
@@ -167,14 +158,8 @@ body::before {
   cursor:pointer; transition:all 0.2s; letter-spacing:1px;
   position:relative;
 }
-
 .day-btn:hover { border-color:var(--accent); color:var(--accent); }
-
-.day-btn.active {
-  background:var(--accent); border-color:var(--accent);
-  color:#0f0f13; font-weight:700;
-}
-
+.day-btn.active { background:var(--accent); border-color:var(--accent); color:#0f0f13; font-weight:700; }
 .day-btn .done-dot {
   position:absolute; top:4px; right:4px;
   width:6px; height:6px; border-radius:50%;
@@ -184,22 +169,46 @@ body::before {
 /* ── 배너 ── */
 .today-banner {
   background:var(--card); border:1px solid var(--border);
-  border-radius:12px; padding:18px 22px;
-  margin-bottom:22px;
+  border-radius:12px; padding:18px 22px; margin-bottom:12px;
   display:flex; align-items:center; gap:14px;
 }
-
 .today-emoji { font-size:30px; }
-.today-info h2 {
-  font-family:'Nanum Myeongjo',serif;
-  font-size:19px; font-weight:700; color:var(--text); margin-bottom:3px;
-}
+.today-info h2 { font-family:'Nanum Myeongjo',serif; font-size:19px; font-weight:700; color:var(--text); margin-bottom:3px; }
 .today-info p { font-size:12px; color:var(--muted); font-weight:300; }
 
-/* ── 레벨 업그레이드 배지 ── */
+/* ── 상황변경 패널 ── */
+.situation-bar {
+  display:flex; gap:6px; margin-bottom:16px; flex-wrap:wrap;
+}
+.sit-btn {
+  background:var(--surface); border:1px solid var(--border);
+  color:var(--muted); font-family:'Noto Sans KR',sans-serif;
+  font-size:11px; padding:5px 12px; border-radius:100px;
+  cursor:pointer; transition:all 0.2s;
+}
+.sit-btn:hover { border-color:var(--accent3); color:var(--accent3); }
+.sit-btn.active { background:rgba(232,122,154,0.15); border-color:var(--accent3); color:var(--accent3); font-weight:700; }
+
+.alt-panel {
+  background:var(--surface); border:1px solid var(--accent3);
+  border-radius:10px; padding:14px 16px; margin-bottom:16px;
+  display:none;
+}
+.alt-panel.show { display:block; animation:fadeIn 0.2s ease; }
+.alt-title { font-size:11px; color:var(--accent3); letter-spacing:2px; margin-bottom:10px; font-family:'Nanum Myeongjo',serif; }
+.alt-option {
+  background:var(--card); border:1px solid var(--border);
+  border-radius:8px; padding:10px 14px; margin-bottom:6px;
+  cursor:pointer; transition:all 0.2s;
+}
+.alt-option:hover { border-color:var(--accent2); }
+.alt-option:last-child { margin-bottom:0; }
+.alt-option-name { font-size:13px; font-weight:600; color:var(--text); margin-bottom:2px; }
+.alt-option-desc { font-size:11px; color:var(--muted); line-height:1.6; }
+
+/* ── 레벨업 배지 ── */
 .upgrade-badge {
-  background:rgba(185,122,232,0.12);
-  border:1px solid var(--xp-color);
+  background:rgba(185,122,232,0.12); border:1px solid var(--xp-color);
   border-radius:8px; padding:10px 14px;
   font-size:12px; color:var(--xp-color);
   margin-bottom:14px; display:flex; align-items:center; gap:8px;
@@ -207,36 +216,22 @@ body::before {
 
 /* ── 섹션 ── */
 .section { margin-bottom:24px; }
-
-.section-header {
-  display:flex; align-items:center; gap:12px; margin-bottom:8px;
-}
-
-.section-label {
-  font-family:'Nanum Myeongjo',serif;
-  font-size:10px; letter-spacing:4px;
-  color:var(--accent); text-transform:uppercase;
-}
-
+.section-header { display:flex; align-items:center; gap:12px; margin-bottom:8px; }
+.section-label { font-family:'Nanum Myeongjo',serif; font-size:10px; letter-spacing:4px; color:var(--accent); text-transform:uppercase; }
 .section-line { flex:1; height:1px; background:var(--border); }
 
 /* ── 운동 아이템 ── */
 .exercise-list { display:flex; flex-direction:column; gap:7px; }
-
 .exercise-item {
   background:var(--card); border:1px solid var(--border);
   border-radius:10px; overflow:hidden;
   cursor:pointer; transition:all 0.2s; user-select:none;
 }
-
 .exercise-item:hover { border-color:var(--accent2); }
 .exercise-item.done { border-color:var(--success); background:rgba(122,232,168,0.06); }
 .exercise-item.warm-item { opacity:0.65; }
 
-.exercise-main {
-  padding:13px 16px;
-  display:flex; align-items:center; gap:12px;
-}
+.exercise-main { padding:13px 16px; display:flex; align-items:center; gap:12px; }
 
 .check-circle {
   width:21px; height:21px; border-radius:50%;
@@ -244,20 +239,10 @@ body::before {
   display:flex; align-items:center; justify-content:center;
   font-size:11px; transition:all 0.2s;
 }
+.exercise-item.done .check-circle { background:var(--success); border-color:var(--success); color:#0f0f13; }
 
-.exercise-item.done .check-circle {
-  background:var(--success); border-color:var(--success); color:#0f0f13;
-}
-
-.exercise-name {
-  font-size:14px; font-weight:500; color:var(--text); flex:1;
-  transition:all 0.2s;
-}
-
-.exercise-item.done .exercise-name {
-  text-decoration:line-through; color:var(--muted);
-}
-
+.exercise-name { font-size:14px; font-weight:500; color:var(--text); flex:1; transition:all 0.2s; }
+.exercise-item.done .exercise-name { text-decoration:line-through; color:var(--muted); }
 .exercise-meta { font-size:11px; color:var(--muted); text-align:right; }
 
 .detail-btn {
@@ -270,30 +255,29 @@ body::before {
 }
 .detail-btn:hover { border-color:var(--accent2); color:var(--accent2); }
 
+.interval-btn {
+  background:none; border:1px solid var(--xp-color);
+  color:var(--xp-color); font-size:10px; padding:2px 8px;
+  border-radius:100px; cursor:pointer;
+  font-family:'Noto Sans KR',sans-serif;
+  transition:all 0.2s; letter-spacing:0.5px;
+  display:block; margin-top:4px; margin-left:auto;
+}
+.interval-btn:hover { background:rgba(185,122,232,0.15); }
+
 .exercise-detail {
   display:none; background:var(--surface);
   border-top:1px solid var(--border);
   padding:12px 16px 12px 49px;
   font-size:12px; color:var(--muted); line-height:1.8; font-weight:300;
 }
-
 .exercise-item.expanded .exercise-detail { display:block; }
 
 /* 진행률 */
-.progress-bar-wrap {
-  background:var(--surface); border-radius:100px;
-  height:3px; margin-top:12px; overflow:hidden;
-}
-
-.progress-bar-fill {
-  height:100%;
-  background:linear-gradient(90deg, var(--accent2), var(--success));
-  border-radius:100px; transition:width 0.4s ease;
-}
-
+.progress-bar-wrap { background:var(--surface); border-radius:100px; height:3px; margin-top:12px; overflow:hidden; }
+.progress-bar-fill { height:100%; background:linear-gradient(90deg, var(--accent2), var(--success)); border-radius:100px; transition:width 0.4s ease; }
 .progress-text { font-size:11px; color:var(--muted); text-align:right; margin-top:5px; }
 
-/* 완료 축하 */
 .congrats {
   background:linear-gradient(135deg, rgba(122,232,168,0.08), rgba(122,184,232,0.08));
   border:1px solid var(--success); border-radius:10px;
@@ -304,22 +288,24 @@ body::before {
 .congrats h3 { font-family:'Nanum Myeongjo',serif; font-size:18px; color:var(--success); margin-bottom:4px; }
 .congrats p { font-size:12px; color:var(--muted); }
 
-/* 손글씨 */
+/* ── 손글씨 ── */
 .writing-card {
   background:var(--card); border:1px solid var(--border);
   border-left:4px solid var(--accent3); border-radius:12px;
   padding:18px 22px;
 }
+.writing-posture {
+  background:var(--surface); border-radius:8px; padding:10px 14px;
+  margin-bottom:12px; font-size:12px; color:var(--muted); line-height:1.9;
+}
+.writing-posture strong { color:var(--accent3); font-weight:600; }
 
 .writing-steps { display:flex; flex-direction:column; gap:8px; margin-top:12px; }
-
 .writing-step {
   display:flex; align-items:center; gap:10px;
   cursor:pointer; padding:7px 0; transition:all 0.2s;
 }
-
 .writing-step.done .step-text { text-decoration:line-through; color:var(--muted); }
-
 .step-num {
   width:24px; height:24px; border-radius:50%;
   background:var(--surface); border:1px solid var(--border);
@@ -327,72 +313,73 @@ body::before {
   font-size:10px; font-weight:700; color:var(--accent3);
   flex-shrink:0; transition:all 0.2s;
 }
-
-.writing-step.done .step-num {
-  background:var(--accent3); border-color:var(--accent3); color:#0f0f13;
-}
-
+.writing-step.done .step-num { background:var(--accent3); border-color:var(--accent3); color:#0f0f13; }
 .step-text { font-size:13px; color:var(--text); flex:1; }
 .step-time { font-size:11px; color:var(--muted); font-weight:300; }
 
-/* 맨발걷기 */
+/* ── 타이머 (손글씨) ── */
+.timer-inline {
+  background:var(--surface); border:1px solid var(--border);
+  border-radius:10px; padding:14px 16px;
+  margin-top:14px; display:flex; align-items:center; gap:14px;
+}
+.timer-display-sm {
+  font-family:'Nanum Myeongjo',serif;
+  font-size:28px; font-weight:800;
+  color:var(--accent); letter-spacing:3px;
+  transition:color 0.3s; min-width:70px;
+}
+.timer-display-sm.running { color:var(--success); }
+.timer-display-sm.done-color { color:var(--muted); }
+.timer-btns-sm { display:flex; gap:6px; }
+.timer-btn-sm {
+  background:transparent; border:1px solid var(--border);
+  color:var(--text); font-family:'Noto Sans KR',sans-serif;
+  font-size:12px; font-weight:500; padding:7px 16px;
+  border-radius:100px; cursor:pointer; transition:all 0.2s;
+}
+.timer-btn-sm.primary { background:var(--accent); border-color:var(--accent); color:#0f0f13; font-weight:700; }
+.timer-btn-sm:hover { opacity:0.8; }
+
+/* ── 맨발걷기 ── */
 .walk-card {
   background:var(--card); border:1px solid var(--border);
-  border-left:4px solid #7ae87a;
+  border-left:4px solid var(--walk-color);
   border-radius:12px; padding:14px 18px;
-  display:flex; align-items:center; gap:14px;
-  cursor:pointer; transition:all 0.2s; margin-bottom:8px;
+  margin-bottom:8px;
 }
-.walk-card:hover { border-color:#7ae87a; }
-.walk-card.done { background:rgba(122,232,122,0.06); }
+.walk-top {
+  display:flex; align-items:center; gap:14px;
+  cursor:pointer; margin-bottom:0; transition:all 0.2s;
+}
 .walk-card.done .walk-name { text-decoration:line-through; color:var(--muted); }
 .walk-name { font-size:14px; font-weight:500; color:var(--text); flex:1; }
 .walk-meta { font-size:12px; color:var(--muted); }
 
-/* 타이머 */
-.timer-section {
-  background:var(--surface); border:1px solid var(--border);
-  border-radius:12px; padding:22px; text-align:center; margin-top:12px;
+.walk-timer-row {
+  display:flex; align-items:center; gap:10px;
+  margin-top:12px; padding-top:10px;
+  border-top:1px solid var(--border);
 }
-
-.timer-label {
-  font-size:11px; letter-spacing:3px; color:var(--muted);
-  font-family:'Nanum Myeongjo',serif; margin-bottom:10px;
-}
-
-.timer-display {
+.walk-timer-disp {
   font-family:'Nanum Myeongjo',serif;
-  font-size:52px; font-weight:800;
-  color:var(--accent); letter-spacing:4px;
-  margin-bottom:14px; line-height:1; transition:color 0.3s;
+  font-size:24px; font-weight:800;
+  color:var(--walk-color); letter-spacing:2px; min-width:65px;
 }
-.timer-display.running { color:var(--success); }
-.timer-display.done-color { color:var(--muted); }
-
-.timer-btns { display:flex; gap:8px; justify-content:center; }
-
-.timer-btn {
-  background:transparent; border:1px solid var(--border);
-  color:var(--text); font-family:'Noto Sans KR',sans-serif;
-  font-size:13px; font-weight:500; padding:9px 22px;
-  border-radius:100px; cursor:pointer; transition:all 0.2s; letter-spacing:1px;
+.walk-timer-btn {
+  background:var(--walk-color); border:none; color:#0f0f13;
+  font-family:'Noto Sans KR',sans-serif;
+  font-size:12px; font-weight:700; padding:7px 16px;
+  border-radius:100px; cursor:pointer; transition:all 0.2s;
 }
-.timer-btn.primary {
-  background:var(--accent); border-color:var(--accent);
-  color:#0f0f13; font-weight:700;
-}
-.timer-btn:hover { opacity:0.8; }
+.walk-timer-btn.stop { background:var(--accent3); }
+.walk-timer-btn:hover { opacity:0.85; }
+.walk-tip { font-size:11px; color:var(--muted); flex:1; line-height:1.5; }
 
-/* 메모 */
+/* ── 메모 ── */
 .memo-section { margin-top:24px; }
-.memo-box {
-  background:var(--card); border:1px solid var(--border);
-  border-radius:12px; padding:16px 18px;
-}
-.memo-label {
-  font-size:10px; letter-spacing:3px; color:var(--accent);
-  font-family:'Nanum Myeongjo',serif; margin-bottom:8px;
-}
+.memo-box { background:var(--card); border:1px solid var(--border); border-radius:12px; padding:16px 18px; }
+.memo-label { font-size:10px; letter-spacing:3px; color:var(--accent); font-family:'Nanum Myeongjo',serif; margin-bottom:8px; }
 .memo-input {
   width:100%; background:transparent; border:none;
   color:var(--text); font-family:'Noto Sans KR',sans-serif;
@@ -401,16 +388,10 @@ body::before {
 }
 .memo-input::placeholder { color:var(--border); }
 
-/* 휴식일 */
-.rest-card {
-  background:var(--card); border:1px solid var(--border);
-  border-radius:14px; padding:44px 24px; text-align:center;
-}
+/* ── 휴식일 ── */
+.rest-card { background:var(--card); border:1px solid var(--border); border-radius:14px; padding:44px 24px; text-align:center; }
 .rest-emoji { font-size:46px; margin-bottom:14px; }
-.rest-card h2 {
-  font-family:'Nanum Myeongjo',serif;
-  font-size:22px; font-weight:700; color:var(--text); margin-bottom:8px;
-}
+.rest-card h2 { font-family:'Nanum Myeongjo',serif; font-size:22px; font-weight:700; color:var(--text); margin-bottom:8px; }
 .rest-card p { font-size:13px; color:var(--muted); line-height:1.9; font-weight:300; }
 
 /* ── 달력 모달 ── */
@@ -424,19 +405,11 @@ body::before {
 
 .cal-modal {
   background:var(--card); border:1px solid var(--border);
-  border-radius:16px; padding:28px; width:360px; max-width:94vw;
+  border-radius:16px; padding:28px; width:380px; max-width:94vw;
+  max-height:90vh; overflow-y:auto;
 }
-
-.cal-header {
-  display:flex; align-items:center; justify-content:space-between;
-  margin-bottom:20px;
-}
-
-.cal-title {
-  font-family:'Nanum Myeongjo',serif;
-  font-size:18px; font-weight:800; color:var(--text);
-}
-
+.cal-header { display:flex; align-items:center; justify-content:space-between; margin-bottom:20px; }
+.cal-title { font-family:'Nanum Myeongjo',serif; font-size:18px; font-weight:800; color:var(--text); }
 .cal-nav {
   background:none; border:1px solid var(--border);
   color:var(--muted); font-size:14px; padding:5px 12px;
@@ -444,119 +417,111 @@ body::before {
   transition:all 0.2s;
 }
 .cal-nav:hover { border-color:var(--accent); color:var(--accent); }
-
-.cal-close {
-  background:none; border:none; color:var(--muted);
-  font-size:18px; cursor:pointer; padding:4px 8px;
-  transition:color 0.2s;
-}
+.cal-close { background:none; border:none; color:var(--muted); font-size:18px; cursor:pointer; padding:4px 8px; transition:color 0.2s; }
 .cal-close:hover { color:var(--text); }
 
-.cal-days-header {
-  display:grid; grid-template-columns:repeat(7,1fr);
-  text-align:center; font-size:11px; color:var(--muted);
-  margin-bottom:8px; gap:2px;
-}
+.cal-days-header { display:grid; grid-template-columns:repeat(7,1fr); text-align:center; font-size:11px; color:var(--muted); margin-bottom:8px; gap:2px; }
 
-.cal-grid {
-  display:grid; grid-template-columns:repeat(7,1fr);
-  gap:4px;
-}
-
+.cal-grid { display:grid; grid-template-columns:repeat(7,1fr); gap:4px; }
 .cal-cell {
   aspect-ratio:1; border-radius:8px;
   display:flex; align-items:center; justify-content:center;
-  font-size:12px; position:relative; cursor:default;
+  font-size:12px; position:relative; cursor:pointer;
   font-family:'Noto Sans KR',sans-serif;
+  transition:all 0.15s;
 }
-
-.cal-cell.empty { }
+.cal-cell:hover { background:var(--surface); }
+.cal-cell.empty { cursor:default; }
+.cal-cell.empty:hover { background:transparent; }
 .cal-cell.today { border:1px solid var(--accent); color:var(--accent); font-weight:700; }
 .cal-cell.done-day { background:rgba(122,232,168,0.2); color:var(--success); }
 .cal-cell.partial-day { background:rgba(232,201,122,0.15); color:var(--accent); }
-.cal-cell.missed { color:var(--muted); }
+.cal-cell.missed { color:var(--muted); opacity:0.5; }
+.cal-cell.selected { outline:2px solid var(--accent2); outline-offset:1px; }
 
-.cal-legend {
-  display:flex; gap:14px; margin-top:16px;
-  font-size:11px; color:var(--muted); flex-wrap:wrap;
-}
-
+.cal-legend { display:flex; gap:14px; margin-top:16px; font-size:11px; color:var(--muted); flex-wrap:wrap; }
 .cal-legend-item { display:flex; align-items:center; gap:6px; }
-.legend-dot {
-  width:10px; height:10px; border-radius:3px; flex-shrink:0;
-}
+.legend-dot { width:10px; height:10px; border-radius:3px; flex-shrink:0; }
 
-/* ── 모바일 최적화 ── */
-@media (max-width: 600px) {
-  .wrapper { padding: 0 14px 100px; }
-  .header { padding: 24px 0 18px; }
-  .header-date { font-size: 30px; }
-  .header-day { font-size: 13px; }
-  .level-bar-wrap { padding: 12px 14px; gap: 10px; }
-  .level-badge { width: 38px; height: 38px; font-size: 14px; }
-  .level-title { font-size: 13px; }
-  .level-sub { font-size: 10px; }
-  .quote-text { font-size: 16px; }
-  .day-selector { gap: 5px; }
-  .day-btn { font-size: 11px; padding: 7px 11px; }
-  .today-banner { padding: 14px 16px; gap: 10px; }
-  .today-emoji { font-size: 24px; }
-  .today-info h2 { font-size: 16px; }
-  .exercise-main { padding: 11px 13px; gap: 10px; }
-  .exercise-name { font-size: 13px; }
-  .exercise-meta { font-size: 10px; }
-  .exercise-detail { padding: 10px 13px 10px 43px; font-size: 11px; }
-  .timer-display { font-size: 44px; }
-  .timer-btn { font-size: 12px; padding: 8px 18px; }
-  .memo-input { font-size: 14px; }
-  .walk-card { padding: 12px 14px; }
-  .walk-name { font-size: 13px; }
-  .writing-card { padding: 14px 16px; }
-  .step-text { font-size: 12px; }
-  .cal-modal { padding: 20px 16px; }
-  .cal-cell { font-size: 11px; border-radius: 6px; }
-  .rest-card { padding: 32px 16px; }
-  .rest-card h2 { font-size: 20px; }
+/* 날짜 상세 */
+.cal-day-detail {
+  margin-top:16px; border-top:1px solid var(--border);
+  padding-top:14px; display:none; animation:fadeIn 0.2s ease;
 }
+.cal-day-detail.show { display:block; }
+.cal-detail-date { font-size:12px; color:var(--accent2); letter-spacing:2px; font-family:'Nanum Myeongjo',serif; margin-bottom:10px; }
+.cal-detail-row { display:flex; align-items:center; gap:8px; font-size:12px; color:var(--text); margin-bottom:6px; }
+.cal-detail-memo { font-size:12px; color:var(--muted); background:var(--surface); border-radius:6px; padding:8px 12px; margin-top:8px; line-height:1.7; }
 
-/* iOS 홈 화면 추가 안내 배너 */
-.install-banner {
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: 10px;
-  padding: 12px 16px;
-  margin-bottom: 16px;
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  font-size: 12px;
-  color: var(--muted);
+/* ── 인터벌 타이머 모달 ── */
+.interval-modal {
+  position:fixed; inset:0;
+  background:rgba(0,0,0,0.85); backdrop-filter:blur(8px);
+  z-index:150; display:none;
+  align-items:center; justify-content:center;
 }
-.install-banner .install-icon { font-size: 20px; flex-shrink: 0; }
-.install-banner .install-close {
-  background: none; border: none;
-  color: var(--muted); cursor: pointer;
-  font-size: 14px; margin-left: auto;
-  padding: 2px 6px;
+.interval-modal.show { display:flex; animation:fadeIn 0.2s ease; }
+.interval-card {
+  background:var(--card); border:1px solid var(--xp-color);
+  border-radius:20px; padding:32px; width:320px; max-width:90vw;
+  text-align:center;
 }
+.interval-title { font-family:'Nanum Myeongjo',serif; font-size:16px; font-weight:700; color:var(--text); margin-bottom:6px; }
+.interval-ex-name { font-size:13px; color:var(--muted); margin-bottom:20px; }
 
-.save-toast {
-  position:fixed; bottom:24px; right:24px;
-  background:var(--success); color:#0f0f13;
-  font-size:12px; font-weight:700; padding:9px 18px;
-  border-radius:100px; opacity:0;
-  transform:translateY(8px); transition:all 0.3s ease;
-  pointer-events:none; letter-spacing:1px;
+.interval-phase {
+  font-size:11px; letter-spacing:3px; color:var(--xp-color);
+  font-family:'Nanum Myeongjo',serif; margin-bottom:8px;
+  transition:color 0.3s;
+}
+.interval-phase.rest-phase { color:var(--accent2); }
+
+.interval-count {
+  font-family:'Nanum Myeongjo',serif;
+  font-size:72px; font-weight:800;
+  color:var(--xp-color); line-height:1;
+  margin-bottom:8px; transition:color 0.3s;
+}
+.interval-count.rest-count { color:var(--accent2); }
+
+.interval-sets { font-size:13px; color:var(--muted); margin-bottom:20px; }
+
+.interval-settings { display:flex; gap:8px; margin-bottom:20px; justify-content:center; }
+.interval-setting-box {
+  background:var(--surface); border:1px solid var(--border);
+  border-radius:8px; padding:8px 12px; text-align:center;
+}
+.interval-setting-label { font-size:10px; color:var(--muted); margin-bottom:4px; }
+.interval-setting-val { display:flex; align-items:center; gap:6px; }
+.interval-adj-btn {
+  background:none; border:1px solid var(--border); color:var(--muted);
+  width:22px; height:22px; border-radius:50%; cursor:pointer;
+  font-size:12px; display:flex; align-items:center; justify-content:center;
+  transition:all 0.2s;
+}
+.interval-adj-btn:hover { border-color:var(--xp-color); color:var(--xp-color); }
+.interval-num { font-size:14px; font-weight:700; color:var(--text); min-width:28px; }
+
+.interval-btns { display:flex; gap:8px; justify-content:center; flex-wrap:wrap; }
+.interval-ctrl-btn {
+  background:var(--xp-color); border:none; color:#0f0f13;
   font-family:'Noto Sans KR',sans-serif;
+  font-size:13px; font-weight:700; padding:10px 24px;
+  border-radius:100px; cursor:pointer; transition:all 0.2s;
 }
-.save-toast.show { opacity:1; transform:translateY(0); }
+.interval-ctrl-btn:hover { opacity:0.85; }
+.interval-close-btn {
+  background:none; border:1px solid var(--border); color:var(--muted);
+  font-family:'Noto Sans KR',sans-serif;
+  font-size:13px; padding:10px 20px;
+  border-radius:100px; cursor:pointer; transition:all 0.2s;
+}
+.interval-close-btn:hover { border-color:var(--text); color:var(--text); }
 
 /* ── 레벨업 팝업 ── */
 .levelup-popup {
-  position:fixed; inset:0;
-  background:rgba(0,0,0,0.8);
-  z-index:200; display:none;
-  align-items:center; justify-content:center;
+  position:fixed; inset:0; background:rgba(0,0,0,0.8);
+  z-index:200; display:none; align-items:center; justify-content:center;
 }
 .levelup-popup.show { display:flex; }
 .levelup-card {
@@ -567,19 +532,52 @@ body::before {
   animation:popIn 0.4s ease;
 }
 .levelup-emoji { font-size:56px; margin-bottom:16px; }
-.levelup-title {
-  font-family:'Nanum Myeongjo',serif;
-  font-size:28px; font-weight:800;
-  color:var(--xp-color); margin-bottom:8px;
-}
+.levelup-title { font-family:'Nanum Myeongjo',serif; font-size:28px; font-weight:800; color:var(--xp-color); margin-bottom:8px; }
 .levelup-sub { font-size:14px; color:var(--text); margin-bottom:6px; }
 .levelup-desc { font-size:12px; color:var(--muted); line-height:1.7; margin-bottom:24px; }
 .levelup-btn {
   background:var(--xp-color); border:none; color:#0f0f13;
   font-family:'Noto Sans KR',sans-serif;
-  font-size:14px; font-weight:700;
-  padding:12px 32px; border-radius:100px; cursor:pointer;
-  letter-spacing:1px;
+  font-size:14px; font-weight:700; padding:12px 32px;
+  border-radius:100px; cursor:pointer;
+}
+
+/* ── 토스트 ── */
+.save-toast {
+  position:fixed; bottom:24px; right:24px;
+  background:var(--success); color:#0f0f13;
+  font-size:12px; font-weight:700; padding:9px 18px;
+  border-radius:100px; opacity:0;
+  transform:translateY(8px); transition:all 0.3s ease;
+  pointer-events:none; letter-spacing:1px;
+  font-family:'Noto Sans KR',sans-serif; z-index:300;
+}
+.save-toast.show { opacity:1; transform:translateY(0); }
+
+.install-banner {
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: 10px; padding: 12px 16px; margin-bottom: 16px;
+  display: flex; align-items: center; gap: 10px;
+  font-size: 12px; color: var(--muted);
+}
+.install-banner .install-icon { font-size: 20px; flex-shrink: 0; }
+.install-banner .install-close {
+  background: none; border: none; color: var(--muted);
+  cursor: pointer; font-size: 14px; margin-left: auto; padding: 2px 6px;
+}
+
+@media (max-width: 600px) {
+  .wrapper { padding: 0 14px 100px; }
+  .header { padding: 24px 0 18px; }
+  .header-date { font-size: 30px; }
+  .level-badge { width: 38px; height: 38px; font-size: 14px; }
+  .quote-text { font-size: 16px; }
+  .day-btn { font-size: 11px; padding: 7px 11px; }
+  .today-banner { padding: 14px 16px; gap: 10px; }
+  .today-emoji { font-size: 24px; }
+  .today-info h2 { font-size: 16px; }
+  .timer-display-sm { font-size: 24px; }
+  .interval-count { font-size: 58px; }
 }
 
 @keyframes fadeIn { from{opacity:0;transform:translateY(12px)} to{opacity:1;transform:translateY(0)} }
@@ -591,7 +589,6 @@ body::before {
 
 <div class="wrapper">
 
-  <!-- iOS 홈 화면 안내 (처음 1번만) -->
   <div class="install-banner" id="installBanner" style="display:none">
     <span class="install-icon">📲</span>
     <span>Safari → <b>공유 버튼</b> → <b>홈 화면에 추가</b> 하면 앱처럼 쓸 수 있어!</span>
@@ -602,8 +599,13 @@ body::before {
   <div class="header">
     <div class="header-top">
       <div class="header-brand">오늘의 행복</div>
-      <button class="header-cal-btn" onclick="openCal()">📅 기록 달력</button>
-      <button class="header-cal-btn" onclick="pushData()" style="background:var(--success);border-color:var(--success);color:#0f0f13;font-weight:700;">☁️ 동기화</button>
+      <div class="header-btns">
+        <div style="display:flex;gap:6px;">
+          <button class="header-cal-btn" onclick="openCal()">📅 기록 달력</button>
+          <button class="sync-btn" id="syncBtn" onclick="pushData()">☁️ 동기화</button>
+        </div>
+        <div class="sync-time" id="syncTimeLabel"></div>
+      </div>
     </div>
     <div class="header-center">
       <div class="header-date" id="headerDate" onclick="openCal()"></div>
@@ -667,6 +669,58 @@ body::before {
       <div class="cal-legend-item"><div class="legend-dot" style="background:rgba(232,201,122,0.2)"></div>부분 완료</div>
       <div class="cal-legend-item"><div class="legend-dot" style="border:1px solid var(--accent)"></div>오늘</div>
     </div>
+    <!-- 날짜 상세 (클릭 시 표시) -->
+    <div class="cal-day-detail" id="calDayDetail">
+      <div class="cal-detail-date" id="calDetailDate"></div>
+      <div id="calDetailContent"></div>
+    </div>
+  </div>
+</div>
+
+<!-- 인터벌 타이머 모달 -->
+<div class="interval-modal" id="intervalModal">
+  <div class="interval-card">
+    <div class="interval-title">인터벌 타이머</div>
+    <div class="interval-ex-name" id="intervalExName">철봉 매달리기</div>
+
+    <div class="interval-settings">
+      <div class="interval-setting-box">
+        <div class="interval-setting-label">운동 시간</div>
+        <div class="interval-setting-val">
+          <button class="interval-adj-btn" onclick="adjustInterval('work',-5)">−</button>
+          <div class="interval-num" id="workSecDisplay">30</div>
+          <button class="interval-adj-btn" onclick="adjustInterval('work',5)">+</button>
+        </div>
+        <div style="font-size:10px;color:var(--muted);">초</div>
+      </div>
+      <div class="interval-setting-box">
+        <div class="interval-setting-label">휴식 시간</div>
+        <div class="interval-setting-val">
+          <button class="interval-adj-btn" onclick="adjustInterval('rest',-5)">−</button>
+          <div class="interval-num" id="restSecDisplay">15</div>
+          <button class="interval-adj-btn" onclick="adjustInterval('rest',5)">+</button>
+        </div>
+        <div style="font-size:10px;color:var(--muted);">초</div>
+      </div>
+      <div class="interval-setting-box">
+        <div class="interval-setting-label">세트</div>
+        <div class="interval-setting-val">
+          <button class="interval-adj-btn" onclick="adjustInterval('sets',-1)">−</button>
+          <div class="interval-num" id="setsDisplay">3</div>
+          <button class="interval-adj-btn" onclick="adjustInterval('sets',1)">+</button>
+        </div>
+        <div style="font-size:10px;color:var(--muted);">세트</div>
+      </div>
+    </div>
+
+    <div class="interval-phase" id="intervalPhase">준비</div>
+    <div class="interval-count" id="intervalCount">--</div>
+    <div class="interval-sets" id="intervalSetsInfo">세트 준비</div>
+
+    <div class="interval-btns">
+      <button class="interval-ctrl-btn" id="intervalStartBtn" onclick="toggleIntervalTimer()">시작</button>
+      <button class="interval-close-btn" onclick="closeIntervalModal()">닫기</button>
+    </div>
   </div>
 </div>
 
@@ -684,113 +738,139 @@ body::before {
 <div class="save-toast" id="saveToast">저장됨 ✓</div>
 
 <script>
-// ════════════════════════════
+// ════════════════════════════════════
 // 데이터
-// ════════════════════════════
+// ════════════════════════════════════
 
 const QUOTES = [
-  { text: "시작이 반이다.", author: "아리스토텔레스 (그리스 철학자, BC 384~322)", meaning: "무언가를 시작하는 것 자체가 이미 절반을 해낸 것이나 다름없다. 망설임과 두려움을 내려놓고 일단 시작하는 용기가 중요하다." },
-  { text: "천 리 길도 한 걸음부터.", author: "노자 (도덕경, BC 6세기)", meaning: "아무리 먼 목표도 결국 지금 이 한 걸음에서 시작된다. 오늘 하루의 작은 실천이 쌓여 큰 변화를 만든다." },
-  { text: "오늘 할 수 있는 일을 내일로 미루지 마라.", author: "벤자민 프랭클린 (미국 건국의 아버지, 1706~1790)", meaning: "미루는 습관은 가장 큰 적이다. 지금 이 순간 할 수 있는 것을 하는 것이 성공의 핵심이다." },
-  { text: "땀은 거짓말을 하지 않는다.", author: "보 잭슨 (미국 운동선수)", meaning: "노력은 반드시 결과로 나타난다. 화려한 말보다 조용히 흘린 땀이 더 정직한 진실을 말해준다." },
-  { text: "작은 것들이 완벽함을 만든다.", author: "미켈란젤로 (이탈리아 예술가, 1475~1564)", meaning: "완벽함은 거창한 것에서 오지 않는다. 매일의 작은 디테일에 집중하는 태도가 결국 위대한 결과를 만들어낸다." },
-  { text: "고통은 일시적이다. 포기는 영원하다.", author: "랜스 암스트롱 (사이클 선수)", meaning: "지금 느끼는 힘듦은 언젠가 끝난다. 하지만 포기한 순간은 평생 후회로 남는다. 조금만 더 버텨라." },
-  { text: "멈추지 않는 한, 속도는 문제가 되지 않는다.", author: "공자 (중국 사상가, BC 551~479)", meaning: "빠르게 가는 것보다 멈추지 않는 것이 더 중요하다. 느려도 괜찮다. 오늘도 계속 나아가고 있다는 것이 핵심이다." },
-  { text: "실패란 더 현명하게 다시 시작할 기회다.", author: "헨리 포드 (포드 창업자, 1863~1947)", meaning: "실패는 끝이 아니라 배움의 시작이다. 무너진 자리에서 무엇을 배웠는지가 다음 성공을 결정한다." },
-  { text: "우리는 우리가 반복적으로 하는 것의 산물이다.", author: "아리스토텔레스 (그리스 철학자)", meaning: "탁월함은 한 번의 행동이 아니라 습관에서 나온다. 매일 반복하는 루틴이 결국 나라는 사람을 만든다." },
-  { text: "당신 자신을 남과 비교하지 마라. 그것은 자신을 모욕하는 행위다.", author: "빌 게이츠 (마이크로소프트 창업자)", meaning: "비교는 행복을 빼앗아간다. 어제의 나와 오늘의 나를 비교하는 것. 그것만이 의미 있는 경쟁이다." },
-  { text: "불가능이란 아무것도 아니다.", author: "무하마드 알리 (권투 선수, 1942~2016)", meaning: "불가능은 능력이 없는 사람의 선언이 아니라, 아직 해보지 않은 사람의 변명이다. 도전하기 전까지는 아무도 모른다." },
-  { text: "나는 실패를 받아들일 수 있다. 하지만 시도하지 않는 것은 받아들일 수 없다.", author: "마이클 조던 (NBA 농구 선수)", meaning: "결과보다 과정이 중요하다. 해보고 실패하는 것은 부끄럽지 않다. 두려워서 시도조차 하지 않는 것이 진짜 실패다." },
-  { text: "매일 조금씩. 그것이 전부다.", author: "로버트 콜리어 (미국 작가, 1885~1950)", meaning: "위대한 변화는 매일의 작은 행동에서 비롯된다. 오늘 하루를 충실히 사는 것이 인생을 바꾸는 유일한 방법이다." },
-  { text: "건강한 몸에 건강한 정신이 깃든다.", author: "유베날리스 (로마 시인, 1~2세기)", meaning: "몸과 마음은 분리되지 않는다. 몸을 단련하면 정신도 강해진다. 운동이 단순한 체력 관리가 아닌 이유다." },
-  { text: "한계는 종종 스스로 만든 것이다.", author: "마이클 조던 (NBA 농구 선수)", meaning: "우리가 '못 한다'고 생각하는 순간, 그것이 진짜 한계가 된다. 그 한계는 대부분 외부가 아닌 자신의 마음속에 있다." },
-  { text: "꿈을 꾸고 있는 한, 인생은 충분히 가치 있다.", author: "빈센트 반 고흐 (화가, 1853~1890)", meaning: "무언가를 바라고 나아가는 사람에게 인생은 의미를 가진다. 목표를 가진 하루는 아무것도 없는 하루와 다르다." },
-  { text: "오늘의 땀이 내일의 나를 만든다.", author: "무명 (스포츠 격언)", meaning: "지금 이 순간 흘리는 땀은 절대 낭비가 아니다. 그것이 쌓여 미래의 더 나은 나를 만드는 재료가 된다." },
-  { text: "변명을 멈추는 순간, 인생이 시작된다.", author: "스티브 잡스 (애플 창업자, 1955~2011)", meaning: "변명은 현실을 합리화하는 도구다. 변명을 내려놓고 책임을 받아들이는 순간, 비로소 진짜 성장이 시작된다." },
-  { text: "어제보다 나은 오늘이면 충분하다.", author: "무명 (일본 무도 격언)", meaning: "완벽할 필요가 없다. 어제의 자신보다 조금이라도 성장했다면, 오늘은 성공한 하루다." },
-  { text: "포기하지 않는 한, 실패는 없다.", author: "크리스토퍼 콜럼버스 (탐험가, 1451~1506)", meaning: "진짜 실패는 넘어지는 것이 아니라 일어나기를 포기하는 것이다. 계속 시도하는 사람은 결국 이긴다." },
-  { text: "인내는 쓰나 열매는 달다.", author: "장 자크 루소 (프랑스 철학자, 1712~1778)", meaning: "힘든 과정을 견딘 사람만이 그 결실의 달콤함을 안다. 지금의 고통은 나중의 기쁨을 더욱 크게 만든다." },
-  { text: "당신이 할 수 있다고 믿든 없다고 믿든, 당신이 옳다.", author: "헨리 포드 (포드 창업자, 1863~1947)", meaning: "믿음이 현실을 만든다. '할 수 있다'는 확신은 행동을 만들고, 행동이 쌓여 결과가 된다." },
-  { text: "나무는 폭풍 속에서 뿌리를 내린다.", author: "돌로레스 이바루리 (스페인 정치인)", meaning: "위기와 고난이 오히려 더 깊은 성장을 만든다. 힘든 시간이 나를 더 단단하게 만들고 있다." },
-  { text: "몸은 마음이 가는 곳으로 따라온다.", author: "스포츠 심리학 격언", meaning: "정신력이 먼저다. 마음을 강하게 먹으면 몸도 따라온다. 오늘 하기 싫다는 마음을 이기는 것이 진짜 훈련이다." },
-  { text: "지금 이 순간은 다시 오지 않는다.", author: "세네카 (로마 철학자, BC 4~AD 65)", meaning: "오늘 이 하루는 두 번 다시 없다. 지금을 허비하는 것은 인생을 허비하는 것과 같다." },
-  { text: "자유는 규율에서 온다.", author: "조코 윌링크 (미국 해군 특수부대 지휘관)", meaning: "아이러니하게도 엄격한 루틴과 자기 규율이 오히려 더 큰 자유를 준다. 규칙이 없는 자유는 혼돈이다." },
-  { text: "성공은 매일 반복되는 작은 노력의 합이다.", author: "로버트 콜리어 (미국 작가)", meaning: "화려한 순간은 평범한 날들의 축적으로 만들어진다. 오늘의 평범한 노력이 내일의 특별함이 된다." },
-  { text: "쉬는 것도 훈련이다.", author: "스포츠 과학 원칙", meaning: "회복 없이는 성장도 없다. 쉬는 것은 게으름이 아니라 다음 훈련을 위한 준비다. 몸에게 회복의 시간을 줘라." },
-  { text: "불편함이 성장의 통화다.", author: "브레네 브라운 (미국 연구교수)", meaning: "편안함 속에서는 성장하기 어렵다. 불편하고 힘든 상황이 바로 내가 성장하고 있다는 신호다." },
-  { text: "작은 씨앗도 올바른 환경에서는 큰 나무가 된다.", author: "중국 속담", meaning: "지금 당장 결과가 보이지 않아도 괜찮다. 꾸준히 좋은 환경과 습관을 만들어가면 반드시 크게 성장한다." },
-  { text: "천천히 가도 괜찮다. 멈추지만 않으면.", author: "마틴 루터 킹 (미국 인권운동가, 1929~1968)", meaning: "속도보다 방향이 중요하다. 느려도 포기하지 않고 나아가는 사람이 결국 목적지에 닿는다." },
-  { text: "오늘 걷지 않으면 내일은 뛰어야 한다.", author: "한국 속담", meaning: "지금의 작은 노력이 나중의 큰 부담을 덜어준다. 오늘 미루면 내일 더 힘들어진다." },
-  { text: "당신이 포기하고 싶은 그 순간이 바로 전환점이다.", author: "밥 피트먼 (미국 기업인)", meaning: "가장 힘든 순간이 사실 가장 중요한 순간이다. 지금 버티는 것이 성공과 실패를 가르는 분기점이다." },
-  { text: "두려움은 꿈을 죽이는 가장 큰 적이다.", author: "오프라 윈프리 (방송인)", meaning: "실패가 두려워 시작하지 않는 것이 진짜 실패다. 두려움을 인정하되, 그것에 지배당하지 마라." },
-  { text: "매일 1%씩 나아지면 1년 후 37배가 된다.", author: "제임스 클리어 (원자적 습관 저자)", meaning: "작은 개선의 복리 효과는 상상을 초월한다. 오늘 1%의 노력이 쌓여 엄청난 차이를 만들어낸다." },
-  { text: "나를 죽이지 못하는 것은 나를 더 강하게 만든다.", author: "프리드리히 니체 (철학자, 1844~1900)", meaning: "역경은 파괴하거나 단련시킨다. 살아남은 모든 고난은 결국 나를 더 강한 사람으로 만들어왔다." },
-  { text: "탁월함은 행위가 아니라 습관이다.", author: "윌 듀란트 (아리스토텔레스 해석)", meaning: "한 번의 훌륭한 행동이 아니라, 매일의 꾸준한 반복이 탁월한 사람을 만든다." },
-  { text: "지금 이 고통이 훗날 너의 힘이 된다.", author: "세네카 (로마 철학자)", meaning: "지금 느끼는 힘듦은 사라지지 않는다. 나중에 힘이 필요할 때 꺼낼 수 있는 경험으로 쌓인다." },
-  { text: "배움에는 지름길이 없다. 하지만 올바른 길은 있다.", author: "베벌리 실스 (성악가)", meaning: "빠른 방법은 없지만 효율적인 방법은 있다. 제대로 된 방향으로 꾸준히 가는 것이 가장 빠른 길이다." },
-  { text: "실천 없는 비전은 단순한 꿈이다.", author: "조엘 바커 (미래학자)", meaning: "머릿속의 계획은 행동으로 옮겨야만 의미가 있다. 오늘 하루를 실천으로 채워라." },
-  { text: "자신을 극복하는 자가 가장 강한 자다.", author: "공자 (중국 사상가, BC 551~479)", meaning: "진짜 싸움은 남과의 경쟁이 아니라 자기 자신과의 싸움이다. 오늘의 나를 이기는 것이 진정한 승리다." },
-  { text: "피로는 성취의 증거다.", author: "스포츠 격언", meaning: "힘든 것은 열심히 했다는 뜻이다. 오늘의 피로가 쌓여 내일의 실력이 된다." },
-  { text: "좋은 습관은 만들기 어렵고, 나쁜 습관은 깨기 어렵다. 그래서 오늘이 중요하다.", author: "아리스토텔레스 (그리스 철학자)", meaning: "습관의 형성과 파괴 모두 의식적인 노력이 필요하다. 오늘 하루의 선택이 내일의 나를 결정한다." },
-  { text: "성공한 사람들은 남들이 쉬는 시간에도 한다.", author: "무명", meaning: "차이는 결정적인 순간이 아니라 아무도 보지 않는 평범한 날에 만들어진다." },
-  { text: "모든 전문가는 처음엔 초보자였다.", author: "헬렌 헤이스 (배우)", meaning: "지금 서툴러도 괜찮다. 모든 대가도 처음엔 형편없었다. 중요한 건 계속하는 것이다." },
-  { text: "하루하루 살아라. 이 하루가 당신의 인생이다.", author: "오마르 하이얌 (페르시아 시인, 1048~1131)", meaning: "거창한 미래보다 오늘 이 하루에 집중하라. 인생은 오늘의 집합이다." },
-  { text: "준비가 기회를 만날 때 행운이 된다.", author: "세네카 (로마 철학자)", meaning: "행운은 우연이 아니다. 꾸준히 준비한 사람에게 기회가 왔을 때 그것이 행운으로 보일 뿐이다." },
-  { text: "지식은 경험 없이는 공허하고, 경험은 지식 없이는 맹목적이다.", author: "임마누엘 칸트 (철학자, 1724~1804)", meaning: "이론과 실전은 함께 가야 한다. 공부와 현장 경험을 연결하는 것이 진짜 전문가의 길이다." },
-  { text: "반복은 모든 기술의 어머니다.", author: "토니 로빈스 (동기부여 강사)", meaning: "처음엔 어색해도 반복하면 자연스러워진다. 손글씨도, 운동도, 공부도 반복이 전부다." },
+  { text: "시작이 반이다.", author: "아리스토텔레스", meaning: "무언가를 시작하는 것 자체가 이미 절반을 해낸 것이나 다름없다." },
+  { text: "천 리 길도 한 걸음부터.", author: "노자 (도덕경)", meaning: "아무리 먼 목표도 결국 지금 이 한 걸음에서 시작된다." },
+  { text: "오늘 할 수 있는 일을 내일로 미루지 마라.", author: "벤자민 프랭클린", meaning: "미루는 습관은 가장 큰 적이다. 지금 할 수 있는 것을 하라." },
+  { text: "땀은 거짓말을 하지 않는다.", author: "보 잭슨", meaning: "노력은 반드시 결과로 나타난다." },
+  { text: "작은 것들이 완벽함을 만든다.", author: "미켈란젤로", meaning: "매일의 작은 디테일에 집중하는 태도가 위대한 결과를 만든다." },
+  { text: "고통은 일시적이다. 포기는 영원하다.", author: "랜스 암스트롱", meaning: "지금 느끼는 힘듦은 언젠가 끝난다. 하지만 포기한 순간은 평생 후회로 남는다." },
+  { text: "멈추지 않는 한, 속도는 문제가 되지 않는다.", author: "공자", meaning: "느려도 괜찮다. 포기하지 않고 나아가는 것이 핵심이다." },
+  { text: "실패란 더 현명하게 다시 시작할 기회다.", author: "헨리 포드", meaning: "실패는 끝이 아니라 배움의 시작이다." },
+  { text: "우리는 우리가 반복적으로 하는 것의 산물이다.", author: "아리스토텔레스", meaning: "매일 반복하는 루틴이 결국 나라는 사람을 만든다." },
+  { text: "당신 자신을 남과 비교하지 마라. 그것은 자신을 모욕하는 행위다.", author: "빌 게이츠", meaning: "어제의 나와 오늘의 나를 비교하는 것만이 의미 있는 경쟁이다." },
+  { text: "불가능이란 아무것도 아니다.", author: "무하마드 알리", meaning: "도전하기 전까지는 아무도 모른다." },
+  { text: "나는 실패를 받아들일 수 있다. 하지만 시도하지 않는 것은 받아들일 수 없다.", author: "마이클 조던", meaning: "두려워서 시도조차 하지 않는 것이 진짜 실패다." },
+  { text: "매일 조금씩. 그것이 전부다.", author: "로버트 콜리어", meaning: "위대한 변화는 매일의 작은 행동에서 비롯된다." },
+  { text: "건강한 몸에 건강한 정신이 깃든다.", author: "유베날리스", meaning: "몸을 단련하면 정신도 강해진다." },
+  { text: "한계는 종종 스스로 만든 것이다.", author: "마이클 조던", meaning: "우리가 못 한다고 생각하는 순간, 그것이 진짜 한계가 된다." },
+  { text: "오늘의 땀이 내일의 나를 만든다.", author: "스포츠 격언", meaning: "지금 이 순간 흘리는 땀은 절대 낭비가 아니다." },
+  { text: "변명을 멈추는 순간, 인생이 시작된다.", author: "스티브 잡스", meaning: "책임을 받아들이는 순간 진짜 성장이 시작된다." },
+  { text: "어제보다 나은 오늘이면 충분하다.", author: "일본 무도 격언", meaning: "조금이라도 성장했다면 오늘은 성공한 하루다." },
+  { text: "포기하지 않는 한, 실패는 없다.", author: "크리스토퍼 콜럼버스", meaning: "진짜 실패는 일어나기를 포기하는 것이다." },
+  { text: "인내는 쓰나 열매는 달다.", author: "장 자크 루소", meaning: "힘든 과정을 견딘 사람만이 그 결실의 달콤함을 안다." },
+  { text: "당신이 할 수 있다고 믿든 없다고 믿든, 당신이 옳다.", author: "헨리 포드", meaning: "믿음이 현실을 만든다." },
+  { text: "몸은 마음이 가는 곳으로 따라온다.", author: "스포츠 심리학 격언", meaning: "정신력이 먼저다. 마음을 강하게 먹으면 몸도 따라온다." },
+  { text: "자유는 규율에서 온다.", author: "조코 윌링크", meaning: "엄격한 루틴과 자기 규율이 오히려 더 큰 자유를 준다." },
+  { text: "성공은 매일 반복되는 작은 노력의 합이다.", author: "로버트 콜리어", meaning: "오늘의 평범한 노력이 내일의 특별함이 된다." },
+  { text: "쉬는 것도 훈련이다.", author: "스포츠 과학 원칙", meaning: "회복 없이는 성장도 없다." },
+  { text: "불편함이 성장의 통화다.", author: "브레네 브라운", meaning: "힘든 상황이 바로 내가 성장하고 있다는 신호다." },
+  { text: "천천히 가도 괜찮다. 멈추지만 않으면.", author: "마틴 루터 킹", meaning: "느려도 포기하지 않고 나아가는 사람이 결국 목적지에 닿는다." },
+  { text: "오늘 걷지 않으면 내일은 뛰어야 한다.", author: "한국 속담", meaning: "지금의 작은 노력이 나중의 큰 부담을 덜어준다." },
+  { text: "당신이 포기하고 싶은 그 순간이 바로 전환점이다.", author: "밥 피트먼", meaning: "가장 힘든 순간이 성공과 실패를 가르는 분기점이다." },
+  { text: "매일 1%씩 나아지면 1년 후 37배가 된다.", author: "제임스 클리어", meaning: "작은 개선의 복리 효과는 상상을 초월한다." },
+  { text: "나를 죽이지 못하는 것은 나를 더 강하게 만든다.", author: "니체", meaning: "살아남은 모든 고난은 결국 나를 더 강한 사람으로 만들었다." },
+  { text: "탁월함은 행위가 아니라 습관이다.", author: "윌 듀란트", meaning: "매일의 꾸준한 반복이 탁월한 사람을 만든다." },
+  { text: "지식은 경험 없이는 공허하고, 경험은 지식 없이는 맹목적이다.", author: "임마누엘 칸트", meaning: "이론과 실전은 함께 가야 한다." },
+  { text: "반복은 모든 기술의 어머니다.", author: "토니 로빈스", meaning: "처음엔 어색해도 반복하면 자연스러워진다." },
+  { text: "준비가 기회를 만날 때 행운이 된다.", author: "세네카", meaning: "꾸준히 준비한 사람에게 기회가 왔을 때 그것이 행운으로 보인다." },
+  { text: "자신을 극복하는 자가 가장 강한 자다.", author: "공자", meaning: "오늘의 나를 이기는 것이 진정한 승리다." },
+  { text: "피로는 성취의 증거다.", author: "스포츠 격언", meaning: "오늘의 피로가 쌓여 내일의 실력이 된다." },
+  { text: "모든 전문가는 처음엔 초보자였다.", author: "헬렌 헤이스", meaning: "지금 서툴러도 괜찮다. 중요한 건 계속하는 것이다." },
+  { text: "하루하루 살아라. 이 하루가 당신의 인생이다.", author: "오마르 하이얌", meaning: "인생은 오늘의 집합이다." },
+  { text: "성공한 사람들은 남들이 쉬는 시간에도 한다.", author: "무명", meaning: "차이는 아무도 보지 않는 평범한 날에 만들어진다." },
 ];
 
 const LEVELS = [
   { lv:1, name:"시작하는 자",    sub:"꾸준함이 모든 것의 시작이야",       xpNeeded:0,   unlock:"기본 루틴" },
-  { lv:2, name:"습관이 생기는 중", sub:"몸이 조금씩 기억하기 시작해",      xpNeeded:70,  unlock:"세트 수 +1" },
-  { lv:3, name:"의지가 굳은 자",  sub:"이제 안 하면 이상한 느낌이 들지",  xpNeeded:200, unlock:"운동 강도 업그레이드" },
-  { lv:4, name:"단련된 몸",       sub:"눈에 보이는 변화가 시작됐어",       xpNeeded:420, unlock:"고급 동작 해금" },
-  { lv:5, name:"강철 루틴",       sub:"의지가 근육이 됐어",               xpNeeded:700, unlock:"최고 강도 루틴 해금" },
+  { lv:2, name:"습관이 생기는 중", sub:"몸이 조금씩 기억하기 시작해",     xpNeeded:70,  unlock:"세트 수 +1" },
+  { lv:3, name:"의지가 굳은 자",  sub:"이제 안 하면 이상한 느낌이 들지", xpNeeded:200, unlock:"운동 강도 업그레이드" },
+  { lv:4, name:"단련된 몸",       sub:"눈에 보이는 변화가 시작됐어",      xpNeeded:420, unlock:"고급 동작 해금" },
+  { lv:5, name:"강철 루틴",       sub:"의지가 근육이 됐어",              xpNeeded:700, unlock:"최고 강도 루틴 해금" },
 ];
 
-// 레벨별 운동 데이터
+// 대체 운동 데이터
+const ALTERNATIVES = {
+  rain: {
+    label: '실내 대체',
+    options: [
+      { name:'실내 맨몸 운동', emoji:'🏠', desc:'푸시업 3세트 → 스쿼트 3세트 → 플랭크 3세트 → 딥스(의자) 3세트. 총 25~30분.' },
+      { name:'수영으로 대체', emoji:'🏊', desc:'자유형 50m 8바퀴 → 배영 50m 4바퀴 → 평영 50m 4바퀴. 총 800m. 약 45~60분.' },
+      { name:'요가 + 스트레칭', emoji:'🧘', desc:'태양경배 10회 → 하체 스트레칭 → 코어 요가. 총 60분. 회복에 집중.' },
+    ]
+  },
+  tired: {
+    label: '저강도 대체',
+    options: [
+      { name:'가벼운 산책 + 스트레칭', emoji:'🚶', desc:'20분 걷기 + 10분 전신 스트레칭. 몸만 깨워두기.' },
+      { name:'수영 (저강도)', emoji:'🏊', desc:'킥보드 100m 4바퀴 + 자유형 50m 천천히 8바퀴. 호흡에만 집중.' },
+      { name:'플랭크·스쿼트만', emoji:'💪', desc:'플랭크 30초 × 5세트 + 스쿼트 15개 × 3세트. 15분. 최소한은 하자.' },
+    ]
+  },
+  swimming: {
+    label: '수영 루틴',
+    options: [
+      { name:'기본 유산소 수영', emoji:'🏊', desc:'자유형 50m×8 → 배영 50m×4 → 평영 50m×4. 총 800m. 60분 기준.' },
+      { name:'기술 집중', emoji:'🏊', desc:'발차기 킥보드 200m → 팔 스트로크 풀부이 200m → 콤비 200m. 자세 교정 집중.' },
+      { name:'고강도 인터벌', emoji:'⚡', desc:'자유형 50m 전력 → 30초 휴식 × 8바퀴. 심폐 강화. 약 40분.' },
+    ]
+  },
+  yoga: {
+    label: '요가 루틴',
+    options: [
+      { name:'아침 활성화 요가', emoji:'🧘', desc:'태양경배 10회 → 전사 자세 → 삼각 자세 → 비둘기 자세. 45분.' },
+      { name:'코어 요가', emoji:'🧘', desc:'보트 자세 → 플랭크 → 사이드 플랭크 → 크로우 자세 도전. 30분.' },
+      { name:'요가 + 맨몸', emoji:'💪', desc:'요가 30분 (유연성) + 푸시업·스쿼트·플랭크 각 3세트. 총 50분.' },
+    ]
+  }
+};
+
 function getExercises(dayIdx, lv) {
   const ex = {
-    0: { // 월 - 상체
+    0: {
       emoji:'💪', title:'상체 — 철봉 & 평행봉', color:'var(--accent2)',
       sub: lv >= 3 ? '이제 자세보다 강도에 집중할 때' : '준비운동 → 상체 근력 → 마무리',
       exercises: [
-        { name:'준비운동 (팔 돌리기·어깨 풀기)', sets:'5분', warm:true, detail:'팔을 크게 원을 그리며 앞·뒤 각 10회. 어깨를 귀 쪽으로 올렸다 내리기 10회.' },
-        { name:'철봉 매달리기', sets: lv >= 3 ? '60초 × 4세트' : lv >= 2 ? '45초 × 3세트' : '30초 × 3세트', detail:'어깨 너비로 잡기. 등 살짝 조이는 느낌. 처음엔 10초도 OK.' },
-        { name: lv >= 4 ? '철봉 턱걸이 (템포 3-1-3)' : '철봉 턱걸이', sets: lv >= 3 ? '최대+1 × 4세트' : '최대 × 3세트', detail: lv >= 4 ? '3초 올라가고, 1초 버티고, 3초 내려오기. 느리게 = 강하게.' : '팔꿈치를 아래·뒤로 당기며 올리기. 0개면 네거티브로 대체.' },
-        { name: lv >= 3 ? '평행봉 딥스 (깊이 최대)' : '평행봉 딥스', sets: lv >= 3 ? '12개 × 4세트' : '10개 × 3세트', detail:'팔 완전히 펴고 시작. 어깨 아래까지. 처음엔 얕게.' },
-        { name: lv >= 3 ? '다이아몬드 푸시업' : '푸시업', sets: lv >= 3 ? '15개 × 4세트' : '15개 × 3세트', detail: lv >= 3 ? '손을 모아 다이아몬드 형태로. 삼두 집중 자극.' : '어깨 너비보다 넓게. 가슴 바닥에 거의 닿도록.' },
+        { name:'준비운동 (팔 돌리기·어깨 풀기)', sets:'5분', warm:true, detail:'팔을 크게 원 앞·뒤 각 10회. 어깨를 귀 쪽으로 올렸다 내리기 10회.' },
+        { name:'철봉 매달리기', sets: lv >= 3 ? '60초 × 4세트' : '30초 × 3세트', detail:'어깨 너비로 잡기. 등 살짝 조이는 느낌.', hasInterval:true },
+        { name: lv >= 4 ? '철봉 턱걸이 (템포 3-1-3)' : '철봉 턱걸이', sets: lv >= 3 ? '최대+1 × 4세트' : '최대 × 3세트', detail: lv >= 4 ? '3초 올라가고, 1초 버티고, 3초 내려오기.' : '팔꿈치를 아래·뒤로 당기며 올리기.', hasInterval:true },
+        { name: lv >= 3 ? '평행봉 딥스 (깊이 최대)' : '평행봉 딥스', sets: lv >= 3 ? '12개 × 4세트' : '10개 × 3세트', detail:'팔 완전히 펴고 시작. 어깨 아래까지.', hasInterval:true },
+        { name: lv >= 3 ? '다이아몬드 푸시업' : '푸시업', sets: lv >= 3 ? '15개 × 4세트' : '15개 × 3세트', detail: lv >= 3 ? '손을 모아 다이아몬드 형태로. 삼두 집중.' : '어깨 너비보다 넓게. 가슴 바닥에 거의 닿도록.', hasInterval:true },
         { name:'마무리 스트레칭', sets:'5분', warm:true, detail:'가슴 근육 펴기. 어깨 교차. 삼두근.' },
       ]
     },
-    2: { // 수 - 하체
+    2: {
       emoji:'🦵', title:'하체 + 코어', color:'var(--accent)',
-      sub: lv >= 3 ? '뱃살은 하체에서 빠진다 — 지금 증명 중' : '뱃살은 하체에서 빠진다',
+      sub:'뱃살은 하체에서 빠진다',
       exercises: [
         { name:'준비운동', sets:'5분', warm:true, detail:'발목 돌리기. 무릎 돌리기. 고관절 풀기.' },
-        { name: lv >= 4 ? '점프 스쿼트' : '스쿼트', sets: lv >= 3 ? '25개 × 4세트' : '20개 × 3세트', detail: lv >= 4 ? '스쿼트 내려가서 폭발적으로 점프. 착지는 부드럽게.' : '발 어깨 너비. 엉덩이 뒤로 빼며 앉기. 허벅지 지면 평행.' },
-        { name: lv >= 3 ? '불가리안 스플릿 스쿼트' : '런지 (한쪽씩)', sets: lv >= 3 ? '10개 × 3세트' : '10개 × 3세트', detail: lv >= 3 ? '뒷발을 벤치나 계단에 올리고 한쪽 다리로 스쿼트. 매우 힘듦.' : '한 발 앞으로 크게. 뒤 무릎 바닥에 거의 닿도록.' },
-        { name:'플랭크', sets: lv >= 3 ? '60초 × 3세트' : '30초 × 3세트', detail:'몸 일직선. 엉덩이 올리거나 내리지 않기. 호흡 멈추지 말기.' },
-        { name: lv >= 3 ? '행잉 레그레이즈' : '레그레이즈', sets:'10개 × 3세트', detail: lv >= 3 ? '철봉에 매달려서 다리 올리기. 일반보다 훨씬 강도 높음.' : '등 바닥. 다리 붙여 90도까지. 천천히 내리기.' },
+        { name: lv >= 4 ? '점프 스쿼트' : '스쿼트', sets: lv >= 3 ? '25개 × 4세트' : '20개 × 3세트', detail: lv >= 4 ? '스쿼트 내려가서 폭발적으로 점프. 착지는 부드럽게.' : '발 어깨 너비. 엉덩이 뒤로 빼며 앉기.', hasInterval:true },
+        { name: lv >= 3 ? '불가리안 스플릿 스쿼트' : '런지', sets:'10개 × 3세트', detail: lv >= 3 ? '뒷발을 계단에 올리고 한쪽 다리로 스쿼트. 매우 힘듦.' : '한 발 앞으로 크게. 뒤 무릎 바닥에 거의 닿도록.', hasInterval:true },
+        { name:'플랭크', sets: lv >= 3 ? '60초 × 3세트' : '30초 × 3세트', detail:'몸 일직선. 엉덩이 올리거나 내리지 않기.', hasInterval:true },
+        { name: lv >= 3 ? '행잉 레그레이즈' : '레그레이즈', sets:'10개 × 3세트', detail: lv >= 3 ? '철봉에 매달려서 다리 올리기.' : '등 바닥. 다리 붙여 90도까지. 천천히 내리기.', hasInterval:true },
         { name:'마무리 스트레칭', sets:'5분', warm:true, detail:'허벅지 앞뒤 스트레칭. 장경인대. 고관절.' },
       ]
     },
-    4: { // 금 - 서킷
+    4: {
       emoji:'🔥', title:'전신 서킷', color:'var(--accent3)',
       sub: lv >= 3 ? '쉬면 지는 거야' : '3라운드. 쉬지 않고.',
       exercises: [
-        { name:'서킷 1라운드', sets:'라운드 1', detail: lv >= 3 ? '푸시업 12개 → 스쿼트 20개 → 딥스 12개 → 플랭크 40초 → 점프스쿼트 12개' : '푸시업 10개 → 스쿼트 15개 → 딥스 10개 → 플랭크 30초 → 점프스쿼트 10개' },
+        { name:'서킷 1라운드', sets:'라운드 1', detail: lv >= 3 ? '푸시업 12→스쿼트 20→딥스 12→플랭크 40초→점프스쿼트 12' : '푸시업 10→스쿼트 15→딥스 10→플랭크 30초→점프스쿼트 10' },
         { name:'서킷 2라운드', sets:'라운드 2', detail:'동작 사이 쉬지 않기. 라운드 사이 1분 휴식.' },
         { name:'서킷 3라운드', sets:'라운드 3', detail:'마지막. 할 수 있는 데까지. 완주가 목표.' },
-        ...(lv >= 4 ? [{ name:'보너스 라운드 4', sets:'라운드 4 ★', detail:'레벨 4 이상만 도전. 완주하면 XP +5 보너스.' }] : []),
+        ...(lv >= 4 ? [{ name:'보너스 라운드 4 ★', sets:'라운드 4', detail:'레벨 4 이상 도전.' }] : []),
       ]
     },
-    5: { // 토 - 보강
-      emoji:'⚡', title:'상체 보강 + 맨발걷기', color:'var(--accent)',
+    5: {
+      emoji:'⚡', title:'상체 보강', color:'var(--accent)',
       sub:'가볍게. 하지만 제대로.',
       exercises: [
-        { name:'철봉 매달리기', sets: lv >= 2 ? '45초 × 3세트' : '30초 × 3세트', detail:'등 조이는 느낌.' },
-        { name:'철봉 턱걸이', sets:'가볍게', detail:'자세에 집중. 무리하지 않기.' },
+        { name:'철봉 매달리기', sets: lv >= 2 ? '45초 × 3세트' : '30초 × 3세트', detail:'등 조이는 느낌.', hasInterval:true },
+        { name:'철봉 턱걸이', sets:'가볍게', detail:'자세에 집중.', hasInterval:true },
       ]
     },
   };
@@ -799,27 +879,27 @@ function getExercises(dayIdx, lv) {
 
 const writingStepsByLevel = {
   1: [
-    { text:'가로선 긋기 — A4 한 줄 길이(18cm)로 10줄. 힘 빼고 팔꿈치 축으로 천천히.', time:'2분' },
-    { text:'세로선 10줄 → 대각선(왼쪽위→오른쪽아래) 10줄. 방향만 바꿔서 같은 방식으로.', time:'2분' },
-    { text:'ㄱㄴㄷㄹ 각 10번씩. 시간 보지 말고 글자 수만 세기.', time:'3분' },
+    { text:'팔 전체로 가로선 10줄 — 손가락은 펜 잡는 용도만. 팔꿈치 축으로 천천히.', time:'2분' },
+    { text:'세로선 10줄 → 대각선 10줄. 팔 전체 움직임 유지.', time:'2분' },
+    { text:'ㄱㄴㄷㄹ 각 10번씩. 손이 아닌 팔로 쓰는 느낌.', time:'3분' },
     { text:'소방 단어 쓰기 — 연소·화재·제연·스프링클러 각 5번씩.', time:'2분' },
-    { text:'오늘의 명언 필사 — 천천히 한 번만. 예쁘게.', time:'1분' },
+    { text:'오늘의 명언 필사 — 천천히 한 번만.', time:'1분' },
   ],
   2: [
-    { text:'가로·세로선 각 5줄. 속도 조금 높여서.', time:'1분' },
-    { text:'기본 획 + 복합 획 (기역+니은 연결) 각 10번씩.', time:'2분' },
+    { text:'선 긋기 5줄 (팔 전체 사용). 속도 조금 높여서.', time:'1분' },
+    { text:'기본 획 + 복합 획 연결 각 10번씩.', time:'2분' },
     { text:'소방 전문 용어 10개 — 각 3번씩.', time:'3분' },
-    { text:'실제 답안 문장 2줄 써보기. 글씨 크기·간격 일정하게.', time:'4분' },
+    { text:'답안 문장 2줄 — 글씨 크기·간격 일정하게.', time:'4분' },
   ],
   3: [
-    { text:'선 긋기 — 빠르게 5줄, 느리게 5줄 교차.', time:'1분' },
-    { text:'소방기술사 답안 형식으로 한 단락 쓰기.', time:'4분' },
+    { text:'빠르게 5줄, 느리게 5줄 교차 선 긋기.', time:'1분' },
+    { text:'소방기술사 답안 형식 한 단락 쓰기.', time:'4분' },
     { text:'오늘의 명언 필사 + 자기 생각 한 문장.', time:'2분' },
-    { text:'어제보다 글씨 크기·간격 일정하게 의식하기.', time:'3분' },
+    { text:'어제보다 글씨 크기·간격 일정하게 의식.', time:'3분' },
   ],
   4: [
     { text:'눈 감고 가로선 5줄 — 근육 기억 훈련.', time:'1분' },
-    { text:'기술사 답안 실전 — 정의·원리·특징·대책 작성.', time:'6분' },
+    { text:'기술사 답안 실전 — 정의·원리·특징·대책.', time:'6분' },
     { text:'오늘의 명언 필사 — 가장 예쁘게.', time:'3분' },
   ],
   5: [
@@ -829,9 +909,9 @@ const writingStepsByLevel = {
   ],
 };
 
-// ════════════════════════════
+// ════════════════════════════════════
 // 상태 & 스토리지
-// ════════════════════════════
+// ════════════════════════════════════
 
 let currentDay = 0;
 let calYear, calMonth;
@@ -839,6 +919,26 @@ let state = {};
 let timerInterval = null;
 let timerSeconds = 10 * 60;
 let timerRunning = false;
+
+// 걷기 타이머
+let walkTimerInterval = null;
+let walkSeconds = 0;
+let walkTimerRunning = false;
+
+// 인터벌 타이머
+let intervalTimerInterval = null;
+let intervalRunning = false;
+let intervalWorkSec = 30;
+let intervalRestSec = 15;
+let intervalTotalSets = 3;
+let intervalCurrentSet = 1;
+let intervalPhase = 'work'; // 'work' | 'rest'
+let intervalRemaining = 30;
+let intervalExerciseName = '';
+
+// 상황 변경 상태
+let currentSituation = null;
+
 const now = new Date();
 
 function getTodayKey() {
@@ -852,8 +952,8 @@ function getDayKey(d) {
 function loadState() {
   try {
     const saved = localStorage.getItem(getDayKey(getTodayKey()));
-    state = saved ? JSON.parse(saved) : { exercises:{}, writing:{}, walk:false, memo:'' };
-  } catch { state = { exercises:{}, writing:{}, walk:false, memo:'' }; }
+    state = saved ? JSON.parse(saved) : { exercises:{}, writing:{}, walk:false, walkSec:0, memo:'' };
+  } catch { state = { exercises:{}, writing:{}, walk:false, walkSec:0, memo:'' }; }
 }
 
 function saveState() {
@@ -865,7 +965,6 @@ function saveState() {
 }
 
 function markDayRecord() {
-  // 오늘 완료 여부 기록
   const lv = getCurrentLevel();
   const routine = getExercises(currentDay, lv.lv);
   let total = 0, done = 0;
@@ -874,16 +973,15 @@ function markDayRecord() {
     done += routine.exercises.filter((_,i) => state.exercises[i]).length;
   }
   const wSteps = writingStepsByLevel[lv.lv];
-  total += wSteps.length;
+  total += wSteps.length + 1; // +1 for walk
   done += wSteps.filter((_,i) => state.writing[i]).length;
-  if (state.walk) done++, total++;
+  if (state.walk) done++;
 
   const key = `record_${getTodayKey()}`;
   const pct = total > 0 ? done / total : 0;
-  localStorage.setItem(key, JSON.stringify({ pct, done, total }));
+  localStorage.setItem(key, JSON.stringify({ pct, done, total, memo: state.memo || '' }));
 }
 
-// XP 계산
 function getTotalXP() {
   let xp = 0;
   for (let i = 0; i < localStorage.length; i++) {
@@ -901,23 +999,19 @@ function getTotalXP() {
 function getCurrentLevel() {
   const xp = getTotalXP();
   let lv = LEVELS[0];
-  for (const l of LEVELS) {
-    if (xp >= l.xpNeeded) lv = l;
-  }
+  for (const l of LEVELS) { if (xp >= l.xpNeeded) lv = l; }
   return lv;
 }
 
 function getNextLevel() {
   const xp = getTotalXP();
-  for (let i = 1; i < LEVELS.length; i++) {
-    if (xp < LEVELS[i].xpNeeded) return LEVELS[i];
-  }
+  for (let i = 1; i < LEVELS.length; i++) { if (xp < LEVELS[i].xpNeeded) return LEVELS[i]; }
   return null;
 }
 
-// ════════════════════════════
+// ════════════════════════════════════
 // 초기화
-// ════════════════════════════
+// ════════════════════════════════════
 
 function initDate() {
   const y = now.getFullYear();
@@ -962,43 +1056,92 @@ function updateLevelUI() {
   document.getElementById('xpText').textContent = next ? `${xp} XP → 다음 레벨까지 ${next.xpNeeded - xp} XP` : `${xp} XP — 최고 레벨 달성!`;
 }
 
-// ════════════════════════════
+function updateSyncTimeLabel() {
+  const ts = parseInt(localStorage.getItem('last_push_ts') || '0');
+  const el = document.getElementById('syncTimeLabel');
+  if (!el || !ts) { if(el) el.textContent=''; return; }
+  const diff = Date.now() - ts;
+  const mins = Math.floor(diff / 60000);
+  const hrs = Math.floor(diff / 3600000);
+  const days = Math.floor(diff / 86400000);
+  if (mins < 1) el.textContent = '방금 동기화됨';
+  else if (mins < 60) el.textContent = `${mins}분 전 동기화`;
+  else if (hrs < 24) el.textContent = `${hrs}시간 전 동기화`;
+  else el.textContent = `${days}일 전 동기화`;
+}
+
+// ════════════════════════════════════
 // 요일 선택
-// ════════════════════════════
+// ════════════════════════════════════
 
 function selectDay(idx) {
   currentDay = idx;
+  currentSituation = null;
   document.querySelectorAll('.day-btn').forEach((b,i) => b.classList.toggle('active', i===idx));
   loadState();
   resetTimer();
+  stopWalkTimer();
   renderMain();
 }
 
-function updateDayDots() {
-  document.querySelectorAll('.day-btn').forEach((btn, i) => {
-    const key = `record_${getTodayKey()}`;
-    // 오늘 날짜 기준 각 요일의 기록은 같은 날이라 생략 (주간 기록이라면 별도 처리 필요)
-    btn.querySelectorAll('.done-dot').forEach(d => d.remove());
-  });
-}
-
-// ════════════════════════════
+// ════════════════════════════════════
 // 메인 렌더
-// ════════════════════════════
+// ════════════════════════════════════
 
 function renderMain() {
   const lv = getCurrentLevel();
-  const routine = getExercises(currentDay, lv.lv);
+  const routine = currentSituation ? null : getExercises(currentDay, lv.lv);
   const container = document.getElementById('mainContent');
   container.innerHTML = '';
   container.className = 'fade-in';
   void container.offsetWidth;
 
-  // 휴식일 (목·일)
   const isRest = (currentDay === 3 || currentDay === 6);
 
+  // ── 상황변경 바 (운동 요일에만) ──
+  if (!isRest) {
+    const sitBar = document.createElement('div');
+    sitBar.className = 'situation-bar';
+    const situations = [
+      { key:'rain', label:'🌧️ 비·날씨' },
+      { key:'tired', label:'😴 피곤해' },
+      { key:'swimming', label:'🏊 수영' },
+      { key:'yoga', label:'🧘 요가' },
+    ];
+    situations.forEach(sit => {
+      const btn = document.createElement('button');
+      btn.className = 'sit-btn' + (currentSituation === sit.key ? ' active' : '');
+      btn.textContent = sit.label;
+      btn.onclick = () => toggleSituation(sit.key);
+      sitBar.appendChild(btn);
+    });
+    // 원래 운동으로 버튼
+    if (currentSituation) {
+      const resetBtn = document.createElement('button');
+      resetBtn.className = 'sit-btn active';
+      resetBtn.textContent = '↩️ 원래 운동';
+      resetBtn.onclick = () => { currentSituation = null; renderMain(); };
+      sitBar.appendChild(resetBtn);
+    }
+    container.appendChild(sitBar);
+
+    // 대체 운동 패널
+    if (currentSituation && ALTERNATIVES[currentSituation]) {
+      const alt = ALTERNATIVES[currentSituation];
+      const panel = document.createElement('div');
+      panel.className = 'alt-panel show';
+      panel.innerHTML = `<div class="alt-title">${alt.label} — 오늘의 선택</div>`;
+      alt.options.forEach(opt => {
+        const optEl = document.createElement('div');
+        optEl.className = 'alt-option';
+        optEl.innerHTML = `<div class="alt-option-name">${opt.emoji} ${opt.name}</div><div class="alt-option-desc">${opt.desc}</div>`;
+        panel.appendChild(optEl);
+      });
+      container.appendChild(panel);
+    }
+  }
+
   if (routine) {
-    // 레벨 업그레이드 배지
     if (lv.lv >= 2) {
       const badge = document.createElement('div');
       badge.className = 'upgrade-badge';
@@ -1006,14 +1149,12 @@ function renderMain() {
       container.appendChild(badge);
     }
 
-    // 배너
     const banner = document.createElement('div');
     banner.className = 'today-banner';
     banner.style.borderLeftColor = routine.color;
     banner.innerHTML = `<div class="today-emoji">${routine.emoji}</div><div class="today-info"><h2>${routine.title}</h2><p>${routine.sub}</p></div>`;
     container.appendChild(banner);
 
-    // 운동 섹션
     const sec = document.createElement('div');
     sec.className = 'section';
     sec.innerHTML = `<div class="section-header"><span class="section-label">운동</span><div class="section-line"></div></div>`;
@@ -1024,21 +1165,23 @@ function renderMain() {
     routine.exercises.forEach((ex, i) => {
       const item = document.createElement('div');
       item.className = 'exercise-item' + (ex.warm ? ' warm-item' : '') + (state.exercises[i] ? ' done' : '');
-      item.innerHTML = `
-        <div class="exercise-main">
-          <div class="check-circle">${state.exercises[i] ? '✓' : ''}</div>
-          <span class="exercise-name">${ex.name}</span>
-          <span class="exercise-meta">${ex.sets}${ex.detail ? `<button class="detail-btn" onclick="toggleDetail(event,this)">설명</button>` : ''}</span>
-        </div>
-      `;
+
+      let metaHtml = `<span class="exercise-meta">${ex.sets}`;
+      if (ex.detail) metaHtml += `<button class="detail-btn" onclick="toggleDetail(event,this)">설명</button>`;
+      if (ex.hasInterval) metaHtml += `<button class="interval-btn" onclick="openIntervalModal(event,'${ex.name.replace(/'/g,"\\'")}')">⏱ 인터벌</button>`;
+      metaHtml += `</span>`;
+
+      item.innerHTML = `<div class="exercise-main"><div class="check-circle">${state.exercises[i] ? '✓' : ''}</div><span class="exercise-name">${ex.name}</span>${metaHtml}</div>`;
+
       if (ex.detail) {
         const det = document.createElement('div');
         det.className = 'exercise-detail';
         det.textContent = ex.detail;
         item.appendChild(det);
       }
+
       item.addEventListener('click', e => {
-        if (e.target.classList.contains('detail-btn')) return;
+        if (e.target.classList.contains('detail-btn') || e.target.classList.contains('interval-btn')) return;
         state.exercises[i] = !state.exercises[i];
         item.classList.toggle('done', state.exercises[i]);
         item.querySelector('.check-circle').textContent = state.exercises[i] ? '✓' : '';
@@ -1049,7 +1192,6 @@ function renderMain() {
 
     sec.appendChild(list);
 
-    // 진행률
     const prog = document.createElement('div');
     prog.id = 'progWrap';
     prog.innerHTML = `<div class="progress-bar-wrap"><div class="progress-bar-fill" id="progFill" style="width:0%"></div></div><div class="progress-text" id="progText"></div>`;
@@ -1062,7 +1204,8 @@ function renderMain() {
 
     container.appendChild(sec);
     updateProgress(routine, sec);
-  } else if (isRest) {
+
+  } else if (isRest && !currentSituation) {
     const card = document.createElement('div');
     card.className = 'rest-card';
     card.innerHTML = `
@@ -1073,42 +1216,58 @@ function renderMain() {
     container.appendChild(card);
   }
 
-  // 맨발걷기 (매일)
+  // ── 맨발걷기 ──
   const walkSec = document.createElement('div');
   walkSec.className = 'section';
-  walkSec.innerHTML = `<div class="section-header"><span class="section-label" style="color:#7ae87a">맨발걷기</span><div class="section-line"></div></div>`;
+  walkSec.innerHTML = `<div class="section-header"><span class="section-label" style="color:var(--walk-color)">맨발걷기</span><div class="section-line"></div></div>`;
 
   const walkCard = document.createElement('div');
   walkCard.className = 'walk-card' + (state.walk ? ' done' : '');
   walkCard.innerHTML = `
-    <div class="check-circle" style="${state.walk ? 'background:#7ae87a;border-color:#7ae87a;color:#0f0f13' : 'border-color:#7ae87a'}">${state.walk ? '✓' : ''}</div>
-    <span class="walk-name">봉서산 맨발걷기</span>
-    <span class="walk-meta">20~30분</span>
+    <div class="walk-top">
+      <div class="check-circle" style="${state.walk ? 'background:var(--walk-color);border-color:var(--walk-color);color:#0f0f13;width:21px;height:21px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;' : 'border-color:var(--walk-color);width:21px;height:21px;border-radius:50%;border:2px solid var(--walk-color);display:flex;align-items:center;justify-content:center;font-size:11px;'}">${state.walk ? '✓' : ''}</div>
+      <span class="walk-name">봉서산 맨발걷기</span>
+      <span class="walk-meta">20~30분</span>
+    </div>
+    <div class="walk-timer-row">
+      <div class="walk-timer-disp" id="walkTimerDisp">${formatWalkTime(walkSeconds)}</div>
+      <button class="walk-timer-btn ${walkTimerRunning ? 'stop' : ''}" id="walkTimerBtn" onclick="toggleWalkTimer()">
+        ${walkTimerRunning ? '🔴 중지·완료' : (state.walk ? '✅ 완료됨' : '🟢 걷기 시작')}
+      </button>
+      <span class="walk-tip">${state.walk ? '오늘 걷기 완료! 잘 했어 👍' : '시작 버튼 누르면 시간 측정'}</span>
+    </div>
   `;
-  walkCard.addEventListener('click', () => {
+
+  // 체크 영역 클릭
+  walkCard.querySelector('.walk-top').addEventListener('click', () => {
+    if (walkTimerRunning) return;
     state.walk = !state.walk;
-    walkCard.classList.toggle('done', state.walk);
-    const cc = walkCard.querySelector('.check-circle');
-    cc.textContent = state.walk ? '✓' : '';
-    cc.style.cssText = state.walk ? 'background:#7ae87a;border-color:#7ae87a;color:#0f0f13;width:21px;height:21px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;' : 'border-color:#7ae87a;width:21px;height:21px;border-radius:50%;border:2px solid #7ae87a;display:flex;align-items:center;justify-content:center;font-size:11px;';
-    saveState(); updateLevelUI();
+    if (!state.walk) { state.walkSec = 0; walkSeconds = 0; }
+    saveState(); updateLevelUI(); renderMain();
   });
+
   walkSec.appendChild(walkCard);
   container.appendChild(walkSec);
 
-  // 손글씨 섹션
+  // ── 손글씨 ──
   const writeSec = document.createElement('div');
   writeSec.className = 'section';
   writeSec.innerHTML = `<div class="section-header"><span class="section-label" style="color:var(--accent3)">손글씨 훈련</span><div class="section-line"></div></div>`;
 
   const wCard = document.createElement('div');
   wCard.className = 'writing-card';
+
+  // 팔 전체 쓰기 안내
   wCard.innerHTML = `
-    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:4px;">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;">
       <span style="font-size:15px;font-weight:700;">✍️ Lv.${lv.lv} 훈련 — 매일 10분</span>
-      <span style="font-size:11px;color:var(--muted)">오전, 공부 전에</span>
+      <span style="font-size:11px;color:var(--muted)">공부 전에</span>
     </div>
-    <div style="font-size:11px;color:var(--muted);margin-bottom:2px;">팔꿈치 책상 · 손목 일자 · 펜 45도 · 힘 빼기</div>
+    <div class="writing-posture">
+      <strong>팔 전체로 쓰기</strong> — 손가락은 펜 잡는 용도만. 어깨·팔꿈치가 축.<br>
+      팔꿈치 책상 고정 · 손목 일자 · 펜 45도 각도 · <strong>힘 빼기</strong><br>
+      <span style="color:var(--accent);font-size:11px;">손가락만 쓰려 하면 근육이 싸운다. 팔 전체를 움직여.</span>
+    </div>
   `;
 
   const wSteps = writingStepsByLevel[lv.lv];
@@ -1127,23 +1286,23 @@ function renderMain() {
     steps.appendChild(step);
   });
   wCard.appendChild(steps);
-  writeSec.appendChild(wCard);
 
-  // 타이머
-  const timerSec = document.createElement('div');
-  timerSec.className = 'timer-section';
-  timerSec.innerHTML = `
-    <div class="timer-label">손글씨 타이머</div>
-    <div class="timer-display" id="timerDisplay">10:00</div>
-    <div class="timer-btns">
-      <button class="timer-btn primary" onclick="toggleTimer()">시작</button>
-      <button class="timer-btn" onclick="resetTimer()">초기화</button>
+  // 인라인 타이머
+  const timerInline = document.createElement('div');
+  timerInline.className = 'timer-inline';
+  timerInline.innerHTML = `
+    <div class="timer-display-sm" id="timerDisplay">10:00</div>
+    <div class="timer-btns-sm">
+      <button class="timer-btn-sm primary" onclick="toggleTimer()">시작</button>
+      <button class="timer-btn-sm" onclick="resetTimer()">초기화</button>
     </div>
+    <span style="font-size:11px;color:var(--muted);">10분 타이머</span>
   `;
-  writeSec.appendChild(timerSec);
+  wCard.appendChild(timerInline);
+  writeSec.appendChild(wCard);
   container.appendChild(writeSec);
 
-  // 메모
+  // ── 메모 ──
   const memoSec = document.createElement('div');
   memoSec.className = 'memo-section';
   memoSec.innerHTML = `
@@ -1159,6 +1318,11 @@ function renderMain() {
   });
 
   updateTimerDisplay();
+}
+
+function toggleSituation(key) {
+  currentSituation = currentSituation === key ? null : key;
+  renderMain();
 }
 
 function toggleDetail(e, btn) {
@@ -1177,25 +1341,24 @@ function updateProgress(routine, sec) {
   const cg = document.getElementById('congrats');
   if (fill) fill.style.width = pct+'%';
   if (text) text.textContent = `${done} / ${total} 완료`;
-  if (cg) cg.classList.toggle('show', done===total);
+  if (cg) cg.classList.toggle('show', done===total && total>0);
 }
 
-// ════════════════════════════
+// ════════════════════════════════════
 // 달력
-// ════════════════════════════
+// ════════════════════════════════════
 
 function openCal() {
   calYear = now.getFullYear(); calMonth = now.getMonth();
+  document.getElementById('calDayDetail').classList.remove('show');
   renderCal();
   document.getElementById('calModal').classList.add('show');
 }
 
-function closeCal(e) {
-  if (e.target === document.getElementById('calModal')) closeCalBtn();
-}
+function closeCal(e) { if (e.target === document.getElementById('calModal')) closeCalBtn(); }
 function closeCalBtn() { document.getElementById('calModal').classList.remove('show'); }
-function calPrev() { calMonth--; if(calMonth<0){calMonth=11;calYear--;} renderCal(); }
-function calNext() { calMonth++; if(calMonth>11){calMonth=0;calYear++;} renderCal(); }
+function calPrev() { calMonth--; if(calMonth<0){calMonth=11;calYear--;} renderCal(); document.getElementById('calDayDetail').classList.remove('show'); }
+function calNext() { calMonth++; if(calMonth>11){calMonth=0;calYear++;} renderCal(); document.getElementById('calDayDetail').classList.remove('show'); }
 
 function renderCal() {
   const months = ['1월','2월','3월','4월','5월','6월','7월','8월','9월','10월','11월','12월'];
@@ -1230,17 +1393,67 @@ function renderCal() {
     }
 
     cell.textContent = d;
-    if (rec) cell.title = `${rec.done}/${rec.total} 완료`;
+    cell.title = rec ? `${rec.done}/${rec.total} 완료` : '';
+    cell.addEventListener('click', () => showCalDetail(calYear, calMonth, d, cell));
     grid.appendChild(cell);
   }
 }
 
-// ════════════════════════════
-// 타이머
-// ════════════════════════════
+function showCalDetail(y, m, d, clickedCell) {
+  // 선택 표시
+  document.querySelectorAll('.cal-cell.selected').forEach(c => c.classList.remove('selected'));
+  if (clickedCell) clickedCell.classList.add('selected');
+
+  const detail = document.getElementById('calDayDetail');
+  const dateLabel = document.getElementById('calDetailDate');
+  const content = document.getElementById('calDetailContent');
+
+  const dateKey = `${y}_${m}_${d}`;
+  const rec = (() => { try { return JSON.parse(localStorage.getItem(`record_${dateKey}`)); } catch { return null; } })();
+
+  // 해당 날짜의 habit 상태 찾기 (어느 요일 탭이든)
+  let habitState = null;
+  for (let di = 0; di < 7; di++) {
+    const k = `habit_${dateKey}_d${di}`;
+    const saved = localStorage.getItem(k);
+    if (saved) { try { habitState = JSON.parse(saved); break; } catch {} }
+  }
+
+  const monthNames = ['1월','2월','3월','4월','5월','6월','7월','8월','9월','10월','11월','12월'];
+  dateLabel.textContent = `${monthNames[m]} ${d}일 기록`;
+
+  let html = '';
+
+  if (rec) {
+    const statusEmoji = rec.pct >= 0.85 ? '✅' : rec.pct > 0 ? '🟡' : '❌';
+    const statusText = rec.pct >= 0.85 ? '완주' : rec.pct > 0 ? '부분 완료' : '기록 없음';
+    html += `<div class="cal-detail-row">${statusEmoji} <strong>${statusText}</strong> — ${rec.done}/${rec.total} 완료 (${Math.round(rec.pct*100)}%)</div>`;
+  } else {
+    const isPast = new Date(y, m, d) < new Date(now.getFullYear(), now.getMonth(), now.getDate());
+    html += `<div class="cal-detail-row" style="color:var(--muted)">${isPast ? '❌ 기록 없음' : '📝 오늘'}</div>`;
+  }
+
+  if (habitState) {
+    if (habitState.walk) html += `<div class="cal-detail-row" style="color:var(--walk-color)">🌿 맨발걷기 완료${habitState.walkSec > 0 ? ' ('+formatWalkTime(habitState.walkSec)+')' : ''}</div>`;
+    if (habitState.memo && habitState.memo.trim()) {
+      html += `<div class="cal-detail-memo">📝 ${habitState.memo.replace(/\n/g,'<br>')}</div>`;
+    }
+  }
+
+  if (!rec && !habitState) {
+    html += `<div style="font-size:12px;color:var(--muted);margin-top:4px;">이 날의 기록이 없어.</div>`;
+  }
+
+  content.innerHTML = html;
+  detail.classList.add('show');
+}
+
+// ════════════════════════════════════
+// 손글씨 타이머
+// ════════════════════════════════════
 
 function toggleTimer() {
-  const btn = document.querySelector('.timer-btn.primary');
+  const btn = document.querySelector('.timer-btn-sm.primary');
   if (!btn) return;
   if (timerRunning) {
     clearInterval(timerInterval); timerRunning = false;
@@ -1255,9 +1468,10 @@ function toggleTimer() {
       updateTimerDisplay();
       if (timerSeconds <= 0) {
         clearInterval(timerInterval); timerRunning = false;
-        btn.textContent = '완료!';
         const disp = document.getElementById('timerDisplay');
         if (disp) { disp.classList.remove('running'); disp.classList.add('done-color'); disp.textContent = '완료! ✓'; }
+        if (btn) btn.textContent = '완료!';
+        beep(880, 300); setTimeout(() => beep(660, 400), 350);
       }
     }, 1000);
   }
@@ -1267,7 +1481,7 @@ function resetTimer() {
   clearInterval(timerInterval); timerRunning = false; timerSeconds = 10*60;
   const disp = document.getElementById('timerDisplay');
   if (disp) { disp.classList.remove('running','done-color'); }
-  const btn = document.querySelector('.timer-btn.primary');
+  const btn = document.querySelector('.timer-btn-sm.primary');
   if (btn) btn.textContent = '시작';
   updateTimerDisplay();
 }
@@ -1280,9 +1494,167 @@ function updateTimerDisplay() {
   disp.textContent = `${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;
 }
 
-// ════════════════════════════
+// ════════════════════════════════════
+// 걷기 타이머
+// ════════════════════════════════════
+
+function formatWalkTime(sec) {
+  const m = Math.floor(sec/60);
+  const s = sec % 60;
+  return `${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;
+}
+
+function toggleWalkTimer() {
+  if (state.walk && !walkTimerRunning) return; // 이미 완료
+
+  if (walkTimerRunning) {
+    // 중지 → 완료 처리
+    clearInterval(walkTimerInterval);
+    walkTimerRunning = false;
+    state.walk = true;
+    state.walkSec = walkSeconds;
+    saveState(); updateLevelUI();
+    renderMain();
+    return;
+  }
+
+  // 시작
+  walkSeconds = 0;
+  walkTimerRunning = true;
+  walkTimerInterval = setInterval(() => {
+    walkSeconds++;
+    const disp = document.getElementById('walkTimerDisp');
+    if (disp) disp.textContent = formatWalkTime(walkSeconds);
+    // 20분, 30분에 알림음
+    if (walkSeconds === 20*60 || walkSeconds === 30*60) {
+      beep(660, 200); setTimeout(() => beep(880, 300), 250);
+    }
+  }, 1000);
+
+  const btn = document.getElementById('walkTimerBtn');
+  if (btn) { btn.textContent = '🔴 중지·완료'; btn.classList.add('stop'); }
+}
+
+function stopWalkTimer() {
+  clearInterval(walkTimerInterval);
+  walkTimerRunning = false;
+  walkSeconds = state.walkSec || 0;
+}
+
+// ════════════════════════════════════
+// 인터벌 타이머
+// ════════════════════════════════════
+
+function openIntervalModal(e, exName) {
+  e.stopPropagation();
+  intervalExerciseName = exName;
+  document.getElementById('intervalExName').textContent = exName;
+  resetIntervalTimer();
+  document.getElementById('intervalModal').classList.add('show');
+}
+
+function closeIntervalModal() {
+  stopIntervalTimer();
+  document.getElementById('intervalModal').classList.remove('show');
+}
+
+function adjustInterval(type, delta) {
+  if (type === 'work') { intervalWorkSec = Math.max(5, intervalWorkSec + delta); document.getElementById('workSecDisplay').textContent = intervalWorkSec; }
+  if (type === 'rest') { intervalRestSec = Math.max(5, intervalRestSec + delta); document.getElementById('restSecDisplay').textContent = intervalRestSec; }
+  if (type === 'sets') { intervalTotalSets = Math.max(1, Math.min(10, intervalTotalSets + delta)); document.getElementById('setsDisplay').textContent = intervalTotalSets; }
+  if (!intervalRunning) resetIntervalTimer();
+}
+
+function resetIntervalTimer() {
+  stopIntervalTimer();
+  intervalCurrentSet = 1;
+  intervalPhase = 'work';
+  intervalRemaining = intervalWorkSec;
+  updateIntervalUI();
+}
+
+function stopIntervalTimer() {
+  clearInterval(intervalTimerInterval);
+  intervalRunning = false;
+  const btn = document.getElementById('intervalStartBtn');
+  if (btn) btn.textContent = '시작';
+}
+
+function toggleIntervalTimer() {
+  if (intervalRunning) {
+    stopIntervalTimer();
+    return;
+  }
+  if (intervalCurrentSet > intervalTotalSets) { resetIntervalTimer(); return; }
+  intervalRunning = true;
+  document.getElementById('intervalStartBtn').textContent = '일시정지';
+
+  intervalTimerInterval = setInterval(() => {
+    intervalRemaining--;
+    if (intervalRemaining <= 0) {
+      if (intervalPhase === 'work') {
+        // 운동 끝 → 휴식 시작
+        beep(440, 150); setTimeout(() => beep(440, 150), 200); setTimeout(() => beep(660, 300), 400);
+        intervalPhase = 'rest';
+        intervalRemaining = intervalRestSec;
+      } else {
+        // 휴식 끝 → 다음 세트
+        intervalCurrentSet++;
+        if (intervalCurrentSet > intervalTotalSets) {
+          // 완료
+          stopIntervalTimer();
+          beep(880, 200); setTimeout(() => beep(880, 200), 250); setTimeout(() => beep(1100, 500), 500);
+          document.getElementById('intervalPhase').textContent = '완료! 수고했어 🎉';
+          document.getElementById('intervalCount').textContent = '✓';
+          document.getElementById('intervalSetsInfo').textContent = '모든 세트 완료';
+          document.getElementById('intervalStartBtn').textContent = '다시';
+          return;
+        }
+        beep(880, 300);
+        intervalPhase = 'work';
+        intervalRemaining = intervalWorkSec;
+      }
+    }
+    updateIntervalUI();
+  }, 1000);
+}
+
+function updateIntervalUI() {
+  const phaseEl = document.getElementById('intervalPhase');
+  const countEl = document.getElementById('intervalCount');
+  const setsEl = document.getElementById('intervalSetsInfo');
+
+  if (phaseEl) {
+    phaseEl.textContent = intervalPhase === 'work' ? '운동' : '휴식';
+    phaseEl.className = 'interval-phase' + (intervalPhase === 'rest' ? ' rest-phase' : '');
+  }
+  if (countEl) {
+    countEl.textContent = intervalRemaining;
+    countEl.className = 'interval-count' + (intervalPhase === 'rest' ? ' rest-count' : '');
+  }
+  if (setsEl) setsEl.textContent = `${intervalCurrentSet} / ${intervalTotalSets} 세트`;
+}
+
+// ════════════════════════════════════
+// 음향
+// ════════════════════════════════════
+
+function beep(freq = 800, duration = 200, vol = 0.3) {
+  try {
+    const ctx = new (window.AudioContext || window.webkitAudioContext)();
+    const osc = ctx.createOscillator();
+    const gain = ctx.createGain();
+    osc.connect(gain); gain.connect(ctx.destination);
+    osc.frequency.value = freq;
+    gain.gain.setValueAtTime(vol, ctx.currentTime);
+    gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + duration/1000);
+    osc.start(ctx.currentTime); osc.stop(ctx.currentTime + duration/1000);
+  } catch(e) {}
+}
+
+// ════════════════════════════════════
 // 레벨업 체크
-// ════════════════════════════
+// ════════════════════════════════════
 
 function checkLevelup() {
   const prevXP = parseInt(localStorage.getItem('prev_xp') || '0');
@@ -1303,9 +1675,9 @@ function closeLevelup() {
   updateLevelUI(); renderMain();
 }
 
-// ════════════════════════════
+// ════════════════════════════════════
 // 토스트
-// ════════════════════════════
+// ════════════════════════════════════
 
 function showToast() {
   const t = document.getElementById('saveToast');
@@ -1313,12 +1685,12 @@ function showToast() {
   setTimeout(() => t.classList.remove('show'), 1500);
 }
 
-// ════════════════════════════
+// ════════════════════════════════════
 // ☁️ 클라우드 동기화 (JSONBin)
-// ════════════════════════════
+// ════════════════════════════════════
 
 const BIN_ID = '69e029c936566621a8ba3891';
-const API_KEY = '$2a$10$GmXIwyo5n3LB7JIEvjSycumI89.62DFRm8UGsH4FBgJs4jBdm/kBq'; // ← 여기에 메모장의 API 키 붙여넣기
+const API_KEY = '$2a$10$GmXIwyo5n3LB7JIEvjSycumI89.62DFRm8UGsH4FBgJs4jBdm/kBq'; // ← 메모장의 Master Key 붙여넣기
 
 async function cloudSave(data) {
   try {
@@ -1340,45 +1712,68 @@ async function cloudLoad() {
   } catch(e) { return null; }
 }
 
+// ★ 버그 수정: 자동 로드 시 로컬 데이터 덮어쓰지 않음
 async function syncData() {
   const cloud = await cloudLoad();
   if (!cloud) return;
+  // 클라우드에 있지만 로컬에 없는 데이터만 가져옴 (오늘 기록 보호)
   Object.keys(cloud).forEach(k => {
-    if (k !== 'timestamp') localStorage.setItem(k, JSON.stringify(cloud[k]));
+    if (k === 'timestamp' || k === 'last_push_ts') return;
+    if (!localStorage.getItem(k)) { // 로컬에 없는 것만 채움
+      try {
+        const val = typeof cloud[k] === 'string' ? cloud[k] : JSON.stringify(cloud[k]);
+        localStorage.setItem(k, val);
+      } catch {}
+    }
   });
 }
 
 async function pushData() {
+  const btn = document.getElementById('syncBtn');
+  if (btn) { btn.textContent = '⏳ 동기화 중...'; btn.disabled = true; }
+
   const data = { timestamp: Date.now() };
   for (let i = 0; i < localStorage.length; i++) {
     const k = localStorage.key(i);
-    try { data[k] = JSON.parse(localStorage.getItem(k)); } catch { data[k] = localStorage.getItem(k); }
+    try { data[k] = JSON.parse(localStorage.getItem(k)); }
+    catch { data[k] = localStorage.getItem(k); }
   }
   await cloudSave(data);
+
+  const ts = Date.now();
+  localStorage.setItem('last_push_ts', ts);
+  updateSyncTimeLabel();
+
+  if (btn) { btn.textContent = '☁️ 동기화'; btn.disabled = false; }
   showToast();
 }
 
-// ════════════════════════════
+// ════════════════════════════════════
 // 시작
-// ════════════════════════════
+// ════════════════════════════════════
 
 initDate();
 initQuote();
 loadState();
 updateLevelUI();
 renderMain();
+updateSyncTimeLabel();
 
 document.querySelectorAll('.day-btn').forEach((b,i) => b.classList.toggle('active', i===currentDay));
 
-// 페이지 로드 시 클라우드에서 자동 불러오기
-syncData().then(() => { loadState(); updateLevelUI(); renderMain(); });
+// 자동 클라우드 동기화 (로컬 보호 버전)
+syncData().then(() => {
+  loadState(); updateLevelUI(); renderMain();
+});
 
-// iOS 홈 화면 추가 안내 (모바일에서 처음만)
+// 동기화 시간 레이블 주기 갱신 (1분마다)
+setInterval(updateSyncTimeLabel, 60000);
+
+// iOS 홈 화면 추가 안내
 function dismissInstall() {
   localStorage.setItem('install_dismissed', '1');
   document.getElementById('installBanner').style.display = 'none';
 }
-
 const isIOS = /iphone|ipad|ipod/i.test(navigator.userAgent);
 const isStandalone = window.navigator.standalone;
 const dismissed = localStorage.getItem('install_dismissed');
