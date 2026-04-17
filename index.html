@@ -205,6 +205,26 @@ body::before {
 .alt-option:last-child { margin-bottom:0; }
 .alt-option-name { font-size:13px; font-weight:600; color:var(--text); margin-bottom:2px; }
 .alt-option-desc { font-size:11px; color:var(--muted); line-height:1.6; }
+.alt-option.selected { border-color:var(--accent2); background:rgba(122,184,232,0.08); }
+.alt-option.completed { border-color:var(--success); background:rgba(122,232,168,0.1); }
+.alt-option.completed .alt-option-name { color:var(--success); }
+.alt-xp-badge {
+  display:inline-block; background:rgba(185,122,232,0.15);
+  border:1px solid var(--xp-color); color:var(--xp-color);
+  font-size:10px; font-weight:700; padding:1px 7px;
+  border-radius:100px; margin-left:8px; letter-spacing:0.5px;
+}
+.alt-done-check {
+  display:inline-block; background:var(--success); color:#0f0f13;
+  font-size:10px; font-weight:700; padding:1px 8px;
+  border-radius:100px; margin-left:8px;
+}
+.alt-complete-banner {
+  background:linear-gradient(135deg,rgba(122,232,168,0.1),rgba(122,184,232,0.1));
+  border:1px solid var(--success); border-radius:8px;
+  padding:10px 14px; margin-top:10px; font-size:12px;
+  color:var(--success); text-align:center; font-weight:700;
+}
 
 /* ── 레벨업 배지 ── */
 .upgrade-badge {
@@ -798,33 +818,33 @@ const ALTERNATIVES = {
   rain: {
     label: '실내 대체',
     options: [
-      { name:'실내 맨몸 운동', emoji:'🏠', desc:'푸시업 3세트 → 스쿼트 3세트 → 플랭크 3세트 → 딥스(의자) 3세트. 총 25~30분.' },
-      { name:'수영으로 대체', emoji:'🏊', desc:'자유형 50m 8바퀴 → 배영 50m 4바퀴 → 평영 50m 4바퀴. 총 800m. 약 45~60분.' },
-      { name:'요가 + 스트레칭', emoji:'🧘', desc:'태양경배 10회 → 하체 스트레칭 → 코어 요가. 총 60분. 회복에 집중.' },
+      { name:'실내 맨몸 운동', emoji:'🏠', desc:'푸시업 3세트 → 스쿼트 3세트 → 플랭크 3세트 → 딥스(의자) 3세트. 총 25~30분.', xp:7 },
+      { name:'수영으로 대체', emoji:'🏊', desc:'자유형 50m 8바퀴 → 배영 50m 4바퀴 → 평영 50m 4바퀴. 총 800m. 약 45~60분.', xp:8 },
+      { name:'요가 + 스트레칭', emoji:'🧘', desc:'태양경배 10회 → 하체 스트레칭 → 코어 요가. 총 60분. 회복에 집중.', xp:6 },
     ]
   },
   tired: {
     label: '저강도 대체',
     options: [
-      { name:'가벼운 산책 + 스트레칭', emoji:'🚶', desc:'20분 걷기 + 10분 전신 스트레칭. 몸만 깨워두기.' },
-      { name:'수영 (저강도)', emoji:'🏊', desc:'킥보드 100m 4바퀴 + 자유형 50m 천천히 8바퀴. 호흡에만 집중.' },
-      { name:'플랭크·스쿼트만', emoji:'💪', desc:'플랭크 30초 × 5세트 + 스쿼트 15개 × 3세트. 15분. 최소한은 하자.' },
+      { name:'가벼운 산책 + 스트레칭', emoji:'🚶', desc:'20분 걷기 + 10분 전신 스트레칭. 몸만 깨워두기.', xp:4 },
+      { name:'수영 (저강도)', emoji:'🏊', desc:'킥보드 100m 4바퀴 + 자유형 50m 천천히 8바퀴. 호흡에만 집중.', xp:6 },
+      { name:'플랭크·스쿼트만', emoji:'💪', desc:'플랭크 30초 × 5세트 + 스쿼트 15개 × 3세트. 15분. 최소한은 하자.', xp:5 },
     ]
   },
   swimming: {
     label: '수영 루틴',
     options: [
-      { name:'기본 유산소 수영', emoji:'🏊', desc:'자유형 50m×8 → 배영 50m×4 → 평영 50m×4. 총 800m. 60분 기준.' },
-      { name:'기술 집중', emoji:'🏊', desc:'발차기 킥보드 200m → 팔 스트로크 풀부이 200m → 콤비 200m. 자세 교정 집중.' },
-      { name:'고강도 인터벌', emoji:'⚡', desc:'자유형 50m 전력 → 30초 휴식 × 8바퀴. 심폐 강화. 약 40분.' },
+      { name:'기본 유산소 수영', emoji:'🏊', desc:'자유형 50m×8 → 배영 50m×4 → 평영 50m×4. 총 800m. 60분 기준.', xp:8 },
+      { name:'기술 집중', emoji:'🏊', desc:'발차기 킥보드 200m → 팔 스트로크 풀부이 200m → 콤비 200m. 자세 교정 집중.', xp:7 },
+      { name:'고강도 인터벌', emoji:'⚡', desc:'자유형 50m 전력 → 30초 휴식 × 8바퀴. 심폐 강화. 약 40분.', xp:9 },
     ]
   },
   yoga: {
     label: '요가 루틴',
     options: [
-      { name:'아침 활성화 요가', emoji:'🧘', desc:'태양경배 10회 → 전사 자세 → 삼각 자세 → 비둘기 자세. 45분.' },
-      { name:'코어 요가', emoji:'🧘', desc:'보트 자세 → 플랭크 → 사이드 플랭크 → 크로우 자세 도전. 30분.' },
-      { name:'요가 + 맨몸', emoji:'💪', desc:'요가 30분 (유연성) + 푸시업·스쿼트·플랭크 각 3세트. 총 50분.' },
+      { name:'아침 활성화 요가', emoji:'🧘', desc:'태양경배 10회 → 전사 자세 → 삼각 자세 → 비둘기 자세. 45분.', xp:6 },
+      { name:'코어 요가', emoji:'🧘', desc:'보트 자세 → 플랭크 → 사이드 플랭크 → 크로우 자세 도전. 30분.', xp:6 },
+      { name:'요가 + 맨몸', emoji:'💪', desc:'요가 30분 (유연성) + 푸시업·스쿼트·플랭크 각 3세트. 총 50분.', xp:7 },
     ]
   }
 };
@@ -952,8 +972,9 @@ function getDayKey(d) {
 function loadState() {
   try {
     const saved = localStorage.getItem(getDayKey(getTodayKey()));
-    state = saved ? JSON.parse(saved) : { exercises:{}, writing:{}, walk:false, walkSec:0, memo:'' };
-  } catch { state = { exercises:{}, writing:{}, walk:false, walkSec:0, memo:'' }; }
+    state = saved ? JSON.parse(saved) : { exercises:{}, writing:{}, walk:false, walkSec:0, memo:'', altCompleted:null };
+    if (!state.altCompleted) state.altCompleted = null;
+  } catch { state = { exercises:{}, writing:{}, walk:false, walkSec:0, memo:'', altCompleted:null }; }
 }
 
 function saveState() {
@@ -972,6 +993,8 @@ function markDayRecord() {
     total += routine.exercises.length;
     done += routine.exercises.filter((_,i) => state.exercises[i]).length;
   }
+  // 대체운동 완료 시 운동 파트 완료로 처리
+  if (!routine && state.altCompleted) { total += 1; done += 1; }
   const wSteps = writingStepsByLevel[lv.lv];
   total += wSteps.length + 1; // +1 for walk
   done += wSteps.filter((_,i) => state.writing[i]).length;
@@ -979,7 +1002,9 @@ function markDayRecord() {
 
   const key = `record_${getTodayKey()}`;
   const pct = total > 0 ? done / total : 0;
-  localStorage.setItem(key, JSON.stringify({ pct, done, total, memo: state.memo || '' }));
+  // 대체운동 XP 추가
+  const altXP = state.altCompleted ? (state.altCompleted.xp || 0) : 0;
+  localStorage.setItem(key, JSON.stringify({ pct, done, total, memo: state.memo || '', altCompleted: state.altCompleted, altXP }));
 }
 
 function getTotalXP() {
@@ -990,6 +1015,7 @@ function getTotalXP() {
       try {
         const rec = JSON.parse(localStorage.getItem(k));
         xp += Math.round((rec.pct || 0) * 10);
+        xp += (rec.altXP || 0);
       } catch {}
     }
   }
@@ -1130,13 +1156,42 @@ function renderMain() {
       const alt = ALTERNATIVES[currentSituation];
       const panel = document.createElement('div');
       panel.className = 'alt-panel show';
-      panel.innerHTML = `<div class="alt-title">${alt.label} — 오늘의 선택</div>`;
-      alt.options.forEach(opt => {
+      panel.innerHTML = `<div class="alt-title">${alt.label} — 오늘의 선택 (클릭하면 완료!)</div>`;
+
+      alt.options.forEach((opt, idx) => {
         const optEl = document.createElement('div');
-        optEl.className = 'alt-option';
-        optEl.innerHTML = `<div class="alt-option-name">${opt.emoji} ${opt.name}</div><div class="alt-option-desc">${opt.desc}</div>`;
+        const isCompleted = state.altCompleted && state.altCompleted.name === opt.name;
+        optEl.className = 'alt-option' + (isCompleted ? ' completed' : '');
+        optEl.innerHTML = `
+          <div class="alt-option-name">
+            ${opt.emoji} ${opt.name}
+            <span class="alt-xp-badge">+${opt.xp} XP</span>
+            ${isCompleted ? '<span class="alt-done-check">✓ 완료!</span>' : ''}
+          </div>
+          <div class="alt-option-desc">${opt.desc}</div>
+        `;
+        optEl.style.cursor = 'pointer';
+        optEl.addEventListener('click', () => {
+          if (isCompleted) {
+            // 완료 취소
+            state.altCompleted = null;
+          } else {
+            // 완료 처리
+            state.altCompleted = { name: opt.name, emoji: opt.emoji, xp: opt.xp, situation: currentSituation };
+          }
+          saveState(); updateLevelUI(); renderMain();
+        });
         panel.appendChild(optEl);
       });
+
+      // 완료 배너
+      if (state.altCompleted && state.altCompleted.situation === currentSituation) {
+        const banner = document.createElement('div');
+        banner.className = 'alt-complete-banner';
+        banner.textContent = `🎉 ${state.altCompleted.emoji} ${state.altCompleted.name} 완료! +${state.altCompleted.xp} XP 획득!`;
+        panel.appendChild(banner);
+      }
+
       container.appendChild(panel);
     }
   }
@@ -1434,6 +1489,9 @@ function showCalDetail(y, m, d, clickedCell) {
   }
 
   if (habitState) {
+    if (habitState.altCompleted) {
+      html += `<div class="cal-detail-row" style="color:var(--accent2)">${habitState.altCompleted.emoji} 대체운동: ${habitState.altCompleted.name} (+${habitState.altCompleted.xp} XP)</div>`;
+    }
     if (habitState.walk) html += `<div class="cal-detail-row" style="color:var(--walk-color)">🌿 맨발걷기 완료${habitState.walkSec > 0 ? ' ('+formatWalkTime(habitState.walkSec)+')' : ''}</div>`;
     if (habitState.memo && habitState.memo.trim()) {
       html += `<div class="cal-detail-memo">📝 ${habitState.memo.replace(/\n/g,'<br>')}</div>`;
