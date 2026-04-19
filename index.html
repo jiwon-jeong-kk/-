@@ -176,53 +176,109 @@ body::before {
 .today-info h2 { font-family:'Nanum Myeongjo',serif; font-size:19px; font-weight:700; color:var(--text); margin-bottom:3px; }
 .today-info p { font-size:12px; color:var(--muted); font-weight:300; }
 
-/* ── 상황변경 패널 ── */
+/* ── 상황 변경 ── */
 .situation-bar {
   display:flex; gap:6px; margin-bottom:16px; flex-wrap:wrap;
 }
 .sit-btn {
   background:var(--surface); border:1px solid var(--border);
   color:var(--muted); font-family:'Noto Sans KR',sans-serif;
-  font-size:11px; padding:5px 12px; border-radius:100px;
+  font-size:11px; padding:6px 13px; border-radius:100px;
   cursor:pointer; transition:all 0.2s;
 }
 .sit-btn:hover { border-color:var(--accent3); color:var(--accent3); }
 .sit-btn.active { background:rgba(232,122,154,0.15); border-color:var(--accent3); color:var(--accent3); font-weight:700; }
+.sit-btn.reset-btn { border-color:var(--muted); color:var(--muted); }
+.sit-btn.reset-btn:hover { border-color:var(--text); color:var(--text); }
 
-.alt-panel {
-  background:var(--surface); border:1px solid var(--accent3);
-  border-radius:10px; padding:14px 16px; margin-bottom:16px;
-  display:none;
+/* ── 플랜 선택기 ── */
+.plan-picker {
+  background:var(--card); border:1px solid var(--accent3);
+  border-radius:12px; padding:16px 18px; margin-bottom:16px;
+  animation:fadeIn 0.2s ease;
 }
-.alt-panel.show { display:block; animation:fadeIn 0.2s ease; }
-.alt-title { font-size:11px; color:var(--accent3); letter-spacing:2px; margin-bottom:10px; font-family:'Nanum Myeongjo',serif; }
-.alt-option {
-  background:var(--card); border:1px solid var(--border);
-  border-radius:8px; padding:10px 14px; margin-bottom:6px;
+.plan-picker-title {
+  font-family:'Nanum Myeongjo',serif;
+  font-size:13px; color:var(--accent3); letter-spacing:2px;
+  margin-bottom:12px; font-weight:700;
+}
+.plan-option {
+  background:var(--surface); border:1px solid var(--border);
+  border-radius:10px; padding:12px 14px; margin-bottom:8px;
   cursor:pointer; transition:all 0.2s;
 }
-.alt-option:hover { border-color:var(--accent2); }
-.alt-option:last-child { margin-bottom:0; }
-.alt-option-name { font-size:13px; font-weight:600; color:var(--text); margin-bottom:2px; }
-.alt-option-desc { font-size:11px; color:var(--muted); line-height:1.6; }
-.alt-option.selected { border-color:var(--accent2); background:rgba(122,184,232,0.08); }
-.alt-option.completed { border-color:var(--success); background:rgba(122,232,168,0.1); }
-.alt-option.completed .alt-option-name { color:var(--success); }
-.alt-xp-badge {
-  display:inline-block; background:rgba(185,122,232,0.15);
+.plan-option:hover { border-color:var(--accent2); background:rgba(122,184,232,0.06); }
+.plan-option:last-child { margin-bottom:0; }
+.plan-option-top {
+  display:flex; align-items:center; justify-content:space-between;
+  margin-bottom:4px;
+}
+.plan-option-name { font-size:14px; font-weight:700; color:var(--text); }
+.plan-option-xp {
+  background:rgba(185,122,232,0.15);
   border:1px solid var(--xp-color); color:var(--xp-color);
-  font-size:10px; font-weight:700; padding:1px 7px;
-  border-radius:100px; margin-left:8px; letter-spacing:0.5px;
+  font-size:11px; font-weight:700; padding:2px 10px;
+  border-radius:100px;
 }
-.alt-done-check {
-  display:inline-block; background:var(--success); color:#0f0f13;
-  font-size:10px; font-weight:700; padding:1px 8px;
-  border-radius:100px; margin-left:8px;
+.plan-option-intro { font-size:12px; color:var(--muted); line-height:1.5; margin-bottom:4px; }
+.plan-option-items { font-size:11px; color:var(--accent2); font-weight:600; }
+
+/* ── 대체 플랜 진행 패널 ── */
+.alt-plan-panel {
+  background:var(--card); border:1px solid var(--accent3);
+  border-left:4px solid var(--accent3);
+  border-radius:12px; padding:16px 18px; margin-bottom:20px;
+  animation:fadeIn 0.3s ease;
 }
+.alt-plan-header {
+  display:flex; align-items:center; justify-content:space-between;
+  margin-bottom:6px;
+}
+.alt-plan-label {
+  font-family:'Nanum Myeongjo',serif;
+  font-size:16px; font-weight:700; color:var(--text);
+}
+.alt-plan-xp {
+  background:rgba(185,122,232,0.15);
+  border:1px solid var(--xp-color); color:var(--xp-color);
+  font-size:12px; font-weight:700; padding:3px 12px;
+  border-radius:100px;
+}
+.alt-plan-intro { font-size:12px; color:var(--muted); margin-bottom:12px; line-height:1.6; }
+.alt-plan-progress {
+  background:var(--surface); border-radius:100px;
+  height:5px; overflow:hidden; margin-bottom:6px;
+}
+.alt-plan-progress-bar {
+  height:100%;
+  background:linear-gradient(90deg, var(--accent3), var(--success));
+  border-radius:100px; transition:width 0.4s ease;
+}
+.alt-plan-progress-text {
+  font-size:11px; color:var(--muted); text-align:right;
+  margin-bottom:14px; font-weight:600;
+}
+.alt-plan-items { display:flex; flex-direction:column; gap:7px; }
+.alt-plan-item {
+  background:var(--surface); border:1px solid var(--border);
+  border-radius:10px; overflow:hidden;
+  cursor:pointer; transition:all 0.2s;
+}
+.alt-plan-item:hover { border-color:var(--accent2); }
+.alt-plan-item.done { border-color:var(--success); background:rgba(122,232,168,0.08); }
+.alt-plan-item-main {
+  padding:12px 14px;
+  display:flex; align-items:flex-start; gap:12px;
+}
+.alt-plan-item-body { flex:1; }
+.alt-plan-item-name { font-size:13px; font-weight:600; color:var(--text); margin-bottom:3px; }
+.alt-plan-item.done .alt-plan-item-name { text-decoration:line-through; color:var(--muted); }
+.alt-plan-item-desc { font-size:11px; color:var(--muted); line-height:1.6; }
+
 .alt-complete-banner {
-  background:linear-gradient(135deg,rgba(122,232,168,0.1),rgba(122,184,232,0.1));
-  border:1px solid var(--success); border-radius:8px;
-  padding:10px 14px; margin-top:10px; font-size:12px;
+  background:linear-gradient(135deg,rgba(122,232,168,0.12),rgba(122,184,232,0.12));
+  border:1px solid var(--success); border-radius:10px;
+  padding:12px 16px; margin-top:14px; font-size:13px;
   color:var(--success); text-align:center; font-weight:700;
 }
 
@@ -385,6 +441,17 @@ body::before {
   font-family:'Nanum Myeongjo',serif;
   font-size:24px; font-weight:800;
   color:var(--walk-color); letter-spacing:2px; min-width:65px;
+}
+.walk-kcal-disp {
+  font-size:13px; font-weight:700; color:var(--accent);
+  background:rgba(232,201,122,0.1); border:1px solid rgba(232,201,122,0.3);
+  padding:4px 10px; border-radius:100px; letter-spacing:0.5px;
+}
+.walk-info-row {
+  margin-top:10px; padding-top:10px;
+  border-top:1px dashed var(--border);
+  font-size:11px; color:var(--muted); line-height:1.5;
+  text-align:center;
 }
 .walk-timer-btn {
   background:var(--walk-color); border:none; color:#0f0f13;
@@ -813,41 +880,110 @@ const LEVELS = [
   { lv:5, name:"강철 루틴",       sub:"의지가 근육이 됐어",              xpNeeded:700, unlock:"최고 강도 루틴 해금" },
 ];
 
-// 대체 운동 데이터
-const ALTERNATIVES = {
+// 대체 운동 — 세트 플랜 방식
+// J 데이터 기준: 183cm, 97kg, 37세, 상체 루틴 소화 중 (푸시업·턱걸이·평행봉)
+// 목표: 뱃살 감소 + 근육 유지
+//
+// 각 플랜은 "오늘 전부 하는 것"이 목표. 항목 체크 = 완료.
+const ALT_PLANS = {
   rain: {
-    label: '실내 대체',
-    options: [
-      { name:'실내 맨몸 운동', emoji:'🏠', desc:'푸시업 3세트 → 스쿼트 3세트 → 플랭크 3세트 → 딥스(의자) 3세트. 총 25~30분.', xp:7 },
-      { name:'수영으로 대체', emoji:'🏊', desc:'자유형 50m 8바퀴 → 배영 50m 4바퀴 → 평영 50m 4바퀴. 총 800m. 약 45~60분.', xp:8 },
-      { name:'요가 + 스트레칭', emoji:'🧘', desc:'태양경배 10회 → 하체 스트레칭 → 코어 요가. 총 60분. 회복에 집중.', xp:6 },
+    label: '🌧️ 비 오는 날',
+    intro: '실내에서 할 수 있는 완결된 루틴이야. 전부 하면 완료.',
+    totalXp: 9,
+    items: [
+      { name:'푸시업 3세트', desc:'15개 × 3세트. 어깨 너비보다 약간 넓게. 가슴 바닥까지.', hasInterval:true },
+      { name:'스쿼트 3세트', desc:'20개 × 3세트. 체중 97kg 기준 하체 자극 충분.' },
+      { name:'의자 딥스 3세트', desc:'12개 × 3세트. 삼두 집중. 의자 끝에 손 고정.', hasInterval:true },
+      { name:'플랭크 3세트', desc:'45초 × 3세트. 허리 떨어지지 않게.' },
+      { name:'마무리 스트레칭 5분', desc:'가슴·어깨·허벅지 풀기.' },
     ]
   },
   tired: {
-    label: '저강도 대체',
-    options: [
-      { name:'가벼운 산책 + 스트레칭', emoji:'🚶', desc:'20분 걷기 + 10분 전신 스트레칭. 몸만 깨워두기.', xp:4 },
-      { name:'수영 (저강도)', emoji:'🏊', desc:'킥보드 100m 4바퀴 + 자유형 50m 천천히 8바퀴. 호흡에만 집중.', xp:6 },
-      { name:'플랭크·스쿼트만', emoji:'💪', desc:'플랭크 30초 × 5세트 + 스쿼트 15개 × 3세트. 15분. 최소한은 하자.', xp:5 },
+    label: '😴 피곤한 날',
+    intro: '에너지 부족할 때 딱 이 정도만. 완료 자체가 의미.',
+    totalXp: 5,
+    items: [
+      { name:'가벼운 산책 20~30분', desc:'실내외 상관없이 천천히. 호흡만 유지.' },
+      { name:'전신 스트레칭 10분', desc:'목·어깨·허리·다리. 시원하게 풀기.' },
+    ]
+  },
+  heavyTired: {
+    label: '🥱 진짜 기운 없는 날',
+    intro: '오늘은 진짜 쉬고 싶을 때. 최소한만.',
+    totalXp: 3,
+    items: [
+      { name:'스트레칭 10분', desc:'누워서 또는 앉아서. 몸만 깨우기.' },
+      { name:'심호흡 5분', desc:'4초 들이마시고 6초 내쉬기. 부교감신경 활성화.' },
     ]
   },
   swimming: {
-    label: '수영 루틴',
-    options: [
-      { name:'기본 유산소 수영', emoji:'🏊', desc:'자유형 50m×8 → 배영 50m×4 → 평영 50m×4. 총 800m. 60분 기준.', xp:8 },
-      { name:'기술 집중', emoji:'🏊', desc:'발차기 킥보드 200m → 팔 스트로크 풀부이 200m → 콤비 200m. 자세 교정 집중.', xp:7 },
-      { name:'고강도 인터벌', emoji:'⚡', desc:'자유형 50m 전력 → 30초 휴식 × 8바퀴. 심폐 강화. 약 40분.', xp:9 },
+    label: '🏊 수영 (50m 풀 · 선수용)',
+    intro: '총 800~1000m 목표. 1시간~1시간 30분 기준.',
+    totalXp: 10,
+    items: [
+      { name:'워밍업 — 자유형 50m × 2바퀴', desc:'천천히. 호흡 4-6 패턴으로 적응.' },
+      { name:'자유형 50m × 6바퀴 (총 300m)', desc:'양손 스트로크 끝까지 뻗기. 리커버리에 집중. 한 손 들고 잠깐 쉬기 OK.' },
+      { name:'배영 50m × 4바퀴 (총 200m)', desc:'엉덩이 떨어지지 않게. 시선은 천장. 발차기는 물 밖으로 나오지 않게.' },
+      { name:'평영 50m × 4바퀴 (총 200m)', desc:'개구리발차기 정확히. 스트로크와 호흡 리듬 맞추기.' },
+      { name:'쿨다운 — 자유형 50m × 2바퀴', desc:'천천히. 숨 고르기.' },
+    ]
+  },
+  swimmingTech: {
+    label: '🏊 수영 (기술 집중)',
+    intro: '자세 교정 중심. 체력보다 정확성이 목표.',
+    totalXp: 8,
+    items: [
+      { name:'킥판 발차기 100m × 3바퀴', desc:'엉덩이·허벅지·복근 자극. 발목은 이완.' },
+      { name:'풀부이 팔 스트로크 100m × 3바퀴', desc:'다리는 고정. 팔 동작에만 집중.' },
+      { name:'콤비 자유형 100m × 2바퀴', desc:'방금 교정한 팔·다리 합쳐서 천천히.' },
     ]
   },
   yoga: {
-    label: '요가 루틴',
-    options: [
-      { name:'아침 활성화 요가', emoji:'🧘', desc:'태양경배 10회 → 전사 자세 → 삼각 자세 → 비둘기 자세. 45분.', xp:6 },
-      { name:'코어 요가', emoji:'🧘', desc:'보트 자세 → 플랭크 → 사이드 플랭크 → 크로우 자세 도전. 30분.', xp:6 },
-      { name:'요가 + 맨몸', emoji:'💪', desc:'요가 30분 (유연성) + 푸시업·스쿼트·플랭크 각 3세트. 총 50분.', xp:7 },
+    label: '🧘 요가',
+    intro: '1시간 완결 루틴. 유연성 + 코어 동시 자극.',
+    totalXp: 7,
+    items: [
+      { name:'태양경배 10회', desc:'워밍업. 전신 활성화.' },
+      { name:'전사 자세 3종 (좌·우)', desc:'다리 근력 + 균형. 각 30초 유지.' },
+      { name:'삼각 자세 (좌·우)', desc:'햄스트링·옆구리 스트레칭. 각 30초.' },
+      { name:'보트 자세 3세트', desc:'30초 × 3세트. 코어 핵심 동작.' },
+      { name:'비둘기 자세 (좌·우)', desc:'고관절 열기. 각 1분. 숨 깊이.' },
+      { name:'송장 자세 5분', desc:'완전 이완. 마무리.' },
+    ]
+  },
+  yogaStrength: {
+    label: '🧘💪 요가 + 근력',
+    intro: '유연성 + 근력 조합. 50분.',
+    totalXp: 8,
+    items: [
+      { name:'요가 워밍업 15분', desc:'태양경배 + 전사 자세 중심.' },
+      { name:'푸시업 3세트', desc:'15개 × 3세트.' },
+      { name:'스쿼트 3세트', desc:'20개 × 3세트.' },
+      { name:'플랭크 3세트', desc:'45초 × 3세트.' },
+      { name:'요가 쿨다운 10분', desc:'비둘기 자세 + 송장 자세.' },
+    ]
+  },
+  bodyweight: {
+    label: '💪 맨몸 운동만',
+    intro: '기구 없이 전신 자극. 30분 기준.',
+    totalXp: 7,
+    items: [
+      { name:'푸시업 4세트', desc:'15개 × 4세트. 일반 / 와이드 / 다이아몬드 / 일반.' },
+      { name:'점프 스쿼트 3세트', desc:'15개 × 3세트. 폭발적으로.' },
+      { name:'역런지 3세트', desc:'한쪽 10개 × 3세트. 뒤로 걷듯이.' },
+      { name:'플랭크 3세트', desc:'45초 × 3세트.' },
+      { name:'버피 2세트', desc:'10개 × 2세트. 심박수 올리기.' },
     ]
   }
 };
+
+// 상황 버튼 — 어떤 플랜을 보여줄지
+const SITUATIONS = [
+  { key:'tired', label:'😴 피곤해', plans:['tired', 'heavyTired'] },
+  { key:'rain', label:'🌧️ 비·날씨', plans:['rain', 'bodyweight'] },
+  { key:'swimming', label:'🏊 수영', plans:['swimming', 'swimmingTech'] },
+  { key:'yoga', label:'🧘 요가', plans:['yoga', 'yogaStrength'] },
+];
 
 function getExercises(dayIdx, lv) {
   const ex = {
@@ -940,10 +1076,12 @@ let timerInterval = null;
 let timerSeconds = 10 * 60;
 let timerRunning = false;
 
-// 걷기 타이머
+// 걷기 타이머 (타임스탬프 방식 — 백그라운드에서도 시간 흐름)
 let walkTimerInterval = null;
-let walkSeconds = 0;
+let walkStartTs = 0;       // 시작 시각 (밀리초)
+let walkSeconds = 0;       // 현재 표시되는 초
 let walkTimerRunning = false;
+const WALK_MAX_SEC = 7200; // 2시간 자동 정지
 
 // 인터벌 타이머
 let intervalTimerInterval = null;
@@ -956,8 +1094,7 @@ let intervalPhase = 'work'; // 'work' | 'rest'
 let intervalRemaining = 30;
 let intervalExerciseName = '';
 
-// 상황 변경 상태
-let currentSituation = null;
+// 상황 변경 상태는 state.altPlan / state.pendingSituation으로 관리
 
 const now = new Date();
 
@@ -972,9 +1109,16 @@ function getDayKey(d) {
 function loadState() {
   try {
     const saved = localStorage.getItem(getDayKey(getTodayKey()));
-    state = saved ? JSON.parse(saved) : { exercises:{}, writing:{}, walk:false, walkSec:0, memo:'', altCompleted:null };
-    if (!state.altCompleted) state.altCompleted = null;
-  } catch { state = { exercises:{}, writing:{}, walk:false, walkSec:0, memo:'', altCompleted:null }; }
+    state = saved ? JSON.parse(saved) : { exercises:{}, writing:{}, walk:false, walkSec:0, walkStartTs:0, walkRunning:false, memo:'', altPlan:null, altItems:{} };
+    // 이전 버전 호환
+    if (state.altCompleted && !state.altPlan) {
+      // 구버전 altCompleted는 무시하고 초기화
+      state.altPlan = null;
+      state.altItems = {};
+    }
+    if (!state.altItems) state.altItems = {};
+    if (state.altPlan === undefined) state.altPlan = null;
+  } catch { state = { exercises:{}, writing:{}, walk:false, walkSec:0, walkStartTs:0, walkRunning:false, memo:'', altPlan:null, altItems:{} }; }
 }
 
 function saveState() {
@@ -989,22 +1133,47 @@ function markDayRecord() {
   const lv = getCurrentLevel();
   const routine = getExercises(currentDay, lv.lv);
   let total = 0, done = 0;
-  if (routine) {
+
+  // 원래 운동 또는 대체 플랜
+  if (state.altPlan && ALT_PLANS[state.altPlan]) {
+    const plan = ALT_PLANS[state.altPlan];
+    total += plan.items.length;
+    done += plan.items.filter((_,i) => state.altItems[i]).length;
+  } else if (routine) {
     total += routine.exercises.length;
     done += routine.exercises.filter((_,i) => state.exercises[i]).length;
   }
-  // 대체운동 완료 시 운동 파트 완료로 처리
-  if (!routine && state.altCompleted) { total += 1; done += 1; }
+
+  // 손글씨 + 걷기
   const wSteps = writingStepsByLevel[lv.lv];
-  total += wSteps.length + 1; // +1 for walk
+  total += wSteps.length + 1;
   done += wSteps.filter((_,i) => state.writing[i]).length;
   if (state.walk) done++;
 
   const key = `record_${getTodayKey()}`;
   const pct = total > 0 ? done / total : 0;
-  // 대체운동 XP 추가
-  const altXP = state.altCompleted ? (state.altCompleted.xp || 0) : 0;
-  localStorage.setItem(key, JSON.stringify({ pct, done, total, memo: state.memo || '', altCompleted: state.altCompleted, altXP }));
+
+  // 대체운동 XP — 완료한 항목 수 비율에 따라 차등
+  let altXP = 0;
+  if (state.altPlan && ALT_PLANS[state.altPlan]) {
+    const plan = ALT_PLANS[state.altPlan];
+    const doneCount = plan.items.filter((_,i) => state.altItems[i]).length;
+    const ratio = doneCount / plan.items.length;
+    altXP = Math.round(plan.totalXp * ratio);
+  }
+
+  localStorage.setItem(key, JSON.stringify({
+    pct, done, total,
+    memo: state.memo || '',
+    altPlan: state.altPlan,
+    altPlanLabel: state.altPlan && ALT_PLANS[state.altPlan] ? ALT_PLANS[state.altPlan].label : null,
+    altItemsDone: state.altPlan && ALT_PLANS[state.altPlan] ?
+      ALT_PLANS[state.altPlan].items.filter((_,i) => state.altItems[i]).length : 0,
+    altItemsTotal: state.altPlan && ALT_PLANS[state.altPlan] ? ALT_PLANS[state.altPlan].items.length : 0,
+    altXP,
+    walkSec: state.walkSec || 0,
+    walkKcal: calcWalkCalories(state.walkSec || 0),
+  }));
 }
 
 function getTotalXP() {
@@ -1084,16 +1253,30 @@ function updateLevelUI() {
 
 function updateSyncTimeLabel() {
   const ts = parseInt(localStorage.getItem('last_push_ts') || '0');
+  const device = localStorage.getItem('last_push_device') || '';
   const el = document.getElementById('syncTimeLabel');
   if (!el || !ts) { if(el) el.textContent=''; return; }
   const diff = Date.now() - ts;
   const mins = Math.floor(diff / 60000);
   const hrs = Math.floor(diff / 3600000);
   const days = Math.floor(diff / 86400000);
-  if (mins < 1) el.textContent = '방금 동기화됨';
-  else if (mins < 60) el.textContent = `${mins}분 전 동기화`;
-  else if (hrs < 24) el.textContent = `${hrs}시간 전 동기화`;
-  else el.textContent = `${days}일 전 동기화`;
+  let timeText;
+  if (mins < 1) timeText = '방금 전';
+  else if (mins < 60) timeText = `${mins}분 전`;
+  else if (hrs < 24) timeText = `${hrs}시간 전`;
+  else timeText = `${days}일 전`;
+  el.textContent = device ? `${timeText} · ${device}` : `${timeText} 동기화`;
+}
+
+// 기기 종류 감지
+function detectDevice() {
+  const ua = navigator.userAgent;
+  if (/iPhone/i.test(ua)) return '📱 아이폰';
+  if (/iPad/i.test(ua)) return '📱 아이패드';
+  if (/Android/i.test(ua)) return '📱 안드로이드';
+  if (/Mac/i.test(ua)) return '💻 맥';
+  if (/Windows/i.test(ua)) return '💻 PC';
+  return '🌐 브라우저';
 }
 
 // ════════════════════════════════════
@@ -1102,7 +1285,6 @@ function updateSyncTimeLabel() {
 
 function selectDay(idx) {
   currentDay = idx;
-  currentSituation = null;
   document.querySelectorAll('.day-btn').forEach((b,i) => b.classList.toggle('active', i===idx));
   loadState();
   resetTimer();
@@ -1116,7 +1298,8 @@ function selectDay(idx) {
 
 function renderMain() {
   const lv = getCurrentLevel();
-  const routine = currentSituation ? null : getExercises(currentDay, lv.lv);
+  const usingAlt = !!state.altPlan;
+  const routine = usingAlt ? null : getExercises(currentDay, lv.lv);
   const container = document.getElementById('mainContent');
   container.innerHTML = '';
   container.className = 'fade-in';
@@ -1124,71 +1307,123 @@ function renderMain() {
 
   const isRest = (currentDay === 3 || currentDay === 6);
 
-  // ── 상황변경 바 (운동 요일에만) ──
-  if (!isRest) {
+  // ── 상황변경 바 ──
+  if (!isRest || usingAlt) {
     const sitBar = document.createElement('div');
     sitBar.className = 'situation-bar';
-    const situations = [
-      { key:'rain', label:'🌧️ 비·날씨' },
-      { key:'tired', label:'😴 피곤해' },
-      { key:'swimming', label:'🏊 수영' },
-      { key:'yoga', label:'🧘 요가' },
-    ];
-    situations.forEach(sit => {
+
+    SITUATIONS.forEach(sit => {
       const btn = document.createElement('button');
-      btn.className = 'sit-btn' + (currentSituation === sit.key ? ' active' : '');
+      const active = sit.plans.includes(state.altPlan);
+      btn.className = 'sit-btn' + (active ? ' active' : '');
       btn.textContent = sit.label;
-      btn.onclick = () => toggleSituation(sit.key);
+      btn.onclick = () => selectSituation(sit.key);
       sitBar.appendChild(btn);
     });
-    // 원래 운동으로 버튼
-    if (currentSituation) {
+
+    if (usingAlt) {
       const resetBtn = document.createElement('button');
-      resetBtn.className = 'sit-btn active';
-      resetBtn.textContent = '↩️ 원래 운동';
-      resetBtn.onclick = () => { currentSituation = null; renderMain(); };
+      resetBtn.className = 'sit-btn reset-btn';
+      resetBtn.textContent = '↩️ 원래 운동으로';
+      resetBtn.onclick = () => { state.altPlan = null; state.altItems = {}; saveState(); renderMain(); };
       sitBar.appendChild(resetBtn);
     }
+
     container.appendChild(sitBar);
 
-    // 대체 운동 패널
-    if (currentSituation && ALTERNATIVES[currentSituation]) {
-      const alt = ALTERNATIVES[currentSituation];
-      const panel = document.createElement('div');
-      panel.className = 'alt-panel show';
-      panel.innerHTML = `<div class="alt-title">${alt.label} — 오늘의 선택 (클릭하면 완료!)</div>`;
+    // 플랜 선택기 (상황 버튼 눌렸는데 플랜 미선택 또는 플랜 여러개 중 선택)
+    if (!usingAlt && state.pendingSituation) {
+      const sit = SITUATIONS.find(s => s.key === state.pendingSituation);
+      if (sit && sit.plans.length > 1) {
+        const picker = document.createElement('div');
+        picker.className = 'plan-picker';
+        picker.innerHTML = `<div class="plan-picker-title">${sit.label} — 오늘 어떤 플랜으로?</div>`;
+        sit.plans.forEach(pk => {
+          const plan = ALT_PLANS[pk];
+          const pBtn = document.createElement('div');
+          pBtn.className = 'plan-option';
+          pBtn.innerHTML = `
+            <div class="plan-option-top">
+              <span class="plan-option-name">${plan.label}</span>
+              <span class="plan-option-xp">+${plan.totalXp} XP</span>
+            </div>
+            <div class="plan-option-intro">${plan.intro}</div>
+            <div class="plan-option-items">${plan.items.length}개 항목 · 예상 시간 ${estimateTime(plan)}</div>
+          `;
+          pBtn.onclick = () => {
+            state.altPlan = pk;
+            state.altItems = {};
+            state.pendingSituation = null;
+            saveState(); renderMain();
+          };
+          picker.appendChild(pBtn);
+        });
+        container.appendChild(picker);
+      }
+    }
 
-      alt.options.forEach((opt, idx) => {
-        const optEl = document.createElement('div');
-        const isCompleted = state.altCompleted && state.altCompleted.name === opt.name;
-        optEl.className = 'alt-option' + (isCompleted ? ' completed' : '');
-        optEl.innerHTML = `
-          <div class="alt-option-name">
-            ${opt.emoji} ${opt.name}
-            <span class="alt-xp-badge">+${opt.xp} XP</span>
-            ${isCompleted ? '<span class="alt-done-check">✓ 완료!</span>' : ''}
+    // 대체 플랜 진행 화면
+    if (usingAlt && ALT_PLANS[state.altPlan]) {
+      const plan = ALT_PLANS[state.altPlan];
+      const panel = document.createElement('div');
+      panel.className = 'alt-plan-panel';
+
+      const doneCount = plan.items.filter((_,i) => state.altItems[i]).length;
+      const totalCount = plan.items.length;
+      const pct = Math.round((doneCount / totalCount) * 100);
+      const earnedXp = Math.round(plan.totalXp * (doneCount / totalCount));
+
+      panel.innerHTML = `
+        <div class="alt-plan-header">
+          <div class="alt-plan-label">${plan.label}</div>
+          <div class="alt-plan-xp">${earnedXp} / ${plan.totalXp} XP</div>
+        </div>
+        <div class="alt-plan-intro">${plan.intro}</div>
+        <div class="alt-plan-progress">
+          <div class="alt-plan-progress-bar" style="width:${pct}%"></div>
+        </div>
+        <div class="alt-plan-progress-text">${doneCount} / ${totalCount} 완료${doneCount === totalCount ? ' · 🎉 완주!' : ''}</div>
+      `;
+
+      const itemsBox = document.createElement('div');
+      itemsBox.className = 'alt-plan-items';
+
+      plan.items.forEach((item, i) => {
+        const done = !!state.altItems[i];
+        const itemEl = document.createElement('div');
+        itemEl.className = 'alt-plan-item' + (done ? ' done' : '');
+
+        let metaHtml = '';
+        if (item.hasInterval) {
+          metaHtml = `<button class="interval-btn" onclick="event.stopPropagation(); openIntervalModal(event,'${item.name.replace(/'/g,"\\'")}')">⏱ 인터벌</button>`;
+        }
+
+        itemEl.innerHTML = `
+          <div class="alt-plan-item-main">
+            <div class="check-circle">${done ? '✓' : ''}</div>
+            <div class="alt-plan-item-body">
+              <div class="alt-plan-item-name">${item.name}</div>
+              <div class="alt-plan-item-desc">${item.desc}</div>
+            </div>
+            ${metaHtml}
           </div>
-          <div class="alt-option-desc">${opt.desc}</div>
         `;
-        optEl.style.cursor = 'pointer';
-        optEl.addEventListener('click', () => {
-          if (isCompleted) {
-            // 완료 취소
-            state.altCompleted = null;
-          } else {
-            // 완료 처리
-            state.altCompleted = { name: opt.name, emoji: opt.emoji, xp: opt.xp, situation: currentSituation };
-          }
+
+        itemEl.addEventListener('click', e => {
+          if (e.target.classList.contains('interval-btn')) return;
+          state.altItems[i] = !state.altItems[i];
           saveState(); updateLevelUI(); renderMain();
         });
-        panel.appendChild(optEl);
+
+        itemsBox.appendChild(itemEl);
       });
 
-      // 완료 배너
-      if (state.altCompleted && state.altCompleted.situation === currentSituation) {
+      panel.appendChild(itemsBox);
+
+      if (doneCount === totalCount) {
         const banner = document.createElement('div');
         banner.className = 'alt-complete-banner';
-        banner.textContent = `🎉 ${state.altCompleted.emoji} ${state.altCompleted.name} 완료! +${state.altCompleted.xp} XP 획득!`;
+        banner.innerHTML = `🎉 ${plan.label} 완주! +${plan.totalXp} XP 획득!`;
         panel.appendChild(banner);
       }
 
@@ -1260,7 +1495,7 @@ function renderMain() {
     container.appendChild(sec);
     updateProgress(routine, sec);
 
-  } else if (isRest && !currentSituation) {
+  } else if (isRest && !state.altPlan) {
     const card = document.createElement('div');
     card.className = 'rest-card';
     card.innerHTML = `
@@ -1278,18 +1513,27 @@ function renderMain() {
 
   const walkCard = document.createElement('div');
   walkCard.className = 'walk-card' + (state.walk ? ' done' : '');
+  const displaySeconds = state.walk ? (state.walkSec || 0) : walkSeconds;
+  const displayKcal = calcWalkCalories(displaySeconds);
   walkCard.innerHTML = `
     <div class="walk-top">
       <div class="check-circle" style="${state.walk ? 'background:var(--walk-color);border-color:var(--walk-color);color:#0f0f13;width:21px;height:21px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;' : 'border-color:var(--walk-color);width:21px;height:21px;border-radius:50%;border:2px solid var(--walk-color);display:flex;align-items:center;justify-content:center;font-size:11px;'}">${state.walk ? '✓' : ''}</div>
       <span class="walk-name">봉서산 맨발걷기</span>
-      <span class="walk-meta">20~30분</span>
+      <span class="walk-meta">${state.walk ? '✅ 완료' : (walkTimerRunning ? '⏱ 측정 중' : '시간 자유')}</span>
     </div>
     <div class="walk-timer-row">
-      <div class="walk-timer-disp" id="walkTimerDisp">${formatWalkTime(walkSeconds)}</div>
+      <div class="walk-timer-disp" id="walkTimerDisp">${formatWalkTime(displaySeconds)}</div>
+      <div class="walk-kcal-disp" id="walkCalDisp">${displayKcal} kcal</div>
       <button class="walk-timer-btn ${walkTimerRunning ? 'stop' : ''}" id="walkTimerBtn" onclick="toggleWalkTimer()">
         ${walkTimerRunning ? '🔴 중지·완료' : (state.walk ? '✅ 완료됨' : '🟢 걷기 시작')}
       </button>
-      <span class="walk-tip">${state.walk ? '오늘 걷기 완료! 잘 했어 👍' : '시작 버튼 누르면 시간 측정'}</span>
+    </div>
+    <div class="walk-info-row">
+      ${walkTimerRunning
+        ? '<span style="color:var(--walk-color);font-weight:600;">앱 전환해도 시간은 계속 흘러 · 2시간 자동 정지</span>'
+        : (state.walk
+          ? `오늘 ${formatWalkTime(displaySeconds)} 걸으면서 약 ${displayKcal} kcal 소모! 👏`
+          : '체중 97kg · MET 3.8 기준 자동 계산')}
     </div>
   `;
 
@@ -1375,9 +1619,36 @@ function renderMain() {
   updateTimerDisplay();
 }
 
-function toggleSituation(key) {
-  currentSituation = currentSituation === key ? null : key;
-  renderMain();
+function selectSituation(key) {
+  const sit = SITUATIONS.find(s => s.key === key);
+  if (!sit) return;
+  // 같은 상황 중 다른 플랜 진행 중이면 초기화
+  if (state.altPlan && sit.plans.includes(state.altPlan)) {
+    state.altPlan = null;
+    state.altItems = {};
+    state.pendingSituation = null;
+    saveState(); renderMain();
+    return;
+  }
+  // 플랜 1개면 바로 시작
+  if (sit.plans.length === 1) {
+    state.altPlan = sit.plans[0];
+    state.altItems = {};
+    state.pendingSituation = null;
+  } else {
+    // 플랜 여러개면 선택 UI 열기
+    state.pendingSituation = key;
+    state.altPlan = null;
+    state.altItems = {};
+  }
+  saveState(); renderMain();
+}
+
+// 플랜 예상 시간 — 항목 개수 × 5분
+function estimateTime(plan) {
+  const mins = plan.items.length * 5;
+  if (mins >= 60) return `약 ${Math.round(mins/60*10)/10}시간`;
+  return `약 ${mins}분`;
 }
 
 function toggleDetail(e, btn) {
@@ -1489,12 +1760,29 @@ function showCalDetail(y, m, d, clickedCell) {
   }
 
   if (habitState) {
-    if (habitState.altCompleted) {
-      html += `<div class="cal-detail-row" style="color:var(--accent2)">${habitState.altCompleted.emoji} 대체운동: ${habitState.altCompleted.name} (+${habitState.altCompleted.xp} XP)</div>`;
+    if (habitState.altPlan && ALT_PLANS[habitState.altPlan]) {
+      const plan = ALT_PLANS[habitState.altPlan];
+      const doneItems = plan.items.filter((_,i) => habitState.altItems && habitState.altItems[i]).length;
+      html += `<div class="cal-detail-row" style="color:var(--accent2)">${plan.label} · ${doneItems}/${plan.items.length} 완료</div>`;
     }
-    if (habitState.walk) html += `<div class="cal-detail-row" style="color:var(--walk-color)">🌿 맨발걷기 완료${habitState.walkSec > 0 ? ' ('+formatWalkTime(habitState.walkSec)+')' : ''}</div>`;
+    if (habitState.walk) {
+      const walkSecVal = habitState.walkSec || 0;
+      const kcal = calcWalkCalories(walkSecVal);
+      html += `<div class="cal-detail-row" style="color:var(--walk-color)">🌿 맨발걷기 ${formatWalkTime(walkSecVal)} · ${kcal} kcal</div>`;
+    }
     if (habitState.memo && habitState.memo.trim()) {
       html += `<div class="cal-detail-memo">📝 ${habitState.memo.replace(/\n/g,'<br>')}</div>`;
+    }
+  } else if (rec) {
+    // 요약 정보만 있는 경우 (rec 우선)
+    if (rec.altPlanLabel) {
+      html += `<div class="cal-detail-row" style="color:var(--accent2)">${rec.altPlanLabel} · ${rec.altItemsDone || 0}/${rec.altItemsTotal || 0}</div>`;
+    }
+    if (rec.walkSec > 0) {
+      html += `<div class="cal-detail-row" style="color:var(--walk-color)">🌿 맨발걷기 ${formatWalkTime(rec.walkSec)} · ${rec.walkKcal || 0} kcal</div>`;
+    }
+    if (rec.memo && rec.memo.trim()) {
+      html += `<div class="cal-detail-memo">📝 ${rec.memo.replace(/\n/g,'<br>')}</div>`;
     }
   }
 
@@ -1569,23 +1857,61 @@ function toggleWalkTimer() {
     // 중지 → 완료 처리
     clearInterval(walkTimerInterval);
     walkTimerRunning = false;
+    const elapsed = Math.floor((Date.now() - walkStartTs) / 1000);
+    walkSeconds = Math.min(elapsed, WALK_MAX_SEC);
     state.walk = true;
     state.walkSec = walkSeconds;
+    state.walkStartTs = 0;
     saveState(); updateLevelUI();
     renderMain();
     return;
   }
 
-  // 시작
+  // 시작 — 시작 시각 저장
+  walkStartTs = Date.now();
   walkSeconds = 0;
   walkTimerRunning = true;
+  state.walkStartTs = walkStartTs; // 페이지 닫혀도 복원 가능
+  state.walkRunning = true;
+  saveState();
+
+  let warned20 = false, warned30 = false;
+
   walkTimerInterval = setInterval(() => {
-    walkSeconds++;
+    // ★ 핵심: setInterval 카운트가 아니라 타임스탬프 차이로 계산
+    // → 다른 앱 갔다 와도 시간은 계속 흐름
+    const elapsed = Math.floor((Date.now() - walkStartTs) / 1000);
+    walkSeconds = elapsed;
+
     const disp = document.getElementById('walkTimerDisp');
     if (disp) disp.textContent = formatWalkTime(walkSeconds);
-    // 20분, 30분에 알림음
-    if (walkSeconds === 20*60 || walkSeconds === 30*60) {
+
+    // 칼로리 표시 업데이트
+    const calDisp = document.getElementById('walkCalDisp');
+    if (calDisp) calDisp.textContent = calcWalkCalories(walkSeconds) + ' kcal';
+
+    // 20분, 30분 경과 알림음 (한 번씩만)
+    if (!warned20 && walkSeconds >= 20*60) {
+      warned20 = true;
       beep(660, 200); setTimeout(() => beep(880, 300), 250);
+    }
+    if (!warned30 && walkSeconds >= 30*60) {
+      warned30 = true;
+      beep(880, 200); setTimeout(() => beep(1100, 400), 250);
+    }
+
+    // 2시간 자동 정지
+    if (walkSeconds >= WALK_MAX_SEC) {
+      walkSeconds = WALK_MAX_SEC;
+      clearInterval(walkTimerInterval);
+      walkTimerRunning = false;
+      state.walk = true;
+      state.walkSec = walkSeconds;
+      state.walkStartTs = 0;
+      state.walkRunning = false;
+      saveState(); updateLevelUI();
+      beep(1100, 300); setTimeout(() => beep(880, 400), 350);
+      renderMain();
     }
   }, 1000);
 
@@ -1593,10 +1919,61 @@ function toggleWalkTimer() {
   if (btn) { btn.textContent = '🔴 중지·완료'; btn.classList.add('stop'); }
 }
 
+// 페이지 복귀 시 진행 중이던 걷기 복원
+function restoreWalkTimer() {
+  if (state.walkRunning && state.walkStartTs) {
+    const elapsed = Math.floor((Date.now() - state.walkStartTs) / 1000);
+    if (elapsed < WALK_MAX_SEC) {
+      // 아직 진행 중인 걷기 복원
+      walkStartTs = state.walkStartTs;
+      walkSeconds = elapsed;
+      walkTimerRunning = true;
+      // 재시작
+      walkTimerInterval = setInterval(() => {
+        walkSeconds = Math.floor((Date.now() - walkStartTs) / 1000);
+        const disp = document.getElementById('walkTimerDisp');
+        if (disp) disp.textContent = formatWalkTime(walkSeconds);
+        const calDisp = document.getElementById('walkCalDisp');
+        if (calDisp) calDisp.textContent = calcWalkCalories(walkSeconds) + ' kcal';
+        if (walkSeconds >= WALK_MAX_SEC) {
+          walkSeconds = WALK_MAX_SEC;
+          clearInterval(walkTimerInterval);
+          walkTimerRunning = false;
+          state.walk = true;
+          state.walkSec = walkSeconds;
+          state.walkStartTs = 0;
+          state.walkRunning = false;
+          saveState(); updateLevelUI(); renderMain();
+        }
+      }, 1000);
+    } else {
+      // 2시간 넘었음 — 자동 완료 처리
+      walkSeconds = WALK_MAX_SEC;
+      walkTimerRunning = false;
+      state.walk = true;
+      state.walkSec = WALK_MAX_SEC;
+      state.walkStartTs = 0;
+      state.walkRunning = false;
+      saveState();
+    }
+  }
+}
+
+// J 체중 기준 맨발걷기 칼로리 계산 (MET 3.8 기준)
+// 공식: 칼로리 = MET × 체중(kg) × 시간(시간) × 1.05
+const USER_WEIGHT_KG = 97;
+const MET_BAREFOOT_WALK = 3.8; // 얕은 산·맨발걷기 평균값
+function calcWalkCalories(seconds) {
+  const hours = seconds / 3600;
+  const kcal = MET_BAREFOOT_WALK * USER_WEIGHT_KG * hours * 1.05;
+  return Math.round(kcal);
+}
+
 function stopWalkTimer() {
   clearInterval(walkTimerInterval);
   walkTimerRunning = false;
   walkSeconds = state.walkSec || 0;
+  walkStartTs = 0;
 }
 
 // ════════════════════════════════════
@@ -1774,10 +2151,13 @@ async function cloudLoad() {
 async function syncData() {
   const cloud = await cloudLoad();
   if (!cloud) return;
-  // 클라우드에 있지만 로컬에 없는 데이터만 가져옴 (오늘 기록 보호)
+  // 클라우드의 동기화 시간·기기 정보는 덮어쓰기 (최신 기준)
+  if (cloud.last_push_ts) localStorage.setItem('last_push_ts', cloud.last_push_ts);
+  if (cloud.last_push_device) localStorage.setItem('last_push_device', cloud.last_push_device);
+  // 나머지는 로컬에 없는 것만 채움 (오늘 기록 보호)
   Object.keys(cloud).forEach(k => {
-    if (k === 'timestamp' || k === 'last_push_ts') return;
-    if (!localStorage.getItem(k)) { // 로컬에 없는 것만 채움
+    if (k === 'timestamp' || k === 'last_push_ts' || k === 'last_push_device') return;
+    if (!localStorage.getItem(k)) {
       try {
         const val = typeof cloud[k] === 'string' ? cloud[k] : JSON.stringify(cloud[k]);
         localStorage.setItem(k, val);
@@ -1790,16 +2170,23 @@ async function pushData() {
   const btn = document.getElementById('syncBtn');
   if (btn) { btn.textContent = '⏳ 동기화 중...'; btn.disabled = true; }
 
-  const data = { timestamp: Date.now() };
+  const device = detectDevice();
+  const ts = Date.now();
+
+  const data = { timestamp: ts, last_push_device: device };
   for (let i = 0; i < localStorage.length; i++) {
     const k = localStorage.key(i);
     try { data[k] = JSON.parse(localStorage.getItem(k)); }
     catch { data[k] = localStorage.getItem(k); }
   }
+  // 기기 정보도 포함시켜서 클라우드에 저장
+  data.last_push_ts = ts;
+  data.last_push_device = device;
+
   await cloudSave(data);
 
-  const ts = Date.now();
   localStorage.setItem('last_push_ts', ts);
+  localStorage.setItem('last_push_device', device);
   updateSyncTimeLabel();
 
   if (btn) { btn.textContent = '☁️ 동기화'; btn.disabled = false; }
@@ -1813,6 +2200,7 @@ async function pushData() {
 initDate();
 initQuote();
 loadState();
+restoreWalkTimer(); // 진행 중이던 걷기 복원
 updateLevelUI();
 renderMain();
 updateSyncTimeLabel();
