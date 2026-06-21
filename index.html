@@ -388,25 +388,63 @@ body::before {
   font-family: 'Nanum Myeongjo', serif;
 }
 
-/* ── 메모 ── */
-.memo-card {
+/* ── 오늘의 기록 (덧글 형태) ── */
+.entries-card {
   background: var(--card);
   border: 1px solid var(--border);
-  border-radius: 16px; padding: 22px 24px;
+  border-radius: 16px; padding: 20px 22px;
   margin-bottom: 16px;
 }
-.memo-label {
-  font-size: 9px; letter-spacing: 4px;
-  color: var(--muted2); font-family: 'Nanum Myeongjo', serif;
-  margin-bottom: 12px; text-transform: uppercase;
+.entry-input-row {
+  display: flex; gap: 8px; margin-bottom: 4px;
 }
-.memo-input {
-  width: 100%; background: transparent; border: none;
+.entry-input {
+  flex: 1; background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 100px; padding: 11px 18px;
   color: var(--text); font-family: 'Noto Sans KR', sans-serif;
-  font-size: 13px; font-weight: 300; line-height: 1.9;
-  resize: none; outline: none; min-height: 88px;
+  font-size: 13px; outline: none; transition: border-color 0.2s;
 }
-.memo-input::placeholder { color: var(--muted); }
+.entry-input:focus { border-color: var(--gold); }
+.entry-input::placeholder { color: var(--muted); }
+.entry-submit {
+  background: var(--gold); border: none;
+  color: #090912; font-weight: 700;
+  font-family: 'Noto Sans KR', sans-serif;
+  font-size: 12px; padding: 0 18px;
+  border-radius: 100px; cursor: pointer;
+  transition: opacity 0.2s; white-space: nowrap;
+}
+.entry-submit:hover { opacity: 0.85; }
+
+.entry-list {
+  margin-top: 16px;
+  display: flex; flex-direction: column; gap: 10px;
+  max-height: 360px; overflow-y: auto;
+}
+.entry-item {
+  display: flex; gap: 10px; align-items: flex-start;
+  padding: 11px 14px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  animation: fadeUp 0.25s ease;
+}
+.entry-time {
+  font-size: 10px; color: var(--gold);
+  font-weight: 700; letter-spacing: 0.5px;
+  padding-top: 1px; flex-shrink: 0;
+  font-family: 'Noto Sans KR', sans-serif;
+}
+.entry-text {
+  font-size: 13px; color: var(--text);
+  line-height: 1.7; font-weight: 300;
+  white-space: pre-wrap; word-break: break-word;
+}
+.entry-empty {
+  font-size: 12px; color: var(--muted);
+  text-align: center; padding: 18px 0;
+}
 
 /* ── 달력 모달 ── */
 .modal-overlay {
@@ -497,6 +535,25 @@ body::before {
   line-height: 1.8; font-weight: 300;
   white-space: pre-wrap;
 }
+.cal-detail-entries {
+  display: flex; flex-direction: column; gap: 8px;
+  max-height: 280px; overflow-y: auto;
+}
+.cal-detail-entry {
+  display: flex; gap: 10px; align-items: flex-start;
+  background: var(--card2);
+  border: 1px solid var(--border);
+  border-radius: 10px; padding: 10px 13px;
+}
+.cal-detail-entry-time {
+  font-size: 10px; color: var(--gold);
+  font-weight: 700; flex-shrink: 0; padding-top: 1px;
+}
+.cal-detail-entry-text {
+  font-size: 13px; color: var(--muted2);
+  line-height: 1.7; font-weight: 300;
+  white-space: pre-wrap; word-break: break-word;
+}
 
 /* ── 토스트 ── */
 .toast {
@@ -539,7 +596,7 @@ body::before {
   <!-- 헤더 -->
   <header class="header">
     <div class="header-left">
-      <div class="app-brand">
+      <div class="app-brand" onclick="location.reload()" title="새로고침" style="cursor:pointer;">
         오늘의 행복
         <span class="app-brand-badge">v2</span>
       </div>
@@ -614,12 +671,15 @@ body::before {
     </div>
   </div>
 
-  <!-- 메모 -->
+  <!-- 오늘의 기록 -->
   <div class="section-label">오늘의 기록</div>
-  <div class="memo-card">
-    <div class="memo-label">Today's note</div>
-    <textarea class="memo-input" id="memoInput"
-      placeholder="오늘 느낀 것, 배운 것, 어떤 하루였는지 자유롭게."></textarea>
+  <div class="entries-card">
+    <div class="entry-input-row">
+      <input type="text" class="entry-input" id="entryInput"
+        placeholder="지금 떠오르는 생각을 적어봐 (Enter로 남기기)">
+      <button class="entry-submit" onclick="submitEntry()">남기기</button>
+    </div>
+    <div class="entry-list" id="entryList"></div>
   </div>
 
 </div>
@@ -1546,8 +1606,22 @@ function ls(key, fallback = null) {
     return v !== null ? JSON.parse(v) : fallback;
   } catch { return fallback; }
 }
+
+// 마지막으로 이 키를 수정한 시각을 기록 — 동기화 시 "더 최신 데이터"를 가려내는 기준
+function touchKey(key) {
+  try {
+    const raw = localStorage.getItem('_ts_index');
+    const idx = raw ? JSON.parse(raw) : {};
+    idx[key] = Date.now();
+    localStorage.setItem('_ts_index', JSON.stringify(idx));
+  } catch {}
+}
+
 function lsSet(key, val) {
-  try { localStorage.setItem(key, JSON.stringify(val)); } catch {}
+  try {
+    localStorage.setItem(key, JSON.stringify(val));
+    touchKey(key);
+  } catch {}
 }
 
 // ══════════════════════════════════════════
@@ -1695,24 +1769,79 @@ function toggleHanja() {
 }
 
 // ══════════════════════════════════════════
-// 메모
+// 오늘의 기록 (덧글 형태)
 // ══════════════════════════════════════════
-function loadMemo() {
-  const memo = ls(`memo_${todayKey()}`, '');
-  document.getElementById('memoInput').value = memo;
+
+// 과거 메모(단일 텍스트) 데이터를 화면에 표시할 때만 자동으로 덧글 형태로 변환
+// → 실제로 저장 형식을 바꾸진 않고, 보여줄 때만 합쳐서 보여줌 (예전 기록도 그대로 보이게)
+function getEntriesForDisplay(y, m, d) {
+  const dk = dateKey(y, m, d);
+  const arr = ls(`entries_${dk}`, []);
+  if (Array.isArray(arr) && arr.length) return arr;
+  const oldMemo = ls(`memo_${dk}`, '');
+  if (oldMemo && oldMemo.trim()) {
+    return [{ id: `legacy_${dk}`, time: '', text: oldMemo, ts: 0 }];
+  }
+  return [];
 }
 
-let memoTimer = null;
-document.addEventListener('DOMContentLoaded', () => {
-  document.getElementById('memoInput').addEventListener('input', e => {
-    clearTimeout(memoTimer);
-    memoTimer = setTimeout(() => {
-      lsSet(`memo_${todayKey()}`, e.target.value);
-      showToast('기록 저장됨 ✓');
-      // 기록을 쓰면 1시간 기다리지 않고 바로 클라우드에 올림
-      cloudPush();
-    }, 800);
+function submitEntry() {
+  const input = document.getElementById('entryInput');
+  const text = input.value.trim();
+  if (!text) return;
+
+  const now = new Date();
+  const entry = {
+    id: `${Date.now()}_${Math.random().toString(36).slice(2, 7)}`,
+    time: `${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`,
+    text,
+    ts: Date.now()
+  };
+
+  const arr = ls(`entries_${todayKey()}`, []);
+  arr.push(entry);
+  lsSet(`entries_${todayKey()}`, arr);
+
+  input.value = '';
+  renderEntries();
+  showToast('기록 저장됨 ✓');
+  // 1시간 기다리지 않고 바로 클라우드에 올림
+  cloudPush();
+}
+
+function renderEntries() {
+  const list = document.getElementById('entryList');
+  const entries = getEntriesForDisplay(NOW.getFullYear(), NOW.getMonth(), NOW.getDate());
+  list.innerHTML = '';
+
+  if (!entries.length) {
+    list.innerHTML = `<div class="entry-empty">아직 오늘 남긴 기록이 없어. 위에 적어봐.</div>`;
+    return;
+  }
+
+  entries.forEach(e => {
+    const el = document.createElement('div');
+    el.className = 'entry-item';
+    const timeHtml = e.time ? `<div class="entry-time">${e.time}</div>` : '';
+    el.innerHTML = `${timeHtml}<div class="entry-text"></div>`;
+    el.querySelector('.entry-text').textContent = e.text; // XSS 방지 위해 textContent 사용
+    list.appendChild(el);
   });
+
+  // 스크롤을 가장 아래(최신)로
+  list.scrollTop = list.scrollHeight;
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  const input = document.getElementById('entryInput');
+  if (input) {
+    input.addEventListener('keydown', e => {
+      if (e.key === 'Enter') {
+        e.preventDefault();
+        submitEntry();
+      }
+    });
+  }
 });
 
 // ══════════════════════════════════════════
@@ -1752,12 +1881,11 @@ function renderCal() {
     el.className = 'cal-cell';
     el.textContent = d;
 
-    const dk = dateKey(calYear, calMonth, d);
-    const hasMemo = ls(`memo_${dk}`, '') !== '';
+    const hasEntries = getEntriesForDisplay(calYear, calMonth, d).length > 0;
     const isToday = calYear === NOW.getFullYear() && calMonth === NOW.getMonth() && d === NOW.getDate();
 
     if (isToday) el.classList.add('today');
-    if (hasMemo) el.classList.add('has-memo');
+    if (hasEntries) el.classList.add('has-memo');
 
     el.addEventListener('click', () => showDayDetail(calYear, calMonth, d, el));
     grid.appendChild(el);
@@ -1771,15 +1899,35 @@ function showDayDetail(y, m, d, cell) {
   const months = ['1월','2월','3월','4월','5월','6월','7월','8월','9월','10월','11월','12월'];
   document.getElementById('calDetailDate').textContent = `${y}년 ${months[m]} ${d}일`;
 
-  const dk = dateKey(y, m, d);
-  const memo = ls(`memo_${dk}`, '');
+  const entries = getEntriesForDisplay(y, m, d);
   const body = document.getElementById('calDetailBody');
+  body.innerHTML = '';
 
-  if (memo.trim()) {
-    body.innerHTML = `<div class="cal-detail-memo">${memo.replace(/\n/g,'<br>')}</div>`;
+  if (entries.length) {
+    const wrap = document.createElement('div');
+    wrap.className = 'cal-detail-entries';
+    entries.forEach(e => {
+      const row = document.createElement('div');
+      row.className = 'cal-detail-entry';
+      if (e.time) {
+        const timeSpan = document.createElement('span');
+        timeSpan.className = 'cal-detail-entry-time';
+        timeSpan.textContent = e.time;
+        row.appendChild(timeSpan);
+      }
+      const textSpan = document.createElement('span');
+      textSpan.className = 'cal-detail-entry-text';
+      textSpan.textContent = e.text;
+      row.appendChild(textSpan);
+      wrap.appendChild(row);
+    });
+    body.appendChild(wrap);
   } else {
     const isPast = new Date(y, m, d) < new Date(NOW.getFullYear(), NOW.getMonth(), NOW.getDate());
-    body.innerHTML = `<div class="cal-detail-empty">${isPast ? '이 날의 기록이 없어.' : '아직 기록이 없어. 오늘의 기록에 써봐 😊'}</div>`;
+    const empty = document.createElement('div');
+    empty.className = 'cal-detail-empty';
+    empty.textContent = isPast ? '이 날의 기록이 없어.' : '아직 기록이 없어. 오늘의 기록에 써봐 😊';
+    body.appendChild(empty);
   }
 
   document.getElementById('calDetail').classList.add('show');
@@ -1854,28 +2002,56 @@ async function cloudPull(overwrite = false) {
     const cloud = json.record;
     if (!cloud) return;
 
-    const memoEl = document.getElementById('memoInput');
-    const isTypingMemo = memoEl && document.activeElement === memoEl;
-    const todayMemoKey = `memo_${todayKey()}`;
+    const localIdx = ls('_ts_index', {}) || {};
+    const cloudIdx = cloud['_ts_index'] || {};
+    let idxChanged = false;
 
     Object.keys(cloud).forEach(k => {
-      if (k === 'timestamp' || k === 'device') return;
-      // 지금 메모를 타이핑 중이면 그 항목만 덮어쓰지 않음 (내용 날아가는 것 방지)
-      if (k === todayMemoKey && isTypingMemo) return;
-      const shouldWrite = overwrite || !localStorage.getItem(k);
+      if (k === 'timestamp' || k === 'device' || k === '_ts_index') return;
+
+      // 덧글(entries_) 데이터는 절대 덮어쓰지 않고 항상 "합치기" — 기록이 사라지는 일이 없도록
+      if (k.startsWith('entries_')) {
+        const localArr = ls(k, []) || [];
+        const cloudArr = Array.isArray(cloud[k]) ? cloud[k] : [];
+        const map = new Map();
+        localArr.forEach(e => { if (e && e.id) map.set(e.id, e); });
+        cloudArr.forEach(e => { if (e && e.id && !map.has(e.id)) map.set(e.id, e); });
+        const merged = Array.from(map.values()).sort((a, b) => (a.ts || 0) - (b.ts || 0));
+        if (merged.length !== localArr.length) {
+          try { localStorage.setItem(k, JSON.stringify(merged)); } catch {}
+        }
+        return;
+      }
+
+      // 그 외 일반 키 — 더 최신(타임스탬프가 큰) 쪽만 가져옴. 둘 다 없으면 비교 자체를 건너뜀
+      const localExists = localStorage.getItem(k) !== null;
+      const cloudTs = cloudIdx[k] || 0;
+      const localTs = localIdx[k] || 0;
+
+      let shouldWrite;
+      if (!localExists) shouldWrite = true;          // 로컬에 아예 없으면 무조건 받아옴
+      else if (overwrite) shouldWrite = cloudTs > localTs; // 더 최신일 때만 덮어씀
+      else shouldWrite = false;
+
       if (shouldWrite) {
         try {
           localStorage.setItem(k, typeof cloud[k] === 'string' ? cloud[k] : JSON.stringify(cloud[k]));
+          localIdx[k] = cloudTs || Date.now();
+          idxChanged = true;
         } catch {}
       }
     });
+
+    if (idxChanged) {
+      try { localStorage.setItem('_ts_index', JSON.stringify(localIdx)); } catch {}
+    }
   } catch {}
 }
 
 async function manualSync() {
   await cloudPush();
   await cloudPull(true);
-  loadMemo();
+  renderEntries();
   renderStreak();
 }
 
@@ -1890,15 +2066,6 @@ async function autoSync() {
 }
 
 // ══════════════════════════════════════════
-// iOS 홈 화면 추가 안내
-// ══════════════════════════════════════════
-function checkInstallBanner() {
-  const isIOS = /iphone|ipad|ipod/i.test(navigator.userAgent);
-  const isStandalone = window.navigator.standalone;
-  // 이미 있으면 표시하지 않음 (현재 코드에는 배너 없음, 필요시 추가)
-}
-
-// ══════════════════════════════════════════
 // 시작
 // ══════════════════════════════════════════
 initDate();
@@ -1906,11 +2073,11 @@ markTodayVisit();
 renderStreak();
 renderQuote();
 renderHanja();
-loadMemo();
+renderEntries();
 
-// 클라우드 pull → 그 후 render 보정 (최신 데이터로 덮어쓰기)
+// 클라우드 pull → 그 후 render 보정 (더 최신 데이터만 가져옴, 덧글은 항상 병합)
 cloudPull(true).then(() => {
-  loadMemo();
+  renderEntries();
   renderStreak();
 });
 
@@ -1922,7 +2089,7 @@ setInterval(autoSync, AUTO_SYNC_INTERVAL);
 document.addEventListener('visibilitychange', () => {
   if (document.visibilityState === 'visible') {
     cloudPull(true).then(() => {
-      loadMemo();
+      renderEntries();
       renderStreak();
     });
   }
@@ -1932,7 +2099,7 @@ document.addEventListener('visibilitychange', () => {
 setInterval(() => {
   if (document.visibilityState === 'visible') {
     cloudPull(true).then(() => {
-      loadMemo();
+      renderEntries();
       renderStreak();
     });
   }
