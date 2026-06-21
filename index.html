@@ -1709,6 +1709,8 @@ document.addEventListener('DOMContentLoaded', () => {
     memoTimer = setTimeout(() => {
       lsSet(`memo_${todayKey()}`, e.target.value);
       showToast('기록 저장됨 ✓');
+      // 기록을 쓰면 1시간 기다리지 않고 바로 클라우드에 올림
+      cloudPush();
     }, 800);
   });
 });
@@ -1843,7 +1845,7 @@ async function cloudPush() {
   }
 }
 
-async function cloudPull() {
+async function cloudPull(overwrite = false) {
   try {
     const res = await fetch(`https://api.jsonbin.io/v3/b/${BIN_ID}/latest`, {
       headers: { 'X-Master-Key': API_KEY }
@@ -1851,9 +1853,17 @@ async function cloudPull() {
     const json = await res.json();
     const cloud = json.record;
     if (!cloud) return;
+
+    const memoEl = document.getElementById('memoInput');
+    const isTypingMemo = memoEl && document.activeElement === memoEl;
+    const todayMemoKey = `memo_${todayKey()}`;
+
     Object.keys(cloud).forEach(k => {
       if (k === 'timestamp' || k === 'device') return;
-      if (!localStorage.getItem(k)) {
+      // 지금 메모를 타이핑 중이면 그 항목만 덮어쓰지 않음 (내용 날아가는 것 방지)
+      if (k === todayMemoKey && isTypingMemo) return;
+      const shouldWrite = overwrite || !localStorage.getItem(k);
+      if (shouldWrite) {
         try {
           localStorage.setItem(k, typeof cloud[k] === 'string' ? cloud[k] : JSON.stringify(cloud[k]));
         } catch {}
@@ -1864,6 +1874,9 @@ async function cloudPull() {
 
 async function manualSync() {
   await cloudPush();
+  await cloudPull(true);
+  loadMemo();
+  renderStreak();
 }
 
 async function autoSync() {
@@ -1895,15 +1908,35 @@ renderQuote();
 renderHanja();
 loadMemo();
 
-// 클라우드 pull → 그 후 render 보정
-cloudPull().then(() => {
+// 클라우드 pull → 그 후 render 보정 (최신 데이터로 덮어쓰기)
+cloudPull(true).then(() => {
   loadMemo();
   renderStreak();
 });
 
-// 자동 동기화 (1시간마다)
+// 자동 동기화 (1시간마다 push)
 autoSync();
 setInterval(autoSync, AUTO_SYNC_INTERVAL);
+
+// 다른 화면 갔다가 이 탭으로 돌아오면 최신 기록 자동으로 가져옴
+document.addEventListener('visibilitychange', () => {
+  if (document.visibilityState === 'visible') {
+    cloudPull(true).then(() => {
+      loadMemo();
+      renderStreak();
+    });
+  }
+});
+
+// 탭이 켜져 있는 동안 3분마다 다른 기기의 새 기록 확인
+setInterval(() => {
+  if (document.visibilityState === 'visible') {
+    cloudPull(true).then(() => {
+      loadMemo();
+      renderStreak();
+    });
+  }
+}, 3 * 60 * 1000);
 </script>
 </body>
 </html>
