@@ -422,21 +422,56 @@ body::before {
   margin-top: 16px;
   display: flex; flex-direction: column; gap: 10px;
   max-height: 360px; overflow-y: auto;
+  scrollbar-gutter: stable;
 }
 .entry-item {
-  display: flex; gap: 10px; align-items: flex-start;
+  display: flex; flex-direction: column; gap: 6px;
   padding: 11px 14px;
   background: var(--surface);
   border: 1px solid var(--border);
   border-radius: 12px;
   animation: fadeUp 0.25s ease;
 }
+.entry-item-top {
+  display: flex; align-items: center; gap: 8px;
+}
 .entry-time {
   font-size: 10px; color: var(--gold);
   font-weight: 700; letter-spacing: 0.5px;
-  padding-top: 1px; flex-shrink: 0;
+  flex-shrink: 0;
   font-family: 'Noto Sans KR', sans-serif;
 }
+.entry-edited-tag {
+  font-size: 10px; color: var(--muted);
+  font-weight: 300;
+}
+.entry-actions {
+  margin-left: auto; display: flex; gap: 6px; flex-shrink: 0;
+}
+.entry-action-btn {
+  background: none; border: 1px solid var(--border);
+  color: var(--muted2); font-size: 10px; padding: 3px 10px;
+  border-radius: 100px; cursor: pointer;
+  font-family: 'Noto Sans KR', sans-serif;
+  transition: all 0.2s;
+}
+.entry-action-btn:hover { border-color: var(--blue); color: var(--blue); }
+.entry-action-btn.danger:hover { border-color: var(--hanja); color: var(--hanja); }
+.entry-action-btn.save { border-color: var(--gold); color: var(--gold); }
+.entry-action-btn.save:hover { opacity: 0.85; }
+
+.entry-edit-row {
+  display: flex; gap: 6px; align-items: center;
+}
+.entry-edit-input {
+  flex: 1; min-width: 0;
+  background: var(--card2); border: 1px solid var(--border);
+  border-radius: 8px; padding: 8px 12px;
+  color: var(--text); font-family: 'Noto Sans KR', sans-serif;
+  font-size: 13px; outline: none; transition: border-color 0.2s;
+}
+.entry-edit-input:focus { border-color: var(--gold); }
+
 .entry-text {
   font-size: 13px; color: var(--text);
   line-height: 1.7; font-weight: 300;
@@ -1778,7 +1813,9 @@ function toggleHanja() {
 function getEntriesForDisplay(y, m, d) {
   const dk = dateKey(y, m, d);
   const arr = ls(`entries_${dk}`, []);
-  if (Array.isArray(arr) && arr.length) return arr;
+  if (Array.isArray(arr) && arr.length) {
+    return arr.filter(e => !e.deleted);
+  }
   const oldMemo = ls(`memo_${dk}`, '');
   if (oldMemo && oldMemo.trim()) {
     return [{ id: `legacy_${dk}`, time: '', text: oldMemo, ts: 0 }];
@@ -1810,6 +1847,49 @@ function submitEntry() {
   cloudPush();
 }
 
+let editingEntryId = null;
+
+function startEditEntry(id) {
+  editingEntryId = id;
+  renderEntries();
+}
+
+function cancelEditEntry() {
+  editingEntryId = null;
+  renderEntries();
+}
+
+function saveEditEntry(id, newTextRaw) {
+  const newText = (newTextRaw || '').trim();
+  if (!newText) return; // 빈 값으로는 저장하지 않음 (편집 상태 유지)
+  const arr = ls(`entries_${todayKey()}`, []);
+  const idx = arr.findIndex(x => x.id === id);
+  if (idx !== -1) {
+    arr[idx].text = newText;
+    arr[idx].editedTs = Date.now();
+    lsSet(`entries_${todayKey()}`, arr);
+  }
+  editingEntryId = null;
+  renderEntries();
+  showToast('수정됨 ✓');
+  cloudPush();
+}
+
+function deleteEntry(id) {
+  if (!confirm('이 기록을 삭제할까?')) return;
+  const arr = ls(`entries_${todayKey()}`, []);
+  const idx = arr.findIndex(x => x.id === id);
+  if (idx !== -1) {
+    // 실제로 지우지 않고 "삭제됨" 표시만 남김 — 다른 기기와 동기화할 때 되살아나지 않도록
+    arr[idx].deleted = true;
+    arr[idx].deletedTs = Date.now();
+    lsSet(`entries_${todayKey()}`, arr);
+  }
+  renderEntries();
+  showToast('삭제됨 ✓');
+  cloudPush();
+}
+
 function renderEntries(scrollToBottom = false) {
   const list = document.getElementById('entryList');
   const entries = getEntriesForDisplay(NOW.getFullYear(), NOW.getMonth(), NOW.getDate());
@@ -1823,9 +1903,86 @@ function renderEntries(scrollToBottom = false) {
   entries.forEach(e => {
     const el = document.createElement('div');
     el.className = 'entry-item';
-    const timeHtml = e.time ? `<div class="entry-time">${e.time}</div>` : '';
-    el.innerHTML = `${timeHtml}<div class="entry-text"></div>`;
-    el.querySelector('.entry-text').textContent = e.text; // XSS 방지 위해 textContent 사용
+
+    // 편집 중인 항목이면 입력창 형태로 보여줌
+    if (editingEntryId === e.id) {
+      el.classList.add('editing');
+      const row = document.createElement('div');
+      row.className = 'entry-edit-row';
+
+      const input = document.createElement('input');
+      input.type = 'text';
+      input.className = 'entry-edit-input';
+      input.value = e.text;
+
+      const saveBtn = document.createElement('button');
+      saveBtn.className = 'entry-action-btn save';
+      saveBtn.textContent = '저장';
+      saveBtn.addEventListener('click', () => saveEditEntry(e.id, input.value));
+
+      const cancelBtn = document.createElement('button');
+      cancelBtn.className = 'entry-action-btn';
+      cancelBtn.textContent = '취소';
+      cancelBtn.addEventListener('click', cancelEditEntry);
+
+      input.addEventListener('keydown', ev => {
+        if (ev.key === 'Enter') { ev.preventDefault(); saveEditEntry(e.id, input.value); }
+        if (ev.key === 'Escape') { ev.preventDefault(); cancelEditEntry(); }
+      });
+
+      row.appendChild(input);
+      row.appendChild(saveBtn);
+      row.appendChild(cancelBtn);
+      el.appendChild(row);
+      list.appendChild(el);
+
+      setTimeout(() => {
+        input.focus();
+        input.setSelectionRange(input.value.length, input.value.length);
+      }, 0);
+      return;
+    }
+
+    // 일반 표시
+    const top = document.createElement('div');
+    top.className = 'entry-item-top';
+
+    if (e.time) {
+      const timeSpan = document.createElement('span');
+      timeSpan.className = 'entry-time';
+      timeSpan.textContent = e.time;
+      top.appendChild(timeSpan);
+    }
+    if (e.editedTs) {
+      const tag = document.createElement('span');
+      tag.className = 'entry-edited-tag';
+      tag.textContent = '(수정됨)';
+      top.appendChild(tag);
+    }
+
+    const actions = document.createElement('div');
+    actions.className = 'entry-actions';
+
+    const editBtn = document.createElement('button');
+    editBtn.className = 'entry-action-btn';
+    editBtn.textContent = '수정';
+    editBtn.addEventListener('click', () => startEditEntry(e.id));
+
+    const delBtn = document.createElement('button');
+    delBtn.className = 'entry-action-btn danger';
+    delBtn.textContent = '삭제';
+    delBtn.addEventListener('click', () => deleteEntry(e.id));
+
+    actions.appendChild(editBtn);
+    actions.appendChild(delBtn);
+    top.appendChild(actions);
+
+    const textDiv = document.createElement('div');
+    textDiv.className = 'entry-text';
+    textDiv.textContent = e.text; // XSS 방지 위해 textContent 사용
+
+    el.appendChild(top);
+    el.appendChild(textDiv);
     list.appendChild(el);
   });
 
@@ -2012,15 +2169,21 @@ async function cloudPull(overwrite = false) {
     Object.keys(cloud).forEach(k => {
       if (k === 'timestamp' || k === 'device' || k === '_ts_index') return;
 
-      // 덧글(entries_) 데이터는 절대 덮어쓰지 않고 항상 "합치기" — 기록이 사라지는 일이 없도록
+      // 덧글(entries_) 데이터는 절대 통째로 덮어쓰지 않고 항상 "합치기"
+      // → 같은 id가 양쪽에 있으면 더 최근에 수정·삭제된 버전을 채택 (수정/삭제가 기기 간에 제대로 반영되도록)
       if (k.startsWith('entries_')) {
         const localArr = ls(k, []) || [];
         const cloudArr = Array.isArray(cloud[k]) ? cloud[k] : [];
+        const versionTime = e => Math.max(e.ts || 0, e.editedTs || 0, e.deletedTs || 0);
         const map = new Map();
         localArr.forEach(e => { if (e && e.id) map.set(e.id, e); });
-        cloudArr.forEach(e => { if (e && e.id && !map.has(e.id)) map.set(e.id, e); });
+        cloudArr.forEach(e => {
+          if (!e || !e.id) return;
+          const existing = map.get(e.id);
+          if (!existing || versionTime(e) > versionTime(existing)) map.set(e.id, e);
+        });
         const merged = Array.from(map.values()).sort((a, b) => (a.ts || 0) - (b.ts || 0));
-        if (merged.length !== localArr.length) {
+        if (JSON.stringify(merged) !== JSON.stringify(localArr)) {
           try { localStorage.setItem(k, JSON.stringify(merged)); } catch {}
         }
         return;
