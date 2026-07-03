@@ -26,6 +26,7 @@
   --hanja:   #d4846a;
   --hanja-dim: rgba(212,132,106,0.1);
   --green:   #6bbfa0;
+  --green-dim: rgba(107,191,160,0.1);
   --text:    #ede9e0;
   --muted:   #5c5c72;
   --muted2:  #7a7a8f;
@@ -42,7 +43,6 @@ body {
   overflow-x: hidden;
 }
 
-/* 배경 텍스처 */
 body::before {
   content: '';
   position: fixed; inset: 0;
@@ -65,9 +65,7 @@ body::before {
   border-bottom: 1px solid var(--border);
   margin-bottom: 36px;
 }
-
 .header-left {}
-
 .app-brand {
   font-family: 'Nanum Myeongjo', serif;
   font-size: 10px; letter-spacing: 5px;
@@ -81,25 +79,21 @@ body::before {
   padding: 2px 6px; border-radius: 4px;
   font-family: 'Noto Sans KR', sans-serif;
 }
-
 .header-date {
   font-family: 'Nanum Myeongjo', serif;
   font-size: 48px; font-weight: 800;
   color: var(--text); line-height: 1;
   letter-spacing: -1px;
 }
-
 .header-day {
   font-size: 12px; color: var(--muted2);
   font-weight: 300; letter-spacing: 3px;
   margin-top: 6px;
 }
-
 .header-right {
   display: flex; flex-direction: column;
   align-items: flex-end; gap: 8px; padding-top: 4px;
 }
-
 .sync-status {
   display: flex; align-items: center; gap: 6px;
   font-size: 11px; color: var(--muted); cursor: pointer;
@@ -115,7 +109,6 @@ body::before {
 }
 .sync-dot.synced { background: var(--green); }
 .sync-dot.syncing { background: var(--gold); animation: pulse 1s infinite; }
-
 .cal-btn {
   background: none;
   border: 1px solid var(--border);
@@ -125,59 +118,7 @@ body::before {
 }
 .cal-btn:hover { border-color: var(--gold); color: var(--gold); }
 
-/* ── 습관 스트릭 ── */
-.streak-card {
-  background: var(--card);
-  border: 1px solid var(--border);
-  border-radius: 16px; padding: 20px 24px;
-  margin-bottom: 16px;
-}
-.streak-header {
-  display: flex; align-items: center; justify-content: space-between;
-  margin-bottom: 16px;
-}
-.streak-label {
-  font-size: 10px; letter-spacing: 4px;
-  color: var(--gold); font-family: 'Nanum Myeongjo', serif;
-}
-.streak-count {
-  font-size: 11px; color: var(--muted2); font-weight: 300;
-}
-.streak-count span { color: var(--green); font-weight: 700; }
-
-.streak-days {
-  display: flex; gap: 8px; justify-content: space-between;
-}
-.streak-day {
-  flex: 1; text-align: center;
-}
-.streak-day-label {
-  font-size: 9px; color: var(--muted); letter-spacing: 1px;
-  margin-bottom: 6px; font-weight: 500;
-}
-.streak-day-dot {
-  width: 100%; aspect-ratio: 1;
-  border-radius: 8px;
-  background: var(--surface);
-  border: 1px solid var(--border);
-  display: flex; align-items: center; justify-content: center;
-  font-size: 10px; transition: all 0.3s;
-}
-.streak-day-dot.visited {
-  background: rgba(107,191,160,0.15);
-  border-color: var(--green);
-}
-.streak-day-dot.today {
-  border-color: var(--gold);
-  background: var(--gold-dim);
-}
-.streak-day-dot.today.visited {
-  background: rgba(107,191,160,0.2);
-  border-color: var(--green);
-  box-shadow: 0 0 12px rgba(107,191,160,0.2);
-}
-
-/* ── 섹션 ── */
+/* ── 섹션 라벨 ── */
 .section-label {
   font-family: 'Nanum Myeongjo', serif;
   font-size: 9px; letter-spacing: 5px;
@@ -188,6 +129,32 @@ body::before {
 .section-label::after {
   content: ''; flex: 1; height: 1px;
   background: var(--border);
+}
+
+/* ── 공용 nav (명언/사자성어/영어단어 공용) ── */
+.quote-nav {
+  display: flex; align-items: center;
+  justify-content: space-between;
+  margin-bottom: 6px;
+}
+.quote-section-label {
+  font-family: 'Nanum Myeongjo', serif;
+  font-size: 9px; letter-spacing: 4px;
+  color: var(--gold);
+}
+.quote-arrows { display: flex; gap: 4px; }
+.quote-arrow {
+  background: none; border: 1px solid var(--border);
+  color: var(--muted2); width: 28px; height: 28px;
+  border-radius: 50%; cursor: pointer; font-size: 12px;
+  display: flex; align-items: center; justify-content: center;
+  transition: all 0.2s; font-family: 'Noto Sans KR', sans-serif;
+}
+.quote-arrow:hover { border-color: var(--gold); color: var(--gold); }
+.quote-index {
+  text-align: right; margin-top: 12px;
+  font-size: 10px; color: var(--muted);
+  letter-spacing: 1px;
 }
 
 /* ── 명언 카드 ── */
@@ -206,29 +173,6 @@ body::before {
   line-height: 1; pointer-events: none;
   font-weight: 800;
 }
-
-.quote-nav {
-  display: flex; align-items: center;
-  justify-content: space-between;
-  margin-bottom: 6px;
-}
-.quote-section-label {
-  font-family: 'Nanum Myeongjo', serif;
-  font-size: 9px; letter-spacing: 4px;
-  color: var(--gold);
-}
-.quote-arrows {
-  display: flex; gap: 4px;
-}
-.quote-arrow {
-  background: none; border: 1px solid var(--border);
-  color: var(--muted2); width: 28px; height: 28px;
-  border-radius: 50%; cursor: pointer; font-size: 12px;
-  display: flex; align-items: center; justify-content: center;
-  transition: all 0.2s; font-family: 'Noto Sans KR', sans-serif;
-}
-.quote-arrow:hover { border-color: var(--gold); color: var(--gold); }
-
 .quote-text {
   font-family: 'Nanum Myeongjo', serif;
   font-size: 19px; font-weight: 700;
@@ -236,12 +180,10 @@ body::before {
   margin-bottom: 18px; margin-top: 8px;
   padding-left: 2px;
 }
-
 .quote-author-row {
   display: flex; align-items: flex-start;
   justify-content: space-between; gap: 12px;
 }
-
 .quote-author-block {}
 .quote-author-name {
   font-size: 13px; font-weight: 600;
@@ -251,7 +193,6 @@ body::before {
   font-size: 11px; color: var(--muted2);
   font-weight: 300; letter-spacing: 0.5px;
 }
-
 .meaning-toggle {
   background: none;
   border: 1px solid var(--border);
@@ -262,7 +203,6 @@ body::before {
 }
 .meaning-toggle:hover { border-color: var(--blue); color: var(--blue); }
 .meaning-toggle.open { border-color: var(--blue); color: var(--blue); }
-
 .quote-meaning {
   display: none;
   margin-top: 16px; padding: 16px 18px;
@@ -275,10 +215,37 @@ body::before {
 }
 .quote-meaning.open { display: block; }
 
-.quote-index {
-  text-align: right; margin-top: 12px;
-  font-size: 10px; color: var(--muted);
-  letter-spacing: 1px;
+/* ── 사자성어 카드 ── */
+.idiom-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 16px; padding: 28px;
+  margin-bottom: 16px;
+}
+.idiom-kor {
+  font-family: 'Nanum Myeongjo', serif;
+  font-size: 27px; font-weight: 800;
+  color: var(--green); margin-top: 10px; margin-bottom: 4px;
+}
+.idiom-hanja {
+  font-size: 13px; color: var(--muted2);
+  letter-spacing: 2px; margin-bottom: 16px;
+}
+.idiom-meaning {
+  font-size: 14px; color: var(--text);
+  line-height: 1.8; margin-bottom: 14px; font-weight: 400;
+}
+.idiom-usage {
+  padding: 14px 16px;
+  background: var(--green-dim);
+  border: 1px solid rgba(107,191,160,0.18);
+  border-radius: 10px;
+  font-size: 13px; color: var(--muted2);
+  line-height: 1.8; font-weight: 300;
+}
+.idiom-usage-label {
+  color: var(--green); font-weight: 700; font-size: 11px;
+  display: block; margin-bottom: 4px; letter-spacing: 0.5px;
 }
 
 /* ── 한자 카드 ── */
@@ -289,11 +256,7 @@ body::before {
   overflow: hidden;
   margin-bottom: 16px;
 }
-
-.hanja-top {
-  display: flex; gap: 0;
-}
-
+.hanja-top { display: flex; gap: 0; }
 .hanja-char-block {
   width: 130px; flex-shrink: 0;
   background: var(--hanja-dim);
@@ -303,7 +266,6 @@ body::before {
   padding: 28px 16px;
   position: relative;
 }
-
 .hanja-char {
   font-family: 'Noto Serif SC', 'Nanum Myeongjo', serif;
   font-size: 86px; font-weight: 700;
@@ -311,35 +273,12 @@ body::before {
   line-height: 1;
   text-shadow: 0 0 40px rgba(212,132,106,0.25);
 }
-
-.hanja-stroke {
-  font-size: 10px; color: var(--muted);
-  letter-spacing: 1px; margin-top: 8px;
-}
-
-.hanja-info {
-  flex: 1; padding: 24px 22px;
-  display: flex; flex-direction: column; gap: 6px;
-}
-
-.hanja-info-row {
-  display: flex; align-items: baseline; gap: 10px;
-}
-
-.hanja-kor {
-  font-family: 'Nanum Myeongjo', serif;
-  font-size: 20px; font-weight: 700; color: var(--text);
-}
-.hanja-chi {
-  font-size: 13px; color: var(--muted2);
-  font-style: italic;
-}
-
-.hanja-meaning {
-  font-size: 12px; color: var(--muted2);
-  line-height: 1.6; margin-top: 2px;
-}
-
+.hanja-stroke { font-size: 10px; color: var(--muted); letter-spacing: 1px; margin-top: 8px; }
+.hanja-info { flex: 1; padding: 24px 22px; display: flex; flex-direction: column; gap: 6px; }
+.hanja-info-row { display: flex; align-items: baseline; gap: 10px; }
+.hanja-kor { font-family: 'Nanum Myeongjo', serif; font-size: 20px; font-weight: 700; color: var(--text); }
+.hanja-chi { font-size: 13px; color: var(--muted2); font-style: italic; }
+.hanja-meaning { font-size: 12px; color: var(--muted2); line-height: 1.6; margin-top: 2px; }
 .hanja-grade {
   display: inline-block;
   background: rgba(212,132,106,0.12);
@@ -349,55 +288,68 @@ body::before {
   padding: 2px 8px; border-radius: 4px;
   letter-spacing: 1px; margin-top: 6px;
 }
-
 .hanja-expand-btn {
-  width: 100%;
-  background: none;
-  border: none;
+  width: 100%; background: none; border: none;
   border-top: 1px solid var(--border);
-  color: var(--muted2);
-  font-family: 'Noto Sans KR', sans-serif;
+  color: var(--muted2); font-family: 'Noto Sans KR', sans-serif;
   font-size: 11px; padding: 12px;
-  cursor: pointer; transition: all 0.2s;
-  letter-spacing: 1px;
+  cursor: pointer; transition: all 0.2s; letter-spacing: 1px;
 }
 .hanja-expand-btn:hover { background: var(--card2); color: var(--hanja); }
-
-.hanja-detail {
-  display: none;
-  padding: 18px 22px;
-  border-top: 1px solid var(--border);
-  animation: fadeUp 0.25s ease;
-}
+.hanja-detail { display: none; padding: 18px 22px; border-top: 1px solid var(--border); animation: fadeUp 0.25s ease; }
 .hanja-detail.open { display: block; }
-.hanja-detail-title {
-  font-size: 10px; letter-spacing: 3px;
-  color: var(--hanja); margin-bottom: 10px;
-  font-family: 'Nanum Myeongjo', serif;
-}
-.hanja-detail-text {
-  font-size: 13px; color: var(--muted2);
-  line-height: 1.9; font-weight: 300;
-  margin-bottom: 12px;
-}
+.hanja-detail-title { font-size: 10px; letter-spacing: 3px; color: var(--hanja); margin-bottom: 10px; font-family: 'Nanum Myeongjo', serif; }
+.hanja-detail-text { font-size: 13px; color: var(--muted2); line-height: 1.9; font-weight: 300; margin-bottom: 12px; }
 .hanja-example {
   background: var(--hanja-dim);
   border: 1px solid rgba(212,132,106,0.15);
   border-radius: 8px; padding: 10px 14px;
   font-size: 13px; color: var(--text);
   font-family: 'Nanum Myeongjo', serif;
+  margin-bottom: 14px;
+}
+.hanja-stroke-link {
+  display: inline-flex; align-items: center; gap: 6px;
+  font-size: 12px; color: var(--hanja);
+  border: 1px solid rgba(212,132,106,0.3);
+  padding: 8px 14px; border-radius: 100px;
+  text-decoration: none; transition: all 0.2s;
+}
+.hanja-stroke-link:hover { background: var(--hanja-dim); }
+.hanja-stroke-note {
+  font-size: 11px; color: var(--muted); margin-top: 8px; line-height: 1.6; font-weight: 300;
 }
 
-/* ── 오늘의 기록 (덧글 형태) ── */
+/* ── 영어단어 카드 ── */
+.eng-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 16px; padding: 28px;
+  margin-bottom: 16px;
+}
+.eng-word-row { display: flex; align-items: baseline; gap: 10px; margin-top: 10px; flex-wrap: wrap; }
+.eng-word { font-family: 'Nanum Myeongjo', serif; font-size: 28px; font-weight: 800; color: var(--blue); }
+.eng-pos {
+  font-size: 11px; color: var(--muted2);
+  border: 1px solid var(--border); padding: 2px 9px; border-radius: 100px;
+}
+.eng-pron { font-size: 13px; color: var(--muted2); margin: 8px 0 16px; font-style: italic; }
+.eng-meaning { font-size: 14px; color: var(--text); line-height: 1.8; margin-bottom: 14px; }
+.eng-example {
+  font-size: 13px; color: var(--text); line-height: 1.7;
+  background: var(--blue-dim); border: 1px solid rgba(107,174,214,0.15);
+  border-radius: 10px; padding: 12px 14px; margin-bottom: 8px;
+}
+.eng-example-kor { font-size: 12px; color: var(--muted2); padding: 0 2px; font-weight: 300; }
+
+/* ── 오늘의 기록 ── */
 .entries-card {
   background: var(--card);
   border: 1px solid var(--border);
   border-radius: 16px; padding: 20px 22px;
   margin-bottom: 16px;
 }
-.entry-input-row {
-  display: flex; gap: 8px; margin-bottom: 4px;
-}
+.entry-input-row { display: flex; gap: 8px; margin-bottom: 4px; }
 .entry-input {
   flex: 1; min-width: 0; background: var(--surface);
   border: 1px solid var(--border);
@@ -417,7 +369,6 @@ body::before {
   transition: opacity 0.2s; white-space: nowrap;
 }
 .entry-submit:hover { opacity: 0.85; }
-
 .entry-list {
   margin-top: 16px;
   display: flex; flex-direction: column; gap: 10px;
@@ -432,22 +383,10 @@ body::before {
   border-radius: 12px;
   animation: fadeUp 0.25s ease;
 }
-.entry-item-top {
-  display: flex; align-items: center; gap: 8px;
-}
-.entry-time {
-  font-size: 10px; color: var(--gold);
-  font-weight: 700; letter-spacing: 0.5px;
-  flex-shrink: 0;
-  font-family: 'Noto Sans KR', sans-serif;
-}
-.entry-edited-tag {
-  font-size: 10px; color: var(--muted);
-  font-weight: 300;
-}
-.entry-actions {
-  margin-left: auto; display: flex; gap: 6px; flex-shrink: 0;
-}
+.entry-item-top { display: flex; align-items: center; gap: 8px; }
+.entry-time { font-size: 10px; color: var(--gold); font-weight: 700; letter-spacing: 0.5px; flex-shrink: 0; font-family: 'Noto Sans KR', sans-serif; }
+.entry-edited-tag { font-size: 10px; color: var(--muted); font-weight: 300; }
+.entry-actions { margin-left: auto; display: flex; gap: 6px; flex-shrink: 0; }
 .entry-action-btn {
   background: none; border: 1px solid var(--border);
   color: var(--muted2); font-size: 10px; padding: 3px 10px;
@@ -459,10 +398,7 @@ body::before {
 .entry-action-btn.danger:hover { border-color: var(--hanja); color: var(--hanja); }
 .entry-action-btn.save { border-color: var(--gold); color: var(--gold); }
 .entry-action-btn.save:hover { opacity: 0.85; }
-
-.entry-edit-row {
-  display: flex; gap: 6px; align-items: center;
-}
+.entry-edit-row { display: flex; gap: 6px; align-items: center; }
 .entry-edit-input {
   flex: 1; min-width: 0;
   background: var(--card2); border: 1px solid var(--border);
@@ -471,16 +407,8 @@ body::before {
   font-size: 13px; outline: none; transition: border-color 0.2s;
 }
 .entry-edit-input:focus { border-color: var(--gold); }
-
-.entry-text {
-  font-size: 13px; color: var(--text);
-  line-height: 1.7; font-weight: 300;
-  white-space: pre-wrap; word-break: break-word;
-}
-.entry-empty {
-  font-size: 12px; color: var(--muted);
-  text-align: center; padding: 18px 0;
-}
+.entry-text { font-size: 13px; color: var(--text); line-height: 1.7; font-weight: 300; white-space: pre-wrap; word-break: break-word; }
+.entry-empty { font-size: 12px; color: var(--muted); text-align: center; padding: 18px 0; }
 
 /* ── 달력 모달 ── */
 .modal-overlay {
@@ -492,7 +420,6 @@ body::before {
   padding: 20px;
 }
 .modal-overlay.show { display: flex; animation: fadeUp 0.25s ease; }
-
 .cal-modal {
   background: var(--card);
   border: 1px solid var(--border2);
@@ -500,39 +427,24 @@ body::before {
   width: 100%; max-width: 420px;
   max-height: 90vh; overflow-y: auto;
 }
-
-.cal-header {
-  display: flex; align-items: center;
-  justify-content: space-between; margin-bottom: 22px;
-}
+.cal-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 22px; }
 .cal-nav {
-  background: none;
-  border: 1px solid var(--border);
+  background: none; border: 1px solid var(--border);
   color: var(--muted2); font-size: 14px;
   padding: 6px 13px; border-radius: 100px;
   cursor: pointer; font-family: 'Noto Sans KR', sans-serif;
   transition: all 0.2s;
 }
 .cal-nav:hover { border-color: var(--gold); color: var(--gold); }
-.cal-title {
-  font-family: 'Nanum Myeongjo', serif;
-  font-size: 17px; font-weight: 700; color: var(--text);
-}
-.cal-close {
-  background: none; border: none;
-  color: var(--muted); font-size: 16px;
-  cursor: pointer; padding: 4px 8px; transition: color 0.2s;
-}
+.cal-title { font-family: 'Nanum Myeongjo', serif; font-size: 17px; font-weight: 700; color: var(--text); }
+.cal-close { background: none; border: none; color: var(--muted); font-size: 16px; cursor: pointer; padding: 4px 8px; transition: color 0.2s; }
 .cal-close:hover { color: var(--text); }
-
 .cal-days-header {
   display: grid; grid-template-columns: repeat(7,1fr);
   text-align: center; font-size: 10px; color: var(--muted);
   margin-bottom: 8px; gap: 3px; letter-spacing: 1px;
 }
-
 .cal-grid { display: grid; grid-template-columns: repeat(7,1fr); gap: 4px; }
-
 .cal-cell {
   aspect-ratio: 1; border-radius: 10px;
   display: flex; align-items: center; justify-content: center;
@@ -545,51 +457,14 @@ body::before {
 .cal-cell.has-memo { background: rgba(107,174,214,0.12); color: var(--blue); }
 .cal-cell.has-memo.today { border-color: var(--gold); }
 .cal-cell.selected { outline: 2px solid var(--blue); outline-offset: 1px; }
-
-/* 날짜 상세 (달력 아래) */
-.cal-detail {
-  margin-top: 20px;
-  border-top: 1px solid var(--border);
-  padding-top: 18px;
-  display: none; animation: fadeUp 0.2s ease;
-}
+.cal-detail { margin-top: 20px; border-top: 1px solid var(--border); padding-top: 18px; display: none; animation: fadeUp 0.2s ease; }
 .cal-detail.show { display: block; }
-.cal-detail-date {
-  font-family: 'Nanum Myeongjo', serif;
-  font-size: 12px; color: var(--gold);
-  letter-spacing: 2px; margin-bottom: 12px;
-}
-.cal-detail-empty {
-  font-size: 12px; color: var(--muted);
-  text-align: center; padding: 20px 0;
-}
-.cal-detail-memo {
-  background: var(--card2);
-  border: 1px solid var(--border);
-  border-radius: 10px; padding: 14px 16px;
-  font-size: 13px; color: var(--muted2);
-  line-height: 1.8; font-weight: 300;
-  white-space: pre-wrap;
-}
-.cal-detail-entries {
-  display: flex; flex-direction: column; gap: 8px;
-  max-height: 280px; overflow-y: auto;
-}
-.cal-detail-entry {
-  display: flex; gap: 10px; align-items: flex-start;
-  background: var(--card2);
-  border: 1px solid var(--border);
-  border-radius: 10px; padding: 10px 13px;
-}
-.cal-detail-entry-time {
-  font-size: 10px; color: var(--gold);
-  font-weight: 700; flex-shrink: 0; padding-top: 1px;
-}
-.cal-detail-entry-text {
-  font-size: 13px; color: var(--muted2);
-  line-height: 1.7; font-weight: 300;
-  white-space: pre-wrap; word-break: break-word;
-}
+.cal-detail-date { font-family: 'Nanum Myeongjo', serif; font-size: 12px; color: var(--gold); letter-spacing: 2px; margin-bottom: 12px; }
+.cal-detail-empty { font-size: 12px; color: var(--muted); text-align: center; padding: 20px 0; }
+.cal-detail-entries { display: flex; flex-direction: column; gap: 8px; max-height: 280px; overflow-y: auto; }
+.cal-detail-entry { display: flex; gap: 10px; align-items: flex-start; background: var(--card2); border: 1px solid var(--border); border-radius: 10px; padding: 10px 13px; }
+.cal-detail-entry-time { font-size: 10px; color: var(--gold); font-weight: 700; flex-shrink: 0; padding-top: 1px; }
+.cal-detail-entry-text { font-size: 13px; color: var(--muted2); line-height: 1.7; font-weight: 300; white-space: pre-wrap; word-break: break-word; }
 
 /* ── 토스트 ── */
 .toast {
@@ -603,17 +478,9 @@ body::before {
 }
 .toast.show { opacity: 1; transform: translateY(0); }
 
-/* ── 애니메이션 ── */
-@keyframes fadeUp {
-  from { opacity: 0; transform: translateY(10px); }
-  to   { opacity: 1; transform: translateY(0); }
-}
-@keyframes pulse {
-  0%, 100% { opacity: 1; }
-  50%       { opacity: 0.4; }
-}
+@keyframes fadeUp { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.4; } }
 
-/* ── 반응형 ── */
 @media (max-width: 600px) {
   .wrapper { padding: 0 16px 80px; }
   .header { padding: 28px 0 20px; }
@@ -621,7 +488,6 @@ body::before {
   .hanja-char { font-size: 68px; }
   .hanja-char-block { width: 105px; }
   .quote-text { font-size: 16px; }
-  .streak-days { gap: 5px; }
 }
 </style>
 </head>
@@ -629,12 +495,11 @@ body::before {
 
 <div class="wrapper">
 
-  <!-- 헤더 -->
   <header class="header">
     <div class="header-left">
       <div class="app-brand" onclick="location.reload()" title="새로고침" style="cursor:pointer;">
         오늘의 행복
-        <span class="app-brand-badge">v2</span>
+        <span class="app-brand-badge">v3</span>
       </div>
       <div class="header-date" id="headerDate"></div>
       <div class="header-day" id="headerDay"></div>
@@ -648,13 +513,21 @@ body::before {
     </div>
   </header>
 
-  <!-- 습관 스트릭 -->
-  <div class="streak-card">
-    <div class="streak-header">
-      <div class="streak-label">이번 주 출석</div>
-      <div class="streak-count">연속 <span id="streakCount">0</span>일째</div>
+  <!-- 사자성어 -->
+  <div class="section-label">오늘의 사자성어</div>
+  <div class="idiom-card">
+    <div class="quote-nav">
+      <div class="quote-section-label" style="color:var(--green);">FOUR-CHARACTER IDIOM</div>
+      <div class="quote-arrows">
+        <button class="quote-arrow" onclick="prevIdiom()" title="이전">‹</button>
+        <button class="quote-arrow" onclick="nextIdiom()" title="다음">›</button>
+      </div>
     </div>
-    <div class="streak-days" id="streakDays"></div>
+    <div class="idiom-kor" id="idiomKor"></div>
+    <div class="idiom-hanja" id="idiomHanja"></div>
+    <div class="idiom-meaning" id="idiomMeaning"></div>
+    <div class="idiom-usage"><span class="idiom-usage-label">💬 이럴 때 써봐</span><span id="idiomUsage"></span></div>
+    <div class="quote-index" id="idiomIndex"></div>
   </div>
 
   <!-- 명언 -->
@@ -697,14 +570,37 @@ body::before {
       </div>
     </div>
     <button class="hanja-expand-btn" id="hanjaBtn" onclick="toggleHanja()">
-      유래 · 예시 보기 ▾
+      유래 · 예시 · 획순 보기 ▾
     </button>
     <div class="hanja-detail" id="hanjaDetail">
       <div class="hanja-detail-title">한자 유래</div>
       <div class="hanja-detail-text" id="hanjaOrigin"></div>
-      <div class="hanja-detail-title" style="margin-top:14px;">활용 예시</div>
+      <div class="hanja-detail-title">활용 예시</div>
       <div class="hanja-example" id="hanjaExample"></div>
+      <a class="hanja-stroke-link" id="hanjaStrokeLink" target="_blank" rel="noopener">🖌️ 네이버 한자사전에서 획순 애니메이션 보기</a>
+      <div class="hanja-stroke-note">※ 붓 압력(어디서 힘주고 어디서 얇게 긋는지)까지 정확히 그려주는 건 내가 직접 만들기 어려워서, 검증된 획순 자료로 바로 연결해뒀어.</div>
     </div>
+  </div>
+
+  <!-- 영어단어 -->
+  <div class="section-label">오늘의 영어단어</div>
+  <div class="eng-card">
+    <div class="quote-nav">
+      <div class="quote-section-label" style="color:var(--blue);">WORD OF THE DAY</div>
+      <div class="quote-arrows">
+        <button class="quote-arrow" onclick="prevWord()" title="이전 단어">‹</button>
+        <button class="quote-arrow" onclick="nextWord()" title="다음 단어">›</button>
+      </div>
+    </div>
+    <div class="eng-word-row">
+      <div class="eng-word" id="engWord"></div>
+      <div class="eng-pos" id="engPos"></div>
+    </div>
+    <div class="eng-pron" id="engPron"></div>
+    <div class="eng-meaning" id="engMeaning"></div>
+    <div class="eng-example" id="engExample"></div>
+    <div class="eng-example-kor" id="engExampleKor"></div>
+    <div class="quote-index" id="engIndex"></div>
   </div>
 
   <!-- 오늘의 기록 -->
@@ -720,7 +616,6 @@ body::before {
 
 </div>
 
-<!-- 달력 모달 -->
 <div class="modal-overlay" id="calModal" onclick="closeCal(event)">
   <div class="cal-modal">
     <div class="cal-header">
@@ -744,886 +639,328 @@ body::before {
 
 <script>
 // ══════════════════════════════════════════
-// 명언 데이터 (공부·인생·철학·깨달음)
+// 명언 데이터
 // ══════════════════════════════════════════
 const QUOTES = [
-  {
-    text: "나는 내가 아무것도 모른다는 것을 안다.",
-    author: "소크라테스 (Socrates)",
-    country: "고대 그리스",
-    years: "기원전 470 — 399",
-    meaning: "철학의 출발점으로 불리는 '무지의 지(無知의 知)'. 소크라테스는 아테네 현인들을 찾아다니며 대화했는데, 그들이 안다고 믿는 것들이 사실은 근거 없는 착각임을 하나씩 밝혀냈어. 그 끝에 내린 결론이 이 말이야. 스스로 모른다는 걸 아는 사람이 오히려 진짜 배울 준비가 된 사람이라는 뜻이기도 해."
-  },
-  {
-    text: "배우기만 하고 생각하지 않으면 헛되고, 생각만 하고 배우지 않으면 위태롭다.",
-    author: "공자 (孔子, Confucius)",
-    country: "중국",
-    years: "기원전 551 — 479",
-    meaning: "논어(論語) 위정편에 나오는 말이야. 학습과 사유는 수레의 두 바퀴 같아서, 하나만으로는 제대로 굴러가지 않아. 책만 읽고 스스로 곱씹지 않으면 내 것이 되지 않고, 생각만 하고 새로운 자료를 받아들이지 않으면 편견에 갇히게 돼. 소방기술사 공부에도 딱 맞는 말이지 않아?"
-  },
-  {
-    text: "자기 자신을 아는 것이 모든 지혜의 시작이다.",
-    author: "아리스토텔레스 (Aristoteles)",
-    country: "고대 그리스",
-    years: "기원전 384 — 322",
-    meaning: "플라톤의 제자이자 알렉산드로스 대왕의 스승. 아리스토텔레스는 철학뿐 아니라 생물학, 물리학, 윤리학 등 당시 모든 학문을 아울렀어. 이 말은 자기 강점과 약점, 욕구와 두려움을 냉정하게 직시하는 사람만이 올바른 선택을 내릴 수 있다는 뜻이야."
-  },
-  {
-    text: "그대를 방해하는 것은 사물이 아니라, 사물에 대한 그대의 생각이다.",
-    author: "에픽테토스 (Epictetus)",
-    country: "로마 제국 (그리스인)",
-    years: "서기 50경 — 135경",
-    meaning: "노예 출신의 스토아 철학자. 몸은 구속되어 있었지만 정신만큼은 누구보다 자유로웠어. 이 말은 스토아 철학의 핵심을 담고 있어 — 외부 상황은 내가 바꿀 수 없지만, 그것을 어떻게 해석하고 반응하느냐는 언제나 내 선택이라는 것."
-  },
-  {
-    text: "서둘러 살지 마라. 행복은 지금 여기에 있다.",
-    author: "마르쿠스 아우렐리우스 (Marcus Aurelius)",
-    country: "로마 제국",
-    years: "121 — 180",
-    meaning: "로마 황제이면서 철학자. 전쟁터에서 틈틈이 쓴 일기가 『명상록(Meditations)』이야. 제국의 정점에 서 있던 사람이 스스로에게 '지금 이 순간에 집중하라'고 반복해서 다짐한 거야. 성취에 집착하다 보면 정작 살아있는 지금을 잃어버린다는 경고이기도 해."
-  },
-  {
-    text: "인생은 짧고, 기술은 길다.",
-    author: "히포크라테스 (Hippocrates)",
-    country: "고대 그리스",
-    years: "기원전 460 — 370경",
-    meaning: "의학의 아버지. 원문은 라틴어 'Ars longa, vita brevis.' 배워야 할 것은 평생이 지나도 다 배울 수 없을 만큼 방대한데, 우리에게 주어진 시간은 짧다는 뜻이야. 그래서 지금 이 순간의 공부가 소중하다는 거지. 소방기술사 준비하는 J에게도 꽤 맞는 말 아닐까."
-  },
-  {
-    text: "우리가 아직 살고 있는 한, 죽음은 없다. 죽음이 오면, 우리는 없다.",
-    author: "에피쿠로스 (Epicurus)",
-    country: "고대 그리스",
-    years: "기원전 341 — 270",
-    meaning: "쾌락주의 철학자로 오해받지만, 사실 그가 말한 쾌락은 '고통의 부재'에 가까워. 이 말은 죽음을 두려워하는 것이 얼마나 무의미한지를 논리적으로 보여줘. 결국 지금 살아있는 이 순간에 집중하라는 뜻이야."
-  },
-  {
-    text: "알면 알수록 모른다는 것이 많아진다.",
-    author: "아이작 뉴턴 (Isaac Newton)",
-    country: "영국",
-    years: "1643 — 1727",
-    meaning: "중력 법칙, 운동 법칙, 미적분학의 발명자. 인류 역사상 가장 위대한 과학자 중 한 명이 한 말이야. 노년의 뉴턴은 자신을 '해변에서 조개를 줍는 아이'에 비유했어. 진정한 앎은 겸손을 동반해."
-  },
-  {
-    text: "상상력은 지식보다 중요하다. 지식은 한계가 있지만, 상상력은 세상을 품는다.",
-    author: "알베르트 아인슈타인 (Albert Einstein)",
-    country: "독일-미국",
-    years: "1879 — 1955",
-    meaning: "상대성이론의 창시자. 어린 시절 자신이 빛을 타고 달리면 어떻게 보일까 상상했던 것이 훗날 물리학 혁명의 씨앗이 됐어. 정해진 공식을 외우는 것보다 '왜?'라고 묻고 그림을 그리는 능력이 더 강하다는 뜻이야."
-  },
-  {
-    text: "인간은 생각하는 갈대다.",
-    author: "블레즈 파스칼 (Blaise Pascal)",
-    country: "프랑스",
-    years: "1623 — 1662",
-    meaning: "수학자이자 철학자. 갈대처럼 우주 앞에서 연약한 존재이지만, 생각할 수 있다는 것이 인간의 위엄이라는 뜻이야. 우주는 나를 알지 못하지만, 나는 우주를 안다 — 그 앎 자체가 인간의 존엄이야. 짧지만 수백 년이 지나도 계속 회자되는 이유가 있어."
-  },
-  {
-    text: "나는 생각한다, 고로 나는 존재한다. (Cogito, ergo sum)",
-    author: "르네 데카르트 (René Descartes)",
-    country: "프랑스",
-    years: "1596 — 1650",
-    meaning: "모든 것을 의심하던 데카르트가 끝내 의심할 수 없는 것 하나를 찾아낸 말이야. 세상이 환상일 수도 있고, 신체도 착각일 수 있지만 — 지금 이렇게 의심하고 있는 나는 반드시 존재해야 해. 존재의 가장 단단한 출발점."
-  },
-  {
-    text: "독서는 완전한 사람을, 대화는 준비된 사람을, 글쓰기는 정확한 사람을 만든다.",
-    author: "프랜시스 베이컨 (Francis Bacon)",
-    country: "영국",
-    years: "1561 — 1626",
-    meaning: "경험주의 철학의 선구자. 이 세 가지를 합치면 완전한 지식인이 탄생한다고 봤어. 읽어서 채우고, 말하면서 정리하고, 쓰면서 날카로워지는 것 — 공부의 세 단계를 이보다 깔끔하게 정리한 말이 없어."
-  },
-  {
-    text: "가장 위대한 영광은 넘어지지 않는 데 있는 것이 아니라, 넘어질 때마다 일어서는 데 있다.",
-    author: "넬슨 만델라 (Nelson Mandela)",
-    country: "남아프리카공화국",
-    years: "1918 — 2013",
-    meaning: "27년간 감옥에 갇혀 있다가 나와서 대통령이 된 사람. 이 말은 단순한 격언이 아니라 그의 삶 자체야. 실패와 좌절이 없는 사람은 없어. 중요한 건 그것이 끝이 아니라는 걸 아는 것."
-  },
-  {
-    text: "진정한 배움은 자기 자신에게서 온다. 스승은 방향을 가리킬 뿐이야.",
-    author: "소크라테스 (Socrates)",
-    country: "고대 그리스",
-    years: "기원전 470 — 399",
-    meaning: "소크라테스는 '산파술(Maieutics)'이라는 방법을 썼어. 질문을 통해 상대방이 스스로 진리를 끌어내도록 돕는 방식이지. 지식은 주입받는 게 아니라 내면에서 발아하는 거야. 그래서 그는 스스로를 '선생'이 아닌 '산파'라고 불렀어."
-  },
-  {
-    text: "아는 사람은 말하지 않고, 말하는 사람은 알지 못한다.",
-    author: "노자 (老子, Laozi)",
-    country: "중국",
-    years: "기원전 571경 — 471경",
-    meaning: "도덕경(道德經) 56장에 나오는 말이야. 깊이 아는 것은 언어로 표현되기 전의 영역에 있어. 말이 많은 사람이 실은 불확실하기 때문에 말로 채우려 한다는 역설. 침묵은 때로 가장 강한 언어야."
-  },
-  {
-    text: "강은 앞으로만 흘러가지 않는다. 한 방울의 물이 바다가 된다.",
-    author: "장자 (莊子, Zhuangzi)",
-    country: "중국",
-    years: "기원전 369 — 286",
-    meaning: "도가 철학의 거장. 장자는 편협한 시선을 깨고 더 큰 관점으로 세상을 보라고 가르쳤어. 지금 내가 처한 좁은 상황이 전부가 아닐 수 있어. 조금 더 멀리, 더 크게 보면 전혀 다른 길이 보이기도 해."
-  },
-  {
-    text: "모든 것이 변한다. 같은 강물에 두 번 발을 담글 수 없다.",
-    author: "헤라클레이토스 (Heraclitus)",
-    country: "고대 그리스",
-    years: "기원전 535 — 475경",
-    meaning: "변화를 철학의 근본으로 삼은 철학자. 강이 흐르는 동안 물은 계속 바뀌고, 나 자신도 변해. 어제의 나와 오늘의 나는 다른 사람이야. 변화를 두려워하기보다 그 안에서 흐름을 읽는 것이 지혜라는 뜻이야."
-  },
-  {
-    text: "인간은 자유롭게 태어났으나, 도처에서 쇠사슬에 묶여 있다.",
-    author: "장자크 루소 (Jean-Jacques Rousseau)",
-    country: "스위스-프랑스",
-    years: "1712 — 1778",
-    meaning: "사회계약론의 첫 문장이야. 루소는 문명과 사회가 인간의 본성을 왜곡한다고 봤어. 이 말은 수백 년이 지나도 여전히 울림이 있어 — 우리가 당연하게 받아들이는 많은 제약들이 사실 누군가 만들어놓은 것이라는 거."
-  },
-  {
-    text: "두 가지가 내 마음을 경외감으로 채운다. 내 머리 위의 별이 빛나는 하늘, 그리고 내 안의 도덕 법칙.",
-    author: "임마누엘 칸트 (Immanuel Kant)",
-    country: "독일 (프로이센)",
-    years: "1724 — 1804",
-    meaning: "순수이성비판의 저자. 칸트는 평생 고향 쾨니히스베르크를 거의 떠나지 않았지만 그의 생각은 우주와 인간 내면을 동시에 탐구했어. 외부 우주의 광대함과 내면 양심의 무게가 같은 깊이라는 이 문장은 실은 그의 묘비에도 새겨져 있어."
-  },
-  {
-    text: "모든 이론은 회색이고, 오직 생명의 황금 나무만이 녹색이다.",
-    author: "요한 볼프강 폰 괴테 (Johann Wolfgang von Goethe)",
-    country: "독일",
-    years: "1749 — 1832",
-    meaning: "파우스트에 나오는 대사. 아무리 훌륭한 이론도 살아있는 현실의 경험 앞에서는 빛이 바랜다는 뜻이야. 배운 것을 실제로 써봐야 진짜 내 것이 돼. 책 속의 지식과 현장에서 몸으로 익힌 앎은 질적으로 달라."
-  },
-  {
-    text: "인생을 이해하려면 뒤를 봐야 한다. 그러나 살아가려면 앞을 봐야 한다.",
-    author: "쇠렌 키르케고르 (Søren Kierkegaard)",
-    country: "덴마크",
-    years: "1813 — 1855",
-    meaning: "실존주의 철학의 아버지. 인생은 앞으로 살지만 그 의미는 돌아볼 때 비로소 보여. 후회 없이 살기 위해 과거를 돌아보되, 그것에 발목 잡혀 앞을 못 가는 것도 경계해야 해."
-  },
-  {
-    text: "나를 죽이지 못하는 것은 나를 더 강하게 만든다.",
-    author: "프리드리히 니체 (Friedrich Nietzsche)",
-    country: "독일",
-    years: "1844 — 1900",
-    meaning: "우상의 황혼에 나오는 문장. 니체는 고통을 회피해야 할 것이 아니라 성장의 재료로 봤어. 힘든 경험을 통과한 사람은 그 전의 자신으로 돌아갈 수 없어 — 이미 더 강해졌으니까."
-  },
-  {
-    text: "아름다움이 세상을 구원할 것이다.",
-    author: "표도르 도스토옙스키 (Fyodor Dostoevsky)",
-    country: "러시아",
-    years: "1821 — 1881",
-    meaning: "백치(The Idiot)에 나오는 말이야. 도스토옙스키가 말한 아름다움은 외면이 아니라 영혼의 아름다움, 선함, 진실함을 의미해. 인간이 서로에게 진심 어린 선의를 보이고 진실되게 살아갈 때 세상은 나아진다는 믿음."
-  },
-  {
-    text: "인간은 자유라는 형벌을 받았다.",
-    author: "장폴 사르트르 (Jean-Paul Sartre)",
-    country: "프랑스",
-    years: "1905 — 1980",
-    meaning: "실존주의 철학자. '존재는 본질에 앞선다' — 우리는 태어날 때 정해진 목적이 없어. 스스로 선택하고 그 선택에 책임지며 의미를 만들어가야 해. 자유는 선물이지만 동시에 무거운 짐이기도 하다는 뜻이야."
-  },
-  {
-    text: "행복의 비결은 더 많은 것을 원하는 것이 아니라, 더 많이 사랑하는 능력이다.",
-    author: "버트런드 러셀 (Bertrand Russell)",
-    country: "영국",
-    years: "1872 — 1970",
-    meaning: "수학자이자 철학자, 노벨 문학상 수상자. 러셀은 평생 지적 탐구와 인류 평화를 위해 살았어. 욕망을 키우는 것이 행복의 길이 아니라, 이미 있는 것들에 대한 사랑과 감사를 키우는 것이 진짜 행복이라는 뜻이야."
-  },
-  {
-    text: "우주는 인간을 이해하도록 의무지워져 있지 않다.",
-    author: "리처드 파인만 (Richard Feynman)",
-    country: "미국",
-    years: "1918 — 1988",
-    meaning: "노벨 물리학상 수상자. 어떤 것이 이해되지 않아도 괜찮아 — 우주가 인간에게 맞춰줄 의무는 없어. 그래도 우리는 계속 묻고 탐구해야 해. 모른다는 것 자체를 편안하게 받아들이는 태도, 그게 진짜 과학 정신이야."
-  },
-  {
-    text: "어제는 역사이고, 내일은 미스터리이지만, 오늘은 선물이다. 그래서 현재(present)라고 부른다.",
-    author: "앨리스 얼 (Alice Morse Earle)",
-    country: "미국",
-    years: "1853 — 1911",
-    meaning: "역사학자이자 작가. Present에는 '현재'와 '선물'이라는 두 가지 의미가 있어. 과거에 집착하거나 미래를 걱정하는 대신, 지금 이 순간을 충분히 살아내는 것이 가장 큰 선물이라는 뜻이야."
-  },
-  {
-    text: "독서는 충실한 사람을 만들고, 회의(會議)는 준비된 사람을 만들고, 쓰기는 정확한 사람을 만든다.",
-    author: "프랜시스 베이컨 (Francis Bacon)",
-    country: "영국",
-    years: "1561 — 1626",
-    meaning: "경험론 철학의 선구자. 16세기에 한 말인데 지금도 여전히 맞아. 읽고, 토론하고, 써보는 것 — 이 세 가지 루프가 지식을 내 것으로 만드는 가장 확실한 방법이야."
-  },
-  {
-    text: "자기 자신을 극복하는 자가 가장 강한 자다.",
-    author: "공자 (孔子, Confucius)",
-    country: "중국",
-    years: "기원전 551 — 479",
-    meaning: "논어에서 '克己復禮(극기복례)' — 자기를 이기고 예로 돌아가라는 말에서 비롯돼. 어제의 나보다 오늘의 내가 조금이라도 나은 사람이 되는 것, 그것이 진정한 승리야. 남과의 경쟁은 그다음 문제야."
-  },
-  {
-    text: "오늘 읽지 않는 사람은 어제 읽지 못한 사람보다 나을 것이 없다.",
-    author: "마크 트웨인 (Mark Twain)",
-    country: "미국",
-    years: "1835 — 1910",
-    meaning: "소설가이자 유머 작가. 학교를 거의 다니지 않았지만 독서로 세상을 이해한 사람이야. 읽을 수 있는데 읽지 않는 것은, 읽고 싶어도 읽지 못하는 것과 결과가 같다는 따끔한 말."
-  },
-  {
-    text: "철학은 죽음을 연습하는 것이다.",
-    author: "플라톤 (Plato)",
-    country: "고대 그리스",
-    years: "기원전 428 — 348",
-    meaning: "소크라테스의 제자. 여기서 '죽음'은 육체적 욕망과 일상의 집착에서 벗어나는 것을 의미해. 잠깐 멈추고, 덜 중요한 것들로부터 거리를 두고, 진짜 중요한 것이 무엇인지 생각하는 것이 철학이야."
-  },
-  {
-    text: "지식은 힘이다. (Scientia potentia est)",
-    author: "프랜시스 베이컨 (Francis Bacon)",
-    country: "영국",
-    years: "1561 — 1626",
-    meaning: "그냥 아는 것이 힘이 아니라, 그 앎으로 세상에 작용할 수 있을 때 진짜 힘이 돼. 베이컨은 과학적 방법론을 세운 사람이기도 해. 체계적으로 관찰하고 실험하고 검증하는 것이 지식을 힘으로 만드는 과정이야."
-  },
-  {
-    text: "재능은 고독 속에서 만들어지고, 성격은 세상의 조류 속에서 형성된다.",
-    author: "요한 볼프강 폰 괴테 (Johann Wolfgang von Goethe)",
-    country: "독일",
-    years: "1749 — 1832",
-    meaning: "타샤 튜더도 비슷한 말을 했어. 깊은 집중과 혼자 있는 시간이 진짜 실력을 키우고, 그것을 사람들 속에서 부대끼며 쓰는 과정이 인격을 다듬어. 공부와 현장 경험의 조화가 중요한 이유이기도 해."
-  },
-  {
-    text: "지혜로운 자는 많은 것을 알지만, 배움을 멈추지 않는다.",
-    author: "정약용 (丁若鏞, Jeong Yakyong)",
-    country: "조선 (한국)",
-    years: "1762 — 1836",
-    meaning: "다산 정약용. 18년간의 유배 생활 중에도 500여 권의 책을 썼어. 어떤 환경에서도 배움을 놓지 않은 사람이야. 많이 알수록 더 많이 모른다는 것을 알게 되는 것이 진짜 지혜라는 뜻이야."
-  },
-  {
-    text: "천 리 길도 발 아래서 시작된다. (千里之行 始於足下)",
-    author: "노자 (老子, Laozi)",
-    country: "중국",
-    years: "기원전 571경 — 471경",
-    meaning: "도덕경 64장. 먼 목표를 바라보며 압도되기보다는 지금 이 한 발 한 발에 집중하라는 뜻이야. 소방기술사든 어떤 목표든, 결국은 오늘의 한 페이지, 한 문제로 이루어지는 거잖아."
-  },
-  {
-    text: "군자는 말은 더디 하고 행동은 민첩하게 한다.",
-    author: "공자 (孔子, Confucius)",
-    country: "중국",
-    years: "기원전 551 — 479",
-    meaning: "논어 이인편. 입으로 떠드는 것보다 실제로 해내는 것이 더 가치 있다는 말이야. 공자가 이상적인 인간으로 삼은 '군자'의 덕목 중 하나야. 말이 행동을 앞서면 결국 빈 말이 되고 말아."
-  },
-  {
-    text: "세상에서 가장 어려운 일은 자기 자신을 아는 것이고, 가장 쉬운 일은 남을 비판하는 것이다.",
-    author: "탈레스 (Thales)",
-    country: "고대 그리스",
-    years: "기원전 624 — 546경",
-    meaning: "최초의 철학자. 수학자이자 천문학자이기도 했어. 이 말은 지금 시대에도 뼈아프게 맞아. 남의 실수는 잘 보이는데 내 안을 들여다보는 것은 얼마나 어려운지. 비판하기 전에 먼저 자신을 돌아보는 것이 지혜의 시작이야."
-  },
-  {
-    text: "책을 읽지 않는 사람은 읽지 못하는 사람보다 유리하지 않다.",
-    author: "마크 트웨인 (Mark Twain)",
-    country: "미국",
-    years: "1835 — 1910",
-    meaning: "읽을 수 있는 능력이 있어도 쓰지 않으면 없는 것과 같아. 주어진 시간과 능력을 쓰지 않는 것이 가장 큰 낭비야. 비유하자면 소방설비를 설치해놓고 작동 안 시키는 것과 같은 거지 😄"
-  },
-  {
-    text: "생각하는 것은 인간이 할 수 있는 가장 어려운 일이다. 아마 그래서 그것을 하는 사람이 극히 드물 것이다.",
-    author: "헨리 포드 (Henry Ford)",
-    country: "미국",
-    years: "1863 — 1947",
-    meaning: "자동차왕이지만 이 말은 꽤 철학적이야. 정보를 받아들이는 것과 그것을 갖고 진짜 생각하는 것은 달라. 비판적으로 따져보고, 연결하고, 의문을 품는 것 — 그게 진짜 생각이야."
-  },
-  {
-    text: "무지는 지식보다 더 자주 확신을 낳는다.",
-    author: "찰스 다윈 (Charles Darwin)",
-    country: "영국",
-    years: "1809 — 1882",
-    meaning: "진화론의 창시자. 던닝-크루거 효과를 100년 전에 꿰뚫어 본 말이야. 조금 알 때 가장 자신만만하고, 깊이 알수록 얼마나 모르는지 보이는 게 지식의 아이러니야."
-  },
-  {
-    text: "위험을 무릅쓰고 나아가라. 인생 자체가 위험이다.",
-    author: "헬렌 켈러 (Helen Keller)",
-    country: "미국",
-    years: "1880 — 1968",
-    meaning: "보지 못하고 듣지 못했지만 글을 쓰고 강연을 하며 세상과 소통한 사람. 안전한 선택만 하는 삶은 삶처럼 보이지 않는다고 그녀는 말했어. 새로운 시도 앞에 두려움이 오는 건 당연해 — 그래도 가는 거야."
-  },
-  {
-    text: "작은 사람들이 이 세상을 이루고 있다. 모든 위대한 것은 결국 그 작은 사람들의 모임이다.",
-    author: "빅토르 위고 (Victor Hugo)",
-    country: "프랑스",
-    years: "1802 — 1885",
-    meaning: "레미제라블의 작가. 역사는 영웅이 만드는 것처럼 보이지만, 사실은 이름 없이 하루하루 성실하게 살아가는 사람들이 세상을 떠받치고 있어. 매일 묵묵히 공부하는 사람이 언젠가 역사를 바꿔."
-  },
-  {
-    text: "사람은 자기가 이해한 만큼만 보인다.",
-    author: "요한 볼프강 폰 괴테 (Johann Wolfgang von Goethe)",
-    country: "독일",
-    years: "1749 — 1832",
-    meaning: "아는 만큼 보인다는 말이야. 소방 현장을 볼 때도, 도면을 볼 때도, 세상을 볼 때도 — 내 이해의 깊이가 내 시야의 깊이가 돼. 배움이 쌓일수록 이전에 보이지 않던 것들이 보이기 시작해."
-  },
+  { text: "나는 내가 아무것도 모른다는 것을 안다.", author: "소크라테스 (Socrates)", country: "고대 그리스", years: "기원전 470 — 399",
+    meaning: "철학의 출발점으로 불리는 '무지의 지(無知의 知)'. 소크라테스는 아테네 현인들을 찾아다니며 대화했는데, 그들이 안다고 믿는 것들이 사실은 근거 없는 착각임을 하나씩 밝혀냈어. 스스로 모른다는 걸 아는 사람이 오히려 진짜 배울 준비가 된 사람이라는 뜻이야." },
+  { text: "배우기만 하고 생각하지 않으면 헛되고, 생각만 하고 배우지 않으면 위태롭다.", author: "공자 (孔子, Confucius)", country: "중국", years: "기원전 551 — 479",
+    meaning: "논어(論語) 위정편에 나오는 말이야. 학습과 사유는 수레의 두 바퀴 같아서, 하나만으로는 제대로 굴러가지 않아. 소방기술사 공부에도 딱 맞는 말이지 않아?" },
+  { text: "자기 자신을 아는 것이 모든 지혜의 시작이다.", author: "아리스토텔레스 (Aristoteles)", country: "고대 그리스", years: "기원전 384 — 322",
+    meaning: "플라톤의 제자이자 알렉산드로스 대왕의 스승. 이 말은 자기 강점과 약점, 욕구와 두려움을 냉정하게 직시하는 사람만이 올바른 선택을 내릴 수 있다는 뜻이야." },
+  { text: "그대를 방해하는 것은 사물이 아니라, 사물에 대한 그대의 생각이다.", author: "에픽테토스 (Epictetus)", country: "로마 제국 (그리스인)", years: "서기 50경 — 135경",
+    meaning: "노예 출신의 스토아 철학자. 외부 상황은 내가 바꿀 수 없지만, 그것을 어떻게 해석하고 반응하느냐는 언제나 내 선택이라는 것." },
+  { text: "서둘러 살지 마라. 행복은 지금 여기에 있다.", author: "마르쿠스 아우렐리우스 (Marcus Aurelius)", country: "로마 제국", years: "121 — 180",
+    meaning: "로마 황제이면서 철학자. 전쟁터에서 틈틈이 쓴 일기가 『명상록(Meditations)』이야. 성취에 집착하다 보면 정작 살아있는 지금을 잃어버린다는 경고야." },
+  { text: "인생은 짧고, 기술은 길다.", author: "히포크라테스 (Hippocrates)", country: "고대 그리스", years: "기원전 460 — 370경",
+    meaning: "의학의 아버지. 원문은 라틴어 'Ars longa, vita brevis.' 배워야 할 것은 평생이 지나도 다 배울 수 없을 만큼 방대한데, 우리에게 주어진 시간은 짧다는 뜻이야." },
+  { text: "우리가 아직 살고 있는 한, 죽음은 없다. 죽음이 오면, 우리는 없다.", author: "에피쿠로스 (Epicurus)", country: "고대 그리스", years: "기원전 341 — 270",
+    meaning: "쾌락주의 철학자로 오해받지만, 사실 그가 말한 쾌락은 '고통의 부재'에 가까워. 죽음을 두려워하는 것이 얼마나 무의미한지를 논리적으로 보여줘." },
+  { text: "알면 알수록 모른다는 것이 많아진다.", author: "아이작 뉴턴 (Isaac Newton)", country: "영국", years: "1643 — 1727",
+    meaning: "중력 법칙, 운동 법칙, 미적분학의 발명자. 노년의 뉴턴은 자신을 '해변에서 조개를 줍는 아이'에 비유했어. 진정한 앎은 겸손을 동반해." },
+  { text: "상상력은 지식보다 중요하다. 지식은 한계가 있지만, 상상력은 세상을 품는다.", author: "알베르트 아인슈타인 (Albert Einstein)", country: "독일-미국", years: "1879 — 1955",
+    meaning: "상대성이론의 창시자. 정해진 공식을 외우는 것보다 '왜?'라고 묻고 그림을 그리는 능력이 더 강하다는 뜻이야." },
+  { text: "인간은 생각하는 갈대다.", author: "블레즈 파스칼 (Blaise Pascal)", country: "프랑스", years: "1623 — 1662",
+    meaning: "갈대처럼 우주 앞에서 연약한 존재이지만, 생각할 수 있다는 것이 인간의 위엄이라는 뜻이야." },
+  { text: "나는 생각한다, 고로 나는 존재한다.", author: "르네 데카르트 (René Descartes)", country: "프랑스", years: "1596 — 1650",
+    meaning: "모든 것을 의심하던 데카르트가 끝내 의심할 수 없는 것 하나를 찾아낸 말이야. 존재의 가장 단단한 출발점." },
+  { text: "독서는 완전한 사람을, 대화는 준비된 사람을, 글쓰기는 정확한 사람을 만든다.", author: "프랜시스 베이컨 (Francis Bacon)", country: "영국", years: "1561 — 1626",
+    meaning: "경험주의 철학의 선구자. 읽어서 채우고, 말하면서 정리하고, 쓰면서 날카로워지는 것 — 공부의 세 단계를 이보다 깔끔하게 정리한 말이 없어." },
+  { text: "가장 위대한 영광은 넘어지지 않는 데 있는 것이 아니라, 넘어질 때마다 일어서는 데 있다.", author: "넬슨 만델라 (Nelson Mandela)", country: "남아프리카공화국", years: "1918 — 2013",
+    meaning: "27년간 감옥에 갇혀 있다가 나와서 대통령이 된 사람. 실패와 좌절이 없는 사람은 없어. 중요한 건 그것이 끝이 아니라는 걸 아는 것." },
+  { text: "진정한 배움은 자기 자신에게서 온다. 스승은 방향을 가리킬 뿐이야.", author: "소크라테스 (Socrates)", country: "고대 그리스", years: "기원전 470 — 399",
+    meaning: "소크라테스는 '산파술(Maieutics)'이라는 방법을 썼어. 지식은 주입받는 게 아니라 내면에서 발아하는 거야." },
+  { text: "아는 사람은 말하지 않고, 말하는 사람은 알지 못한다.", author: "노자 (老子, Laozi)", country: "중국", years: "기원전 571경 — 471경",
+    meaning: "도덕경(道德經) 56장에 나오는 말이야. 말이 많은 사람이 실은 불확실하기 때문에 말로 채우려 한다는 역설." },
+  { text: "강은 앞으로만 흘러가지 않는다. 한 방울의 물이 바다가 된다.", author: "장자 (莊子, Zhuangzi)", country: "중국", years: "기원전 369 — 286",
+    meaning: "도가 철학의 거장. 조금 더 멀리, 더 크게 보면 전혀 다른 길이 보이기도 해." },
+  { text: "모든 것이 변한다. 같은 강물에 두 번 발을 담글 수 없다.", author: "헤라클레이토스 (Heraclitus)", country: "고대 그리스", years: "기원전 535 — 475경",
+    meaning: "변화를 철학의 근본으로 삼은 철학자. 변화를 두려워하기보다 그 안에서 흐름을 읽는 것이 지혜라는 뜻이야." },
+  { text: "인간은 자유롭게 태어났으나, 도처에서 쇠사슬에 묶여 있다.", author: "장자크 루소 (Jean-Jacques Rousseau)", country: "스위스-프랑스", years: "1712 — 1778",
+    meaning: "사회계약론의 첫 문장이야. 당연하게 받아들이는 많은 제약들이 사실 누군가 만들어놓은 것이라는 거." },
+  { text: "두 가지가 내 마음을 경외감으로 채운다. 내 머리 위의 별이 빛나는 하늘, 그리고 내 안의 도덕 법칙.", author: "임마누엘 칸트 (Immanuel Kant)", country: "독일 (프로이센)", years: "1724 — 1804",
+    meaning: "순수이성비판의 저자. 외부 우주의 광대함과 내면 양심의 무게가 같은 깊이라는 이 문장은 그의 묘비에도 새겨져 있어." },
+  { text: "모든 이론은 회색이고, 오직 생명의 황금 나무만이 녹색이다.", author: "요한 볼프강 폰 괴테 (Johann Wolfgang von Goethe)", country: "독일", years: "1749 — 1832",
+    meaning: "파우스트에 나오는 대사. 배운 것을 실제로 써봐야 진짜 내 것이 돼. 책 속의 지식과 현장에서 몸으로 익힌 앎은 질적으로 달라." },
+  { text: "인생을 이해하려면 뒤를 봐야 한다. 그러나 살아가려면 앞을 봐야 한다.", author: "쇠렌 키르케고르 (Søren Kierkegaard)", country: "덴마크", years: "1813 — 1855",
+    meaning: "실존주의 철학의 아버지. 후회 없이 살기 위해 과거를 돌아보되, 그것에 발목 잡혀 앞을 못 가는 것도 경계해야 해." },
+  { text: "나를 죽이지 못하는 것은 나를 더 강하게 만든다.", author: "프리드리히 니체 (Friedrich Nietzsche)", country: "독일", years: "1844 — 1900",
+    meaning: "우상의 황혼에 나오는 문장. 힘든 경험을 통과한 사람은 그 전의 자신으로 돌아갈 수 없어 — 이미 더 강해졌으니까." },
+  { text: "아름다움이 세상을 구원할 것이다.", author: "표도르 도스토옙스키 (Fyodor Dostoevsky)", country: "러시아", years: "1821 — 1881",
+    meaning: "백치(The Idiot)에 나오는 말이야. 인간이 서로에게 진심 어린 선의를 보이고 진실되게 살아갈 때 세상은 나아진다는 믿음." },
+  { text: "인간은 자유라는 형벌을 받았다.", author: "장폴 사르트르 (Jean-Paul Sartre)", country: "프랑스", years: "1905 — 1980",
+    meaning: "실존주의 철학자. 우리는 태어날 때 정해진 목적이 없어. 스스로 선택하고 그 선택에 책임지며 의미를 만들어가야 해." },
+  { text: "행복의 비결은 더 많은 것을 원하는 것이 아니라, 더 많이 사랑하는 능력이다.", author: "버트런드 러셀 (Bertrand Russell)", country: "영국", years: "1872 — 1970",
+    meaning: "수학자이자 철학자, 노벨 문학상 수상자. 욕망을 키우는 것이 아니라 이미 있는 것들에 대한 사랑과 감사를 키우는 것이 진짜 행복이라는 뜻이야." },
+  { text: "우주는 인간을 이해하도록 의무지워져 있지 않다.", author: "리처드 파인만 (Richard Feynman)", country: "미국", years: "1918 — 1988",
+    meaning: "노벨 물리학상 수상자. 모른다는 것 자체를 편안하게 받아들이는 태도, 그게 진짜 과학 정신이야." },
+  { text: "어제는 역사이고, 내일은 미스터리이지만, 오늘은 선물이다. 그래서 현재(present)라고 부른다.", author: "앨리스 얼 (Alice Morse Earle)", country: "미국", years: "1853 — 1911",
+    meaning: "역사학자이자 작가. Present에는 '현재'와 '선물'이라는 두 가지 의미가 있어. 지금 이 순간을 충분히 살아내는 것이 가장 큰 선물이라는 뜻이야." },
+  { text: "자기 자신을 극복하는 자가 가장 강한 자다.", author: "공자 (孔子, Confucius)", country: "중국", years: "기원전 551 — 479",
+    meaning: "논어에서 '克己復禮(극기복례)'에서 비롯돼. 어제의 나보다 오늘의 내가 조금이라도 나은 사람이 되는 것, 그것이 진정한 승리야." },
+  { text: "오늘 읽지 않는 사람은 어제 읽지 못한 사람보다 나을 것이 없다.", author: "마크 트웨인 (Mark Twain)", country: "미국", years: "1835 — 1910",
+    meaning: "학교를 거의 다니지 않았지만 독서로 세상을 이해한 사람이야. 읽을 수 있는데 읽지 않는 것은 읽지 못하는 것과 결과가 같다는 따끔한 말." },
+  { text: "철학은 죽음을 연습하는 것이다.", author: "플라톤 (Plato)", country: "고대 그리스", years: "기원전 428 — 348",
+    meaning: "여기서 '죽음'은 육체적 욕망과 일상의 집착에서 벗어나는 것을 의미해. 잠깐 멈추고 진짜 중요한 것이 무엇인지 생각하는 것이 철학이야." },
+  { text: "지식은 힘이다.", author: "프랜시스 베이컨 (Francis Bacon)", country: "영국", years: "1561 — 1626",
+    meaning: "그냥 아는 것이 힘이 아니라, 그 앎으로 세상에 작용할 수 있을 때 진짜 힘이 돼. 체계적으로 관찰하고 검증하는 것이 지식을 힘으로 만드는 과정이야." },
+  { text: "재능은 고독 속에서 만들어지고, 성격은 세상의 조류 속에서 형성된다.", author: "요한 볼프강 폰 괴테 (Johann Wolfgang von Goethe)", country: "독일", years: "1749 — 1832",
+    meaning: "깊은 집중과 혼자 있는 시간이 진짜 실력을 키우고, 그것을 사람들 속에서 쓰는 과정이 인격을 다듬어." },
+  { text: "지혜로운 자는 많은 것을 알지만, 배움을 멈추지 않는다.", author: "정약용 (丁若鏞)", country: "조선 (한국)", years: "1762 — 1836",
+    meaning: "다산 정약용. 18년간의 유배 생활 중에도 500여 권의 책을 썼어. 많이 알수록 더 많이 모른다는 것을 알게 되는 것이 진짜 지혜라는 뜻이야." },
+  { text: "천 리 길도 발 아래서 시작된다.", author: "노자 (老子, Laozi)", country: "중국", years: "기원전 571경 — 471경",
+    meaning: "도덕경 64장. 먼 목표를 바라보며 압도되기보다는 지금 이 한 발 한 발에 집중하라는 뜻이야." },
+  { text: "군자는 말은 더디 하고 행동은 민첩하게 한다.", author: "공자 (孔子, Confucius)", country: "중국", years: "기원전 551 — 479",
+    meaning: "논어 이인편. 입으로 떠드는 것보다 실제로 해내는 것이 더 가치 있다는 말이야." },
+  { text: "세상에서 가장 어려운 일은 자기 자신을 아는 것이고, 가장 쉬운 일은 남을 비판하는 것이다.", author: "탈레스 (Thales)", country: "고대 그리스", years: "기원전 624 — 546경",
+    meaning: "최초의 철학자. 비판하기 전에 먼저 자신을 돌아보는 것이 지혜의 시작이야." },
+  { text: "생각하는 것은 인간이 할 수 있는 가장 어려운 일이다. 아마 그래서 그것을 하는 사람이 극히 드물 것이다.", author: "헨리 포드 (Henry Ford)", country: "미국", years: "1863 — 1947",
+    meaning: "자동차왕이지만 이 말은 꽤 철학적이야. 비판적으로 따져보고 연결하고 의문을 품는 것 — 그게 진짜 생각이야." },
+  { text: "무지는 지식보다 더 자주 확신을 낳는다.", author: "찰스 다윈 (Charles Darwin)", country: "영국", years: "1809 — 1882",
+    meaning: "진화론의 창시자. 던닝-크루거 효과를 100년 전에 꿰뚫어 본 말이야. 조금 알 때 가장 자신만만하고, 깊이 알수록 얼마나 모르는지 보이는 게 지식의 아이러니야." },
+  { text: "위험을 무릅쓰고 나아가라. 인생 자체가 위험이다.", author: "헬렌 켈러 (Helen Keller)", country: "미국", years: "1880 — 1968",
+    meaning: "보지 못하고 듣지 못했지만 글을 쓰고 강연을 하며 세상과 소통한 사람. 새로운 시도 앞에 두려움이 오는 건 당연해 — 그래도 가는 거야." },
+  { text: "작은 사람들이 이 세상을 이루고 있다. 모든 위대한 것은 결국 그 작은 사람들의 모임이다.", author: "빅토르 위고 (Victor Hugo)", country: "프랑스", years: "1802 — 1885",
+    meaning: "레미제라블의 작가. 이름 없이 하루하루 성실하게 살아가는 사람들이 세상을 떠받치고 있어. 매일 묵묵히 공부하는 사람이 언젠가 역사를 바꿔." },
+  { text: "사람은 자기가 이해한 만큼만 보인다.", author: "요한 볼프강 폰 괴테 (Johann Wolfgang von Goethe)", country: "독일", years: "1749 — 1832",
+    meaning: "아는 만큼 보인다는 말이야. 배움이 쌓일수록 이전에 보이지 않던 것들이 보이기 시작해." },
+  { text: "인생에서 두려워할 것은 없다. 이해해야 할 것이 있을 뿐이다.", author: "마리 퀴리 (Marie Curie)", country: "폴란드-프랑스", years: "1867 — 1934",
+    meaning: "여성 최초 노벨상 수상자이자 유일하게 두 분야(물리학·화학)에서 노벨상을 받은 과학자. 낯선 것을 두려워하기보다 이해하려는 태도로 다가가라는 뜻이야." },
+  { text: "단순함이야말로 최고의 정교함이다.", author: "레오나르도 다빈치 (Leonardo da Vinci)", country: "이탈리아", years: "1452 — 1519",
+    meaning: "정확한 출처는 불분명하지만 다빈치의 사상과 잘 어울려 널리 인용되는 말이야. 복잡하게 꾸미기보다 본질만 남기는 것이 진짜 실력이라는 뜻." },
+  { text: "하늘이 장차 큰 임무를 맡기려 할 때는 반드시 먼저 그 마음을 괴롭게 한다.", author: "맹자 (孟子, Mencius)", country: "중국", years: "기원전 372 — 289",
+    meaning: "고자하편에 나오는 말이야. 큰 사람이 되기 전에 반드시 시련이 따른다는 뜻으로, 지금의 고생이 헛되지 않다는 위로이기도 해." },
+  { text: "아는 것에 투자하는 것이 가장 이자가 높다.", author: "벤저민 프랭클린 (Benjamin Franklin)", country: "미국", years: "1706 — 1790",
+    meaning: "미국 건국의 아버지 중 한 명이자 다방면의 발명가. 자기계발에 쓰는 시간과 돈이 결국 가장 확실한 투자라는 뜻이야." },
+  { text: "천재는 1%의 영감과 99%의 노력이다.", author: "토마스 에디슨 (Thomas Edison)", country: "미국", years: "1847 — 1931",
+    meaning: "발명왕. 많은 사람들이 1% 영감에만 주목하지만, 정작 에디슨이 강조한 건 나머지 99%의 꾸준한 노력이었어." },
+  { text: "당신의 시간은 한정되어 있다. 그러니 다른 사람의 삶을 사느라 시간을 낭비하지 마라.", author: "스티브 잡스 (Steve Jobs)", country: "미국", years: "1955 — 2011",
+    meaning: "2005년 스탠퍼드 대학 졸업식 연설의 한 구절. 남의 기대에 맞춰 살기보다 자기 확신을 따라 살라는 메시지야." },
+  { text: "위대한 일은 충동이 아니라 작은 일들이 모여 이루어진다.", author: "빈센트 반 고흐 (Vincent van Gogh)", country: "네덜란드", years: "1853 — 1890",
+    meaning: "생전에는 인정받지 못했던 화가. 그가 동생 테오에게 보낸 편지에 담긴 말로, 꾸준한 작은 실천의 힘을 강조해." },
+  { text: "나는 대리석 속에서 천사를 보았고, 천사가 자유로워질 때까지 조각했다.", author: "미켈란젤로 (Michelangelo)", country: "이탈리아", years: "1475 — 1564",
+    meaning: "르네상스 최고의 조각가. 이미 그 안에 있는 가능성을 발견하고 불필요한 것을 덜어내는 것이 창작이라는 관점을 보여줘." },
+  { text: "우리를 두렵게 하는 것은 대개 현실보다 상상이다.", author: "세네카 (Seneca)", country: "로마 제국", years: "기원전 4경 — 서기 65",
+    meaning: "스토아 철학자이자 정치가. 걱정의 대부분은 실제로 일어나지 않는다는 뜻으로, 지금도 불안 관리에 자주 인용돼." },
+  { text: "역경 속에서도 여전히 아름다움이 존재한다고 믿는다.", author: "안네 프랑크 (Anne Frank)", country: "독일-네덜란드", years: "1929 — 1945",
+    meaning: "나치 점령 하에 은신하며 일기를 쓴 소녀. 가장 절망적인 상황에서도 희망을 놓지 않았던 태도가 담긴 문장이야." },
+  { text: "사람들은 당신이 한 말은 잊어도, 당신이 준 느낌은 잊지 않는다.", author: "마야 안젤루 (Maya Angelou)", country: "미국", years: "1928 — 2014",
+    meaning: "시인이자 인권운동가. 논리나 말솜씨보다 상대에게 남긴 마음이 더 오래 기억된다는 뜻이야." },
+  { text: "죽고자 하면 살고, 살고자 하면 죽는다.", author: "이순신 (李舜臣)", country: "조선", years: "1545 — 1598",
+    meaning: "명량해전을 앞두고 부하들에게 한 말(必死則生 必生則死). 절박한 상황일수록 각오를 다지는 태도가 오히려 살길을 만든다는 뜻이야." },
+  { text: "네가 찾고 있는 것이 너를 찾고 있다.", author: "루미 (Rumi)", country: "페르시아", years: "1207 — 1273",
+    meaning: "수피 신비주의 시인. 원문의 정확한 맥락은 학자마다 해석이 갈리지만, 간절히 구하는 것은 결국 서로 만나게 된다는 위로로 널리 사랑받는 말이야." },
+  { text: "우리는 별의 물질로 이루어져 있다.", author: "칼 세이건 (Carl Sagan)", country: "미국", years: "1934 — 1996",
+    meaning: "천문학자이자 과학 커뮤니케이터. 우리 몸을 이루는 원소들이 오래전 별의 핵융합에서 만들어졌다는 과학적 사실을 시적으로 표현한 말이야." },
+  { text: "상상력이야말로 발견의 능력이다.", author: "에이다 러브레이스 (Ada Lovelace)", country: "영국", years: "1815 — 1852",
+    meaning: "세계 최초의 프로그래머로 불리는 수학자. 논리만으로는 새로운 것을 발견할 수 없고, 상상력이 있어야 미지의 영역을 열 수 있다는 뜻이야." },
+  { text: "성공이 끝이 아니고 실패가 끝이 아니다. 중요한 것은 계속하는 용기다.", author: "윈스턴 처칠 (Winston Churchill)", country: "영국", years: "1874 — 1965",
+    meaning: "2차 세계대전을 이끈 영국 총리. 한 번의 성공이나 실패에 일희일비하지 말고 꾸준히 나아가는 것이 진짜 중요하다는 뜻이야." },
+  { text: "하루라도 책을 읽지 않으면 입 안에 가시가 돋는다.", author: "안중근 (安重根)", country: "대한제국", years: "1879 — 1910",
+    meaning: "여순 감옥에서 남긴 유묵(一日不讀書 口中生荊棘). 죽음을 앞둔 순간에도 배움을 놓지 않았던 의지가 담긴 말이야." },
+  { text: "군자는 화합하되 같아지지 않는다.", author: "공자 (孔子, Confucius)", country: "중국", years: "기원전 551 — 479",
+    meaning: "논어 자로편. 남과 잘 지내되 자기 소신까지 버리지는 않는 태도를 뜻해. 조직 생활할 때 곱씹어볼 만한 말이야." },
+  { text: "습관은 제2의 천성이다.", author: "아리스토텔레스 (Aristoteles)", country: "고대 그리스", years: "기원전 384 — 322",
+    meaning: "니코마코스 윤리학에 담긴 사상. 타고난 재능보다 반복된 행동이 결국 사람을 만든다는 뜻이야. 매일의 공부 루틴이 왜 중요한지 설명해줘." },
+  { text: "고통 없이는 얻는 것도 없다.", author: "벤저민 프랭클린 (Benjamin Franklin)", country: "미국", years: "1706 — 1790",
+    meaning: "원문 'No pain, no gain'의 원형으로 자주 인용되는 문장. 노력의 대가 없이 결과만 바랄 수 없다는 소박하지만 정확한 진리야." },
+  { text: "낮은 자세로 오래 견디는 자가 결국 오른다.", author: "노자 (老子, Laozi)", country: "중국", years: "기원전 571경 — 471경",
+    meaning: "도덕경의 물(水) 사상과 맞닿아 있어. 물은 가장 낮은 곳으로 흐르지만 결국 바다를 이룬다는 비유에서 나온 정신이야." },
+  { text: "최고의 복수는 크게 성공하는 것이다.", author: "프랭크 시나트라 (Frank Sinatra)", country: "미국", years: "1915 — 1998",
+    meaning: "가수이자 배우. 원한이나 다툼에 에너지를 쏟기보다, 자기 삶에서 실력으로 증명하라는 실용적인 조언이야." },
+  { text: "훈련이 힘들수록 전투는 쉬워진다.", author: "알렉산드르 수보로프 (Alexander Suvorov)", country: "러시아 제국", years: "1729 — 1800",
+    meaning: "평생 한 번도 전투에서 패배하지 않은 장군. 평소의 혹독한 준비가 결정적 순간의 여유를 만든다는 뜻이야. 시험 준비에도 그대로 적용돼." },
+  { text: "고요함 속에 위대한 힘이 있다.", author: "노자 (老子, Laozi)", country: "중국", years: "기원전 571경 — 471경",
+    meaning: "도덕경의 무위(無爲) 사상. 요란하게 애쓰는 것보다 차분히 중심을 지키는 것이 더 큰 힘을 발휘한다는 뜻이야." },
+  { text: "실패는 성공으로 가는 길에 있는 하나의 사건일 뿐이다.", author: "오프라 윈프리 (Oprah Winfrey)", country: "미국", years: "1954 —",
+    meaning: "빈곤과 학대를 딛고 미디어 거물이 된 방송인. 실패를 인생의 결론이 아니라 과정의 한 지점으로 바라보라는 뜻이야." },
+  { text: "물은 배를 띄우기도 하고 뒤집기도 한다.", author: "순자 (荀子, Xunzi)", country: "중국", years: "기원전 313경 — 238경",
+    meaning: "군주와 백성의 관계를 물과 배에 비유한 말. 나를 지지하는 기반이 동시에 나를 무너뜨릴 수도 있으니 항상 겸손하고 신중하라는 뜻이야." },
 ];
 
 // ══════════════════════════════════════════
-// 한자 데이터 (기초부터 차근차근)
+// 사자성어 데이터 (60개)
+// ══════════════════════════════════════════
+const IDIOMS = [
+  { kor: "각주구검", hanja: "刻舟求劍", meaning: "배에 표시를 해두고 물에 빠진 칼을 찾으려 함 — 상황이 바뀐 줄도 모르고 옛 방식만 고집함.", usage: "시대나 상황이 변했는데도 예전 방식을 고집하는 사람을 지적할 때." },
+  { kor: "감언이설", hanja: "甘言利說", meaning: "달콤한 말과 이로운 조건을 내세워 남을 꾐.", usage: "사기나 과한 유혹을 경계해야 할 때." },
+  { kor: "개과천선", hanja: "改過遷善", meaning: "지난 잘못을 고치고 착하게 됨.", usage: "잘못을 뉘우치고 완전히 달라진 사람을 이야기할 때." },
+  { kor: "거두절미", hanja: "去頭截尾", meaning: "머리와 꼬리를 잘라내고 요점만 남김.", usage: "군더더기 빼고 본론부터 말하자고 할 때." },
+  { kor: "결자해지", hanja: "結者解之", meaning: "일을 맺은 사람이 그 일을 풀어야 함.", usage: "문제를 일으킨 사람에게 책임과 해결을 요구할 때." },
+  { kor: "고진감래", hanja: "苦盡甘來", meaning: "쓴 것이 다하면 단 것이 옴 — 고생 끝에 낙이 옴.", usage: "힘든 시기를 견디고 있는 사람을 위로하거나 격려할 때." },
+  { kor: "과유불급", hanja: "過猶不及", meaning: "지나친 것은 모자란 것과 같음.", usage: "무리한 노력이나 지나친 욕심을 경계할 때." },
+  { kor: "관포지교", hanja: "管鮑之交", meaning: "관중과 포숙아처럼 서로를 깊이 이해하는 우정.", usage: "이해관계를 넘어선 진짜 친구 사이를 표현할 때." },
+  { kor: "괄목상대", hanja: "刮目相對", meaning: "눈을 비비고 다시 볼 만큼 실력이 몰라보게 늘어남.", usage: "짧은 기간에 크게 성장한 사람을 칭찬할 때." },
+  { kor: "구사일생", hanja: "九死一生", meaning: "아홉 번 죽을 고비를 넘기고 한 번 살아남.", usage: "위험을 아슬아슬하게 넘긴 상황을 표현할 때." },
+  { kor: "권선징악", hanja: "勸善懲惡", meaning: "선을 권장하고 악을 벌함.", usage: "이야기나 드라마의 교훈을 말할 때." },
+  { kor: "금상첨화", hanja: "錦上添花", meaning: "비단 위에 꽃을 더함 — 좋은 일에 좋은 일이 더해짐.", usage: "겹경사나 예상 밖의 보너스를 표현할 때." },
+  { kor: "금시초문", hanja: "今始初聞", meaning: "지금 처음 들어봄.", usage: "전혀 몰랐던 소식을 듣고 놀랐을 때." },
+  { kor: "기고만장", hanja: "氣高萬丈", meaning: "기세가 만 길이나 높음 — 지나치게 우쭐댐.", usage: "작은 성공에 취해 거만해진 태도를 경계할 때." },
+  { kor: "난공불락", hanja: "難攻不落", meaning: "공격하기 어려워 쉽게 무너지지 않음.", usage: "매우 견고하거나 넘기 힘든 대상을 표현할 때." },
+  { kor: "노심초사", hanja: "勞心焦思", meaning: "몹시 마음을 쓰며 애를 태움.", usage: "걱정으로 마음을 졸이는 상황을 표현할 때." },
+  { kor: "다다익선", hanja: "多多益善", meaning: "많으면 많을수록 좋음.", usage: "자원, 시간, 도움 등은 많을수록 좋다고 말할 때." },
+  { kor: "대기만성", hanja: "大器晩成", meaning: "큰 그릇은 늦게 이루어짐.", usage: "지금은 더뎌 보여도 결국 크게 될 사람을 응원할 때." },
+  { kor: "동병상련", hanja: "同病相憐", meaning: "같은 병을 앓는 사람끼리 서로를 가엾게 여김.", usage: "비슷한 고민이나 어려움을 가진 사람과 공감할 때." },
+  { kor: "동상이몽", hanja: "同床異夢", meaning: "같은 자리에 있어도 서로 다른 꿈을 꿈.", usage: "겉으로는 함께지만 속으로는 생각이 다른 상황." },
+  { kor: "마이동풍", hanja: "馬耳東風", meaning: "말 귀에 스치는 봄바람 — 남의 말을 귀담아듣지 않음.", usage: "아무리 말해도 조언을 안 듣는 사람을 지적할 때." },
+  { kor: "막상막하", hanja: "莫上莫下", meaning: "위아래를 가릴 수 없을 만큼 실력이 비슷함.", usage: "팽팽하게 맞서는 대결을 표현할 때." },
+  { kor: "명불허전", hanja: "名不虛傳", meaning: "이름이 헛되이 전해진 것이 아님 — 소문대로 실력이 확실함.", usage: "명성이 사실이었음을 확인했을 때." },
+  { kor: "목불인견", hanja: "目不忍見", meaning: "눈 뜨고는 차마 볼 수 없음.", usage: "참혹하거나 민망한 상황을 볼 때." },
+  { kor: "반신반의", hanja: "半信半疑", meaning: "반은 믿고 반은 의심함.", usage: "확신이 서지 않는 정보를 접했을 때." },
+  { kor: "백문불여일견", hanja: "百聞不如一見", meaning: "백 번 듣는 것이 한 번 보는 것만 못함.", usage: "직접 경험하거나 눈으로 확인해보라고 권할 때." },
+  { kor: "백년해로", hanja: "百年偕老", meaning: "부부가 평생을 함께 늙어감.", usage: "결혼을 축하하는 인사말로." },
+  { kor: "부화뇌동", hanja: "附和雷同", meaning: "자기 생각 없이 남을 그대로 따라감.", usage: "줏대 없이 분위기에 휩쓸리는 행동을 지적할 때." },
+  { kor: "사면초가", hanja: "四面楚歌", meaning: "사방이 모두 적으로 둘러싸여 도움받을 곳이 없음.", usage: "누구의 도움도 없이 궁지에 몰린 상황." },
+  { kor: "새옹지마", hanja: "塞翁之馬", meaning: "인생의 화와 복은 미리 알 수 없음.", usage: "좋은 일과 나쁜 일이 뒤바뀔 수 있다고 위로할 때." },
+  { kor: "설상가상", hanja: "雪上加霜", meaning: "눈 위에 서리까지 더함 — 불행이 겹침.", usage: "안 좋은 일이 연달아 생겼을 때." },
+  { kor: "속수무책", hanja: "束手無策", meaning: "손이 묶인 듯 대책이 전혀 없음.", usage: "손쓸 방법이 없는 막막한 상황을 표현할 때." },
+  { kor: "수구초심", hanja: "首丘初心", meaning: "여우가 죽을 때 머리를 자기가 살던 언덕으로 향한다 — 고향을 그리워하는 마음.", usage: "고향이나 근본을 잊지 않는 마음을 말할 때." },
+  { kor: "수수방관", hanja: "袖手傍觀", meaning: "팔짱을 낀 채 곁에서 구경만 함.", usage: "적극적으로 나서지 않고 방관하는 태도를 지적할 때." },
+  { kor: "십중팔구", hanja: "十中八九", meaning: "열 중 여덟아홉 — 거의 확실함.", usage: "확률이 매우 높은 일을 말할 때." },
+  { kor: "안하무인", hanja: "眼下無人", meaning: "눈 아래 사람이 없는 것처럼 거만함.", usage: "지나치게 오만한 태도를 지적할 때." },
+  { kor: "어부지리", hanja: "漁夫之利", meaning: "둘이 다투는 사이 제삼자가 이득을 봄.", usage: "남의 다툼 덕에 뜻밖의 이득을 본 상황." },
+  { kor: "오리무중", hanja: "五里霧中", meaning: "오 리에 걸친 안개 속 — 갈피를 잡을 수 없음.", usage: "상황이나 원인을 전혀 파악할 수 없을 때." },
+  { kor: "우공이산", hanja: "愚公移山", meaning: "우직하게 꾸준히 노력하면 산도 옮길 수 있음.", usage: "느려 보여도 꾸준한 노력의 가치를 말할 때." },
+  { kor: "우유부단", hanja: "優柔不斷", meaning: "망설이기만 하고 결단을 내리지 못함.", usage: "결정을 잘 내리지 못하는 성향을 표현할 때." },
+  { kor: "유비무환", hanja: "有備無患", meaning: "미리 준비하면 근심할 일이 없음.", usage: "사전 대비와 점검의 중요성을 강조할 때 — J 업무에 딱 맞는 말이야." },
+  { kor: "이심전심", hanja: "以心傳心", meaning: "마음에서 마음으로 뜻이 통함.", usage: "말 없이도 서로 통하는 사이를 표현할 때." },
+  { kor: "인과응보", hanja: "因果應報", meaning: "원인에 따라 그에 맞는 결과가 옴.", usage: "노력이나 행동의 대가를 이야기할 때." },
+  { kor: "일석이조", hanja: "一石二鳥", meaning: "돌 하나로 새 두 마리를 잡음.", usage: "한 가지 행동으로 두 가지 효과를 얻었을 때." },
+  { kor: "일취월장", hanja: "日就月將", meaning: "나날이 다달이 발전함.", usage: "빠르게 실력이 느는 사람을 칭찬할 때." },
+  { kor: "자업자득", hanja: "自業自得", meaning: "자기가 한 일의 결과를 자기가 받음.", usage: "스스로 초래한 결과에 대해 말할 때." },
+  { kor: "전화위복", hanja: "轉禍爲福", meaning: "화가 바뀌어 오히려 복이 됨.", usage: "위기를 기회로 바꾼 상황을 표현할 때." },
+  { kor: "절치부심", hanja: "切齒腐心", meaning: "이를 갈며 속을 썩임 — 분함을 참으며 다시 다짐함.", usage: "실패를 딛고 각오를 다시 세울 때." },
+  { kor: "조삼모사", hanja: "朝三暮四", meaning: "당장의 차이만 다르게 보이도록 하는 얕은 속임수.", usage: "본질은 그대로인데 표현만 바꾼 얕은 술수를 지적할 때." },
+  { kor: "좌불안석", hanja: "坐不安席", meaning: "앉아 있어도 자리가 편치 않음 — 초조함.", usage: "불안해서 안절부절못하는 상태를 표현할 때." },
+  { kor: "죽마고우", hanja: "竹馬故友", meaning: "대나무 말을 타고 놀던 어릴 적부터의 오랜 친구.", usage: "아주 오래되고 허물없는 친구 사이를 말할 때." },
+  { kor: "진퇴양난", hanja: "進退兩難", meaning: "나아가지도 물러나지도 못하는 어려운 상황.", usage: "이러지도 저러지도 못하는 곤란한 처지를 표현할 때." },
+  { kor: "천고마비", hanja: "天高馬肥", meaning: "하늘은 높고 말은 살찌는 계절 — 가을.", usage: "가을의 풍성하고 청명한 분위기를 표현할 때." },
+  { kor: "천재일우", hanja: "千載一遇", meaning: "천 년에 한 번 만날까 말까 한 기회.", usage: "절대 놓쳐서는 안 될 절호의 기회를 말할 때." },
+  { kor: "청출어람", hanja: "靑出於藍", meaning: "쪽에서 나온 푸른색이 쪽보다 더 푸르다 — 제자가 스승보다 나음.", usage: "후배나 제자가 선배를 뛰어넘었을 때." },
+  { kor: "초지일관", hanja: "初志一貫", meaning: "처음 세운 뜻을 끝까지 밀고 나감.", usage: "흔들림 없는 꾸준함과 일관성을 칭찬할 때." },
+  { kor: "칠전팔기", hanja: "七顚八起", meaning: "일곱 번 넘어져도 여덟 번 일어남.", usage: "몇 번을 실패해도 다시 도전하는 근성을 표현할 때." },
+  { kor: "타산지석", hanja: "他山之石", meaning: "남의 하찮은 돌도 내 옥을 가는 데 도움이 됨.", usage: "남의 실수나 사례를 교훈 삼을 때." },
+  { kor: "파죽지세", hanja: "破竹之勢", meaning: "대나무를 쪼개듯 거침없이 나아가는 기세.", usage: "막힘없이 거침없는 기세를 표현할 때." },
+  { kor: "형설지공", hanja: "螢雪之功", meaning: "반딧불과 눈빛으로 글을 읽어가며 이룬 노력.", usage: "어려운 환경 속에서도 꾸준히 공부하는 모습을 표현할 때 — 지금 J한테 딱이지." },
+];
+
+// ══════════════════════════════════════════
+// 영어단어 데이터 (50개)
+// ══════════════════════════════════════════
+const ENGLISH = [
+  { word: "resilience", pos: "n.", pron: "[리질리언스]", meaning: "회복력, 탄력성", example: "Her resilience helped her recover quickly after the setback.", exampleKor: "그녀의 회복력 덕분에 좌절 후에도 빠르게 회복했다." },
+  { word: "meticulous", pos: "adj.", pron: "[머티큘러스]", meaning: "꼼꼼한, 세심한", example: "He is meticulous about checking every detail in the report.", exampleKor: "그는 보고서의 모든 세부사항을 꼼꼼히 확인한다." },
+  { word: "procrastinate", pos: "v.", pron: "[프로크래스티네이트]", meaning: "미루다, 지연시키다", example: "Don't procrastinate on your exam preparation.", exampleKor: "시험 준비를 미루지 마라." },
+  { word: "ambiguous", pos: "adj.", pron: "[앰비규어스]", meaning: "애매모호한", example: "The instructions were ambiguous and confusing.", exampleKor: "그 지시사항은 애매모호하고 혼란스러웠다." },
+  { word: "inevitable", pos: "adj.", pron: "[이네비터블]", meaning: "피할 수 없는, 불가피한", example: "Change is inevitable in every industry.", exampleKor: "변화는 모든 산업에서 피할 수 없다." },
+  { word: "diligent", pos: "adj.", pron: "[딜리전트]", meaning: "근면한, 성실한", example: "She is a diligent student who studies every day.", exampleKor: "그녀는 매일 공부하는 성실한 학생이다." },
+  { word: "persistent", pos: "adj.", pron: "[퍼시스턴트]", meaning: "끈질긴, 지속적인", example: "Persistent effort leads to success.", exampleKor: "끈질긴 노력이 성공으로 이어진다." },
+  { word: "inherent", pos: "adj.", pron: "[인히어런트]", meaning: "내재된, 고유의", example: "Risk is inherent in construction work.", exampleKor: "위험은 건설 작업에 내재되어 있다." },
+  { word: "redundant", pos: "adj.", pron: "[리던던트]", meaning: "중복된, 불필요한", example: "The backup system is redundant but necessary for safety.", exampleKor: "예비 시스템은 중복되지만 안전을 위해 필요하다." },
+  { word: "mitigate", pos: "v.", pron: "[미티게이트]", meaning: "완화하다, 경감시키다", example: "Sprinklers help mitigate fire damage.", exampleKor: "스프링클러는 화재 피해를 완화하는 데 도움을 준다." },
+  { word: "compliance", pos: "n.", pron: "[컴플라이언스]", meaning: "준수, 이행", example: "Compliance with fire codes is mandatory.", exampleKor: "소방법규 준수는 의무이다." },
+  { word: "discrepancy", pos: "n.", pron: "[디스크레펀시]", meaning: "불일치, 차이", example: "There is a discrepancy between the drawing and the site.", exampleKor: "도면과 현장 사이에 불일치가 있다." },
+  { word: "feasible", pos: "adj.", pron: "[피저블]", meaning: "실현 가능한", example: "Is this design feasible within the budget?", exampleKor: "이 설계가 예산 내에서 실현 가능한가?" },
+  { word: "adjacent", pos: "adj.", pron: "[어제이슨트]", meaning: "인접한, 가까운", example: "The pump room is adjacent to the mechanical room.", exampleKor: "펌프실은 기계실에 인접해 있다." },
+  { word: "inspect", pos: "v.", pron: "[인스펙트]", meaning: "점검하다, 검사하다", example: "We inspect the sprinkler system monthly.", exampleKor: "우리는 매달 스프링클러 시스템을 점검한다." },
+  { word: "deteriorate", pos: "v.", pron: "[디티리어레이트]", meaning: "악화되다, 저하되다", example: "The equipment will deteriorate without regular maintenance.", exampleKor: "정기적인 유지보수 없이는 장비가 악화될 것이다." },
+  { word: "thorough", pos: "adj.", pron: "[써로우]", meaning: "철저한, 완전한", example: "A thorough review of the report is necessary.", exampleKor: "보고서의 철저한 검토가 필요하다." },
+  { word: "leverage", pos: "v./n.", pron: "[레버리지]", meaning: "활용하다 / 지렛대 효과", example: "Leverage your experience to solve this problem.", exampleKor: "이 문제를 해결하는 데 네 경험을 활용해라." },
+  { word: "sustainable", pos: "adj.", pron: "[서스테이너블]", meaning: "지속 가능한", example: "We need a sustainable study routine.", exampleKor: "우리는 지속 가능한 공부 루틴이 필요하다." },
+  { word: "integrity", pos: "n.", pron: "[인테그리티]", meaning: "진실성, 무결성", example: "Structural integrity is essential in tall buildings.", exampleKor: "구조적 무결성은 고층 건물에 필수적이다." },
+  { word: "proficient", pos: "adj.", pron: "[프로피션트]", meaning: "능숙한, 숙달된", example: "He became proficient in fire protection engineering.", exampleKor: "그는 소방공학에 능숙해졌다." },
+  { word: "rigorous", pos: "adj.", pron: "[리거러스]", meaning: "엄격한, 철저한", example: "The exam requires rigorous preparation.", exampleKor: "그 시험은 철저한 준비를 요구한다." },
+  { word: "plausible", pos: "adj.", pron: "[플로저블]", meaning: "그럴듯한, 타당한", example: "That explanation sounds plausible.", exampleKor: "그 설명은 그럴듯하게 들린다." },
+  { word: "constraint", pos: "n.", pron: "[컨스트레인트]", meaning: "제약, 제한", example: "Time constraints made the project difficult.", exampleKor: "시간 제약으로 프로젝트가 어려워졌다." },
+  { word: "versatile", pos: "adj.", pron: "[버세타일]", meaning: "다재다능한", example: "A versatile engineer can handle many tasks.", exampleKor: "다재다능한 엔지니어는 여러 업무를 처리할 수 있다." },
+  { word: "tedious", pos: "adj.", pron: "[티디어스]", meaning: "지루한, 장황한", example: "Copying vocabulary can be tedious but effective.", exampleKor: "단어를 베껴 쓰는 것은 지루할 수 있지만 효과적이다." },
+  { word: "reluctant", pos: "adj.", pron: "[릴럭턴트]", meaning: "꺼리는, 마지못한", example: "She was reluctant to take the risk.", exampleKor: "그녀는 그 위험을 감수하기를 꺼렸다." },
+  { word: "accumulate", pos: "v.", pron: "[어큐뮬레이트]", meaning: "축적하다, 쌓이다", example: "Knowledge accumulates through daily practice.", exampleKor: "지식은 매일의 연습을 통해 축적된다." },
+  { word: "comprehensive", pos: "adj.", pron: "[컴프리헨시브]", meaning: "포괄적인, 종합적인", example: "This is a comprehensive study guide.", exampleKor: "이것은 종합적인 학습 가이드이다." },
+  { word: "anticipate", pos: "v.", pron: "[앤티시페이트]", meaning: "예상하다, 대비하다", example: "Anticipate possible fire hazards before construction.", exampleKor: "시공 전 가능한 화재 위험을 예상하라." },
+  { word: "deliberate", pos: "adj./v.", pron: "[딜리버럿]", meaning: "의도적인 / 심사숙고하다", example: "It was a deliberate decision.", exampleKor: "그것은 의도적인 결정이었다." },
+  { word: "eloquent", pos: "adj.", pron: "[엘러퀀트]", meaning: "유창한, 웅변적인", example: "He gave an eloquent presentation.", exampleKor: "그는 유창한 발표를 했다." },
+  { word: "innate", pos: "adj.", pron: "[이네이트]", meaning: "타고난, 선천적인", example: "Curiosity is an innate trait in humans.", exampleKor: "호기심은 인간의 타고난 특성이다." },
+  { word: "subsequent", pos: "adj.", pron: "[서브시퀀트]", meaning: "그 다음의, 이후의", example: "Subsequent inspections found no issues.", exampleKor: "이후의 점검에서는 문제가 발견되지 않았다." },
+  { word: "viable", pos: "adj.", pron: "[바이어블]", meaning: "실행 가능한, 생존력 있는", example: "This is a viable solution to the problem.", exampleKor: "이것은 그 문제에 대한 실행 가능한 해결책이다." },
+  { word: "cumbersome", pos: "adj.", pron: "[컴버섬]", meaning: "성가신, 다루기 힘든", example: "The old process was cumbersome and slow.", exampleKor: "예전 절차는 성가시고 느렸다." },
+  { word: "discern", pos: "v.", pron: "[디선]", meaning: "분별하다, 알아차리다", example: "It's hard to discern the cause without more data.", exampleKor: "더 많은 데이터 없이는 원인을 분별하기 어렵다." },
+  { word: "prevalent", pos: "adj.", pron: "[프리벌런트]", meaning: "널리 퍼진, 일반적인", example: "This type of failure is prevalent in old buildings.", exampleKor: "이런 유형의 결함은 오래된 건물에서 흔하다." },
+  { word: "robust", pos: "adj.", pron: "[로버스트]", meaning: "견고한, 강건한", example: "We need a robust fire suppression system.", exampleKor: "우리는 견고한 소화 시스템이 필요하다." },
+  { word: "conscientious", pos: "adj.", pron: "[칸시엔셔스]", meaning: "양심적인, 성실한", example: "She is conscientious about her supervision duties.", exampleKor: "그녀는 감리 업무에 양심적이다." },
+  { word: "pragmatic", pos: "adj.", pron: "[프래그매틱]", meaning: "실용적인", example: "Let's take a pragmatic approach to this issue.", exampleKor: "이 문제에 실용적인 접근을 하자." },
+  { word: "scrutinize", pos: "v.", pron: "[스크루터나이즈]", meaning: "세밀히 조사하다", example: "Inspectors scrutinize every welded joint.", exampleKor: "검사관들은 모든 용접 부위를 세밀히 조사한다." },
+  { word: "obsolete", pos: "adj.", pron: "[옵설리트]", meaning: "구식의, 쓸모없어진", example: "That fire code has become obsolete.", exampleKor: "그 소방법규는 구식이 되었다." },
+  { word: "tangible", pos: "adj.", pron: "[탠저블]", meaning: "실체적인, 만질 수 있는", example: "We need tangible results, not just promises.", exampleKor: "우리는 약속이 아니라 실체적인 결과가 필요하다." },
+  { word: "arbitrary", pos: "adj.", pron: "[아비트러리]", meaning: "임의적인, 제멋대로인", example: "The decision seemed arbitrary and unfair.", exampleKor: "그 결정은 임의적이고 불공평해 보였다." },
+  { word: "coherent", pos: "adj.", pron: "[코히어런트]", meaning: "일관성 있는, 논리정연한", example: "Write a coherent answer with a clear structure.", exampleKor: "명확한 구조로 논리정연한 답안을 써라." },
+  { word: "facilitate", pos: "v.", pron: "[퍼실리테이트]", meaning: "촉진하다, 용이하게 하다", example: "Good ventilation facilitates smoke control.", exampleKor: "좋은 환기는 제연을 용이하게 한다." },
+  { word: "discretion", pos: "n.", pron: "[디스크레션]", meaning: "재량, 신중함", example: "Use your discretion when interpreting the code.", exampleKor: "그 법규를 해석할 때 재량을 사용해라." },
+  { word: "endeavor", pos: "n./v.", pron: "[엔데버]", meaning: "노력, 시도(하다)", example: "Every endeavor requires patience.", exampleKor: "모든 노력에는 인내가 필요하다." },
+  { word: "perseverance", pos: "n.", pron: "[퍼서비어런스]", meaning: "인내, 끈기", example: "Perseverance is the key to passing the exam.", exampleKor: "인내가 시험 합격의 열쇠이다." },
+];
+
+// ══════════════════════════════════════════
+// 한자 데이터
 // ══════════════════════════════════════════
 const HANJA = [
-  {
-    "char": "天",
-    "kor": "하늘 천",
-    "chi": "tiān",
-    "stroke": "4획",
-    "meaning": "하늘, 하느님, 자연. 가장 높고 넓은 것.",
-    "origin": "사람(大)이 팔을 벌리고 서 있는 모습에서, 그 머리 위에 획 하나를 더해 저 위를 가리킨 글자야. 사람이 닿지 못하는 가장 높은 곳이 하늘이라는 뜻이지.",
-    "example": "天地(천지): 하늘과 땅, 곧 세상 전체 / 天才(천재): 하늘이 내린 재주",
-    "grade": "8급"
-  },
-  {
-    "char": "地",
-    "kor": "땅 지",
-    "chi": "dì",
-    "stroke": "6획",
-    "meaning": "땅, 토지, 장소, 위치.",
-    "origin": "土(흙 토)와 也(어조사 야)가 합쳐진 글자야. 흙이 넓게 펼쳐진 곳이 땅이라는 의미. 하늘(天)과 짝을 이루는 글자로, 天地(천지)는 세상 전체를 뜻해.",
-    "example": "地球(지구): 우리가 사는 행성 / 地下(지하): 땅 아래",
-    "grade": "8급"
-  },
-  {
-    "char": "人",
-    "kor": "사람 인",
-    "chi": "rén",
-    "stroke": "2획",
-    "meaning": "사람, 인간, 타인.",
-    "origin": "사람이 두 다리를 벌리고 서 있는 옆모습을 그린 글자야. 가장 간단하면서도 가장 중요한 글자 중 하나. 한자 중 획수가 가장 적은 글자 중 하나이기도 해.",
-    "example": "人間(인간): 사람 / 人生(인생): 사람이 살아가는 일",
-    "grade": "8급"
-  },
-  {
-    "char": "日",
-    "kor": "해 일",
-    "chi": "rì",
-    "stroke": "4획",
-    "meaning": "해, 태양, 날(하루), 일본.",
-    "origin": "원래는 동그란 원 안에 점을 찍은 그림이었어. 태양의 모습을 직접 그린 거야. 시간이 지나면서 각지게 변해 지금의 日이 됐어. 하루를 뜻하기도 해(日月年).",
-    "example": "日出(일출): 해가 뜸 / 日記(일기): 날마다 쓰는 기록",
-    "grade": "8급"
-  },
-  {
-    "char": "月",
-    "kor": "달 월",
-    "chi": "yuè",
-    "stroke": "4획",
-    "meaning": "달(moon), 달(month), 한 달.",
-    "origin": "초승달 모양을 그린 글자야. 달이 완전한 원이 아니라 자주 이지러진 모습이기 때문에 오목하게 표현했어. 날이 지나면서 달이 차고 기우는 것을 관찰한 조상들의 지혜가 담겨 있어.",
-    "example": "月曜(월요): 월요일 / 歲月(세월): 흘러가는 시간",
-    "grade": "8급"
-  },
-  {
-    "char": "火",
-    "kor": "불 화",
-    "chi": "huǒ",
-    "stroke": "4획",
-    "meaning": "불, 화재, 불꽃, 화요일.",
-    "origin": "불꽃이 타오르는 모습을 그린 그림문자야. 가운데에서 불길이 솟구치고 양쪽으로 불꽃이 튀는 형상이지. 소방과 관련된 한자의 핵심 글자야!",
-    "example": "火災(화재): 불로 인한 재해 / 消火(소화): 불을 끔",
-    "grade": "8급"
-  },
-  {
-    "char": "水",
-    "kor": "물 수",
-    "chi": "shuǐ",
-    "stroke": "4획",
-    "meaning": "물, 액체, 수요일.",
-    "origin": "물이 흘러가는 모습을 그린 글자야. 가운데 주된 흐름과 양쪽으로 갈라지는 물결을 표현했어. 소방에서 수계소화설비의 핵심 글자!",
-    "example": "水道(수도): 물이 흐르는 길 / 消防水(소방수): 소방용 물",
-    "grade": "8급"
-  },
-  {
-    "char": "木",
-    "kor": "나무 목",
-    "chi": "mù",
-    "stroke": "4획",
-    "meaning": "나무, 목재, 목요일.",
-    "origin": "뿌리는 아래로 뻗고 가지는 위로 퍼지는 나무의 모습을 그대로 그린 글자야. 위로 뻗은 두 획이 가지, 아래로 뻗은 두 획이 뿌리야.",
-    "example": "木材(목재): 건축·가구 재료로 쓰이는 나무 / 木造(목조): 나무로 지은",
-    "grade": "8급"
-  },
-  {
-    "char": "山",
-    "kor": "산 산",
-    "chi": "shān",
-    "stroke": "3획",
-    "meaning": "산, 산지, 봉우리.",
-    "origin": "세 개의 봉우리가 솟은 산의 모습을 그대로 표현한 글자야. 가운데 봉우리가 가장 높고 양옆이 조금 낮아. 자연을 그대로 담은 상형문자의 대표 격이야.",
-    "example": "登山(등산): 산을 오름 / 봉서산(鳳棲山): J가 자주 가는 천안의 산",
-    "grade": "8급"
-  },
-  {
-    "char": "大",
-    "kor": "클 대",
-    "chi": "dà",
-    "stroke": "3획",
-    "meaning": "크다, 위대하다, 어른.",
-    "origin": "사람(人)이 팔을 크게 벌리고 서 있는 모습이야. 이만큼 크다! 라고 양팔을 벌리는 그 제스처가 그대로 글자가 됐어. 가장 직관적인 상형문자 중 하나야.",
-    "example": "大學(대학): 큰 배움의 장 / 大韓(대한): 크고 위대한 나라 한국",
-    "grade": "8급"
-  },
-  {
-    "char": "小",
-    "kor": "작을 소",
-    "chi": "xiǎo",
-    "stroke": "3획",
-    "meaning": "작다, 적다, 어리다.",
-    "origin": "大(크다)의 반대. 가운데 점을 중심으로 양쪽에 작은 점이 찍힌 모습이야. 큰 것에서 작은 조각들이 흩어져 나가는 이미지를 표현했다는 설도 있어.",
-    "example": "小學(소학): 초등학교 / 消防은 小方이 아니라 消防이야 😄",
-    "grade": "8급"
-  },
-  {
-    "char": "中",
-    "kor": "가운데 중",
-    "chi": "zhōng",
-    "stroke": "4획",
-    "meaning": "가운데, 중간, 중국.",
-    "origin": "깃발을 세운 모습이라는 설이 있어. 사람들이 모이는 중심에 깃발을 꽂은 것에서 유래했다는 거야. 또는 과녁의 정중앙을 화살이 관통하는 모습이라는 설도 있어.",
-    "example": "中心(중심): 가운데 / 中間(중간): 두 사이의 가운데",
-    "grade": "8급"
-  },
-  {
-    "char": "心",
-    "kor": "마음 심",
-    "chi": "xīn",
-    "stroke": "4획",
-    "meaning": "마음, 심장, 감정, 생각.",
-    "origin": "심장의 모양을 본뜬 글자야. 고대 중국에서는 생각과 감정이 모두 심장에서 나온다고 봤어. 그래서 마음과 심장이 같은 글자야. 변으로 쓰이면 忄(심방변)이 되어 감정 관련 글자들을 만들어.",
-    "example": "心情(심정): 마음의 상태 / 中心(중심): 가운데 / 決心(결심): 마음을 굳힘",
-    "grade": "7급"
-  },
-  {
-    "char": "學",
-    "kor": "배울 학",
-    "chi": "xué",
-    "stroke": "16획",
-    "meaning": "배우다, 학문, 학교.",
-    "origin": "획수가 많아 복잡해 보이지만 구조는 이래 — 위에는 두 손으로 교재를 받드는 모습, 가운데는 지붕, 아래는 아이(子). 어른이 아이에게 지식을 전달하는 장면이 담긴 글자야.",
-    "example": "學習(학습): 배우고 익힘 / 學問(학문): 배움과 물음",
-    "grade": "7급"
-  },
-  {
-    "char": "問",
-    "kor": "물을 문",
-    "chi": "wèn",
-    "stroke": "11획",
-    "meaning": "묻다, 질문하다, 안부를 묻다.",
-    "origin": "門(문) 안에 口(입)가 있는 구조야. 문 앞에서 입으로 안을 물어보는 장면이지. 거기 누구 없어요? 라고 묻는 상황을 그대로 표현한 거야.",
-    "example": "質問(질문): 묻는 것 / 問題(문제): 묻는 제목 → 문제",
-    "grade": "7급"
-  },
-  {
-    "char": "答",
-    "kor": "대답 답",
-    "chi": "dá",
-    "stroke": "12획",
-    "meaning": "대답하다, 답, 해답.",
-    "origin": "竹(대나무 죽)과 合(합할 합)이 합쳐진 글자야. 고대에 대나무에 글자를 새겨 답장을 했던 것에서 유래했다는 설이 있어. 問(묻다)의 짝꿍 글자야.",
-    "example": "回答(회답): 돌아와 답함 / 正答(정답): 바른 답",
-    "grade": "7급"
-  },
-  {
-    "char": "知",
-    "kor": "알 지",
-    "chi": "zhī",
-    "stroke": "8획",
-    "meaning": "알다, 지식, 깨닫다.",
-    "origin": "矢(화살 시)와 口(입 구)가 합쳐진 글자야. 화살처럼 빠르고 정확하게 말하는 것, 즉 확실히 아는 것을 의미해. 지식과 앎을 나타내는 핵심 글자야.",
-    "example": "知識(지식): 아는 것 / 無知(무지): 모르는 것",
-    "grade": "6급"
-  },
-  {
-    "char": "道",
-    "kor": "길 도",
-    "chi": "dào",
-    "stroke": "12획",
-    "meaning": "길, 도리, 방법, 말하다.",
-    "origin": "辶(쉬엄쉬엄 갈 착)과 首(머리 수)가 합쳐진 글자야. 머리를 앞으로 향해 나아가는 길이라는 뜻이야. 단순한 물리적 길을 넘어 올바른 삶의 방식, 진리를 의미하기도 해.",
-    "example": "道路(도로): 길 / 道德(도덕): 올바른 길 / 水道(수도): 물이 가는 길",
-    "grade": "6급"
-  },
-  {
-    "char": "德",
-    "kor": "덕 덕",
-    "chi": "dé",
-    "stroke": "15획",
-    "meaning": "덕, 덕행, 품성, 은혜.",
-    "origin": "彳(두인변)과 直(곧을 직), 心(마음 심)의 조합이야. 곧은 마음으로 남에게 베푸는 행동이 덕이야. 공자 사상의 핵심 개념 중 하나야.",
-    "example": "道德(도덕): 삶의 올바른 길 / 德目(덕목): 덕스러운 항목",
-    "grade": "5급"
-  },
-  {
-    "char": "禮",
-    "kor": "예도 례",
-    "chi": "lǐ",
-    "stroke": "18획",
-    "meaning": "예의, 예절, 의식, 선물.",
-    "origin": "示(보일 시, 신에게 보인다)와 豊(풍성할 풍)이 합쳐진 글자야. 신께 풍성한 제물을 바치는 의식에서 시작해 사람 사이의 예절로 의미가 확장됐어.",
-    "example": "禮儀(예의): 예절 / 禮節(예절): 몸가짐의 규범",
-    "grade": "5급"
-  },
-  {
-    "char": "義",
-    "kor": "옳을 의",
-    "chi": "yì",
-    "stroke": "13획",
-    "meaning": "의리, 옳다, 의미, 뜻.",
-    "origin": "羊(양 양)과 我(나 아)가 합쳐진 글자야. 양처럼 온순하고 올바른 내 모습이라는 의미가 있어. 공자가 말한 仁義禮智(인의예지) 중 하나야.",
-    "example": "正義(정의): 바르고 옳은 것 / 意義(의의): 의미와 가치",
-    "grade": "5급"
-  },
-  {
-    "char": "仁",
-    "kor": "어질 인",
-    "chi": "rén",
-    "stroke": "4획",
-    "meaning": "어질다, 인자함, 사랑.",
-    "origin": "人(사람 인)과 二(두 이)가 합쳐진 글자야. 두 사람이 서로를 대하는 관계에서 어짊이 나온다는 뜻이야. 공자 철학의 핵심 — 인간을 사랑하는 마음이 仁이야.",
-    "example": "仁義(인의): 어짊과 옳음 / 仁川(인천): 어진 물의 도시",
-    "grade": "5급"
-  },
-  {
-    "char": "智",
-    "kor": "지혜 지",
-    "chi": "zhì",
-    "stroke": "12획",
-    "meaning": "지혜, 총명함, 슬기.",
-    "origin": "知(알다)와 日(해)이 합쳐진 형태야. 아는 것이 해처럼 밝게 빛나는 것이 智야. 仁義禮智 중 마지막 덕목으로, 올바른 판단력과 통찰력을 뜻해.",
-    "example": "智慧(지혜): 슬기로운 앎 / 知智(지지): 알고 깨달음",
-    "grade": "5급"
-  },
-  {
-    "char": "信",
-    "kor": "믿을 신",
-    "chi": "xìn",
-    "stroke": "9획",
-    "meaning": "믿다, 신뢰, 편지, 소식.",
-    "origin": "人(사람)과 言(말씀 언)이 합쳐진 글자야. 사람이 한 말, 즉 약속을 지키는 것이 신뢰야. 말과 행동이 일치하는 것 — 이것이 信이야.",
-    "example": "信賴(신뢰): 믿고 의지함 / 信念(신념): 굳게 믿는 마음",
-    "grade": "5급"
-  },
-  {
-    "char": "和",
-    "kor": "화할 화",
-    "chi": "hé",
-    "stroke": "8획",
-    "meaning": "화목, 평화, 합하다, 일본.",
-    "origin": "禾(벼 화)와 口(입 구)가 합쳐진 글자야. 먹을 것이 풍족할 때 입도 평화롭다는 뜻이야. 다투지 않고 조화롭게 지내는 상태를 의미해.",
-    "example": "和平(화평): 평화 / 調和(조화): 균형 있게 어울림",
-    "grade": "5급"
-  },
-  {
-    "char": "平",
-    "kor": "평평할 평",
-    "chi": "píng",
-    "stroke": "5획",
-    "meaning": "평평하다, 평화, 고르다.",
-    "origin": "물 위에 수초가 평평하게 떠 있는 모습에서 유래했다는 설이 있어. 울퉁불퉁함 없이 고른 상태가 平이야.",
-    "example": "平和(평화): 평온한 상태 / 平常(평상): 늘 고른 상태",
-    "grade": "5급"
-  },
-  {
-    "char": "安",
-    "kor": "편안할 안",
-    "chi": "ān",
-    "stroke": "6획",
-    "meaning": "편안하다, 안전, 안정.",
-    "origin": "宀(집 면, 지붕 모양)과 女(여자 녀)가 합쳐진 글자야. 집 안에 여자가 있는 안온한 풍경에서 편안함의 의미가 나왔어. 소방에서 안전(安全)의 安이야.",
-    "example": "安全(안전): 위험 없이 편안함 / 安心(안심): 마음이 편함",
-    "grade": "6급"
-  },
-  {
-    "char": "全",
-    "kor": "온전할 전",
-    "chi": "quán",
-    "stroke": "6획",
-    "meaning": "온전하다, 전부, 완전.",
-    "origin": "入(들어갈 입)과 王(임금 왕)이 합쳐진 구조로 해석되기도 해. 하나도 빠짐없이 완전한 상태가 全이야. 소방에서 안전(安全)의 全이기도 해!",
-    "example": "安全(안전): 완전히 편안한 / 全部(전부): 모든 것 다",
-    "grade": "7급"
-  },
-  {
-    "char": "消",
-    "kor": "사라질 소",
-    "chi": "xiāo",
-    "stroke": "10획",
-    "meaning": "사라지다, 소멸, 소화하다.",
-    "origin": "水(물 수)와 肖(닮을 초)가 합쳐진 글자야. 물이 조금씩 졸아들어 없어진다는 이미지야. 소방(消防)의 消가 바로 이 글자야 — 불을 없애다!",
-    "example": "消防(소방): 불(火)을 방비하고 없앰 / 消火(소화): 불을 끔",
-    "grade": "4급"
-  },
-  {
-    "char": "防",
-    "kor": "막을 방",
-    "chi": "fáng",
-    "stroke": "7획",
-    "meaning": "막다, 방지, 방어.",
-    "origin": "阜(언덕 부)와 方(모 방)이 합쳐진 글자야. 언덕이나 둑으로 물이나 외적을 막는다는 뜻이야. 소방(消防)의 防이야 — 불을 막다!",
-    "example": "消防(소방): 불을 끄고 막음 / 防火(방화): 불을 막음 / 防止(방지): 막아서 그침",
-    "grade": "4급"
-  },
-  {
-    "char": "國",
-    "kor": "나라 국",
-    "chi": "guó",
-    "stroke": "11획",
-    "meaning": "나라, 국가.",
-    "origin": "囗(에울 위, 울타리)와 或(혹시 혹, 지역을 창으로 지킨다는 의미)이 합쳐진 글자야. 울타리로 둘러싸인 땅을 창으로 지키는 것이 나라라는 뜻이야.",
-    "example": "韓國(한국): 우리나라 / 國家(국가): 나라 / 國民(국민): 나라의 백성",
-    "grade": "7급"
-  },
-  {
-    "char": "韓",
-    "kor": "한국 한",
-    "chi": "hán",
-    "stroke": "17획",
-    "meaning": "한국, 한국인, 한씨.",
-    "origin": "원래는 고대 한반도 남부의 부족 연맹 삼한(三韓)을 가리키던 글자야. 지금은 대한민국을 나타내는 글자로 쓰여. 획수가 많아 쓰기 어렵지만 우리나라를 나타내는 소중한 글자야.",
-    "example": "大韓民國(대한민국): 우리나라 공식 명칭 / 韓國語(한국어): 한국말",
-    "grade": "5급"
-  },
-  {
-    "char": "民",
-    "kor": "백성 민",
-    "chi": "mín",
-    "stroke": "5획",
-    "meaning": "백성, 국민, 민간.",
-    "origin": "눈에 침을 찌르는 모습이라는 충격적인 설이 있어 — 고대에 포로의 눈을 멀게 해서 복종시키던 것을 표현했다는 거야. 이후 일반 사람들, 백성의 의미로 쓰이게 됐어.",
-    "example": "國民(국민): 나라의 백성 / 民主(민주): 백성이 주인",
-    "grade": "7급"
-  },
-  {
-    "char": "家",
-    "kor": "집 가",
-    "chi": "jiā",
-    "stroke": "10획",
-    "meaning": "집, 가족, 집안, 전문가.",
-    "origin": "宀(지붕)과 豕(돼지 시)가 합쳐진 글자야. 지붕 아래 돼지가 있는 모습 — 고대에 돼지를 집 안에서 키웠기 때문에 돼지가 있는 곳이 집이라는 뜻이 됐어.",
-    "example": "家族(가족): 한 집의 식구들 / 家庭(가정): 집안 / 建築家(건축가): 건축 전문가",
-    "grade": "7급"
-  },
-  {
-    "char": "父",
-    "kor": "아비 부",
-    "chi": "fù",
-    "stroke": "4획",
-    "meaning": "아버지, 부친, 아비.",
-    "origin": "손에 도끼를 쥐고 있는 모습이라는 설이 있어. 가족을 위해 일하고 외적으로부터 지키는 가장의 역할을 표현한 거야.",
-    "example": "父親(부친): 아버지 / 父母(부모): 아버지와 어머니",
-    "grade": "8급"
-  },
-  {
-    "char": "母",
-    "kor": "어미 모",
-    "chi": "mǔ",
-    "stroke": "5획",
-    "meaning": "어머니, 모친, 근원.",
-    "origin": "女(여자 녀)의 변형으로, 가슴 부분에 점 두 개를 더해 젖을 먹이는 어머니의 모습을 나타냈어. 모든 것의 근원이라는 의미도 있어.",
-    "example": "父母(부모): 아버지와 어머니 / 母國(모국): 고향 나라",
-    "grade": "8급"
-  },
-  {
-    "char": "子",
-    "kor": "아들 자",
-    "chi": "zǐ",
-    "stroke": "3획",
-    "meaning": "아들, 자식, 선생님에 대한 존칭.",
-    "origin": "아이가 두 팔을 벌리고 있는 모습이야. 공자(孔子), 맹자(孟子)처럼 이름 뒤에 붙어 존경의 의미로도 쓰여.",
-    "example": "孔子(공자): 공씨 선생님 / 父子(부자): 아버지와 아들",
-    "grade": "8급"
-  },
-  {
-    "char": "文",
-    "kor": "글월 문",
-    "chi": "wén",
-    "stroke": "4획",
-    "meaning": "글, 문자, 문학, 무늬.",
-    "origin": "사람 가슴에 문신을 새긴 모습이라는 설이 있어. 고대에 문신은 신분과 의미를 나타내는 기호였어. 그 기호에서 문자와 문학의 의미가 파생됐어.",
-    "example": "文字(문자): 글자 / 文學(문학): 글로 표현하는 예술 / 作文(작문): 글 쓰기",
-    "grade": "7급"
-  },
-  {
-    "char": "語",
-    "kor": "말씀 어",
-    "chi": "yǔ",
-    "stroke": "14획",
-    "meaning": "말, 언어, 이야기하다.",
-    "origin": "言(말씀 언)과 吾(나 오)가 합쳐진 글자야. 내가 하는 말이 語야. 言이 말 자체라면, 語는 그 말로 이루어진 언어 체계를 뜻해.",
-    "example": "語學(어학): 언어를 배우는 학문 / 韓國語(한국어): 한국말 / 中國語(중국어): 중국말",
-    "grade": "6급"
-  },
-  {
-    "char": "友",
-    "kor": "벗 우",
-    "chi": "yǒu",
-    "stroke": "4획",
-    "meaning": "친구, 벗, 우정.",
-    "origin": "두 손이 서로를 향해 있는 모습이야. 오른손(又)과 또 다른 손이 서로 마주보는 형태에서 친구의 의미가 생겨났어.",
-    "example": "友情(우정): 친구 사이의 정 / 親友(친우): 친한 친구 / 友好(우호): 사이가 좋음",
-    "grade": "6급"
-  },
-  {
-    "char": "愛",
-    "kor": "사랑 애",
-    "chi": "ài",
-    "stroke": "13획",
-    "meaning": "사랑하다, 아끼다, 좋아하다.",
-    "origin": "心(마음)이 들어가 있는 글자야. 발걸음(夂)을 멈추고 마음(心)으로 돌아보는 모습이라고 해석하기도 해. 진정한 사랑은 멈추고 돌아보는 마음에서 나온다는 뜻.",
-    "example": "愛情(애정): 사랑의 마음 / 愛國(애국): 나라를 사랑함",
-    "grade": "6급"
-  },
-  {
-    "char": "書",
-    "kor": "글 서",
-    "chi": "shū",
-    "stroke": "10획",
-    "meaning": "책, 글, 쓰다, 편지.",
-    "origin": "붓(聿)으로 해(日)처럼 밝게 기록하는 모습이라는 해석이 있어. 지식을 빛처럼 남기는 것이 글이야.",
-    "example": "讀書(독서): 책 읽기 / 書類(서류): 문서들 / 圖書館(도서관): 책 모아둔 곳",
-    "grade": "6급"
-  },
-  {
-    "char": "年",
-    "kor": "해 년",
-    "chi": "nián",
-    "stroke": "6획",
-    "meaning": "해(year), 나이, 시절.",
-    "origin": "벼(禾)를 사람이 이고 가는 모습이라는 설이 있어. 한 해 농사를 마치고 수확한 벼를 짊어지는 모습에서 한 해의 의미가 나왔다는 거야.",
-    "example": "年齡(연령): 나이 / 年度(연도): 특정 해 / 靑年(청년): 젊은 사람",
-    "grade": "7급"
-  },
-  {
-    "char": "力",
-    "kor": "힘 력",
-    "chi": "lì",
-    "stroke": "2획",
-    "meaning": "힘, 노력, 능력, 일꾼.",
-    "origin": "팔 근육을 구부린 모습이야. 힘을 쓸 때 팔에 힘을 주는 형상을 그대로 그린 거야. 人(2획)과 함께 획수가 가장 적은 글자 중 하나야.",
-    "example": "努力(노력): 힘을 다해 애씀 / 體力(체력): 몸의 힘 / 電力(전력): 전기의 힘",
-    "grade": "7급"
-  },
-  {
-    "char": "氣",
-    "kor": "기운 기",
-    "chi": "qì",
-    "stroke": "10획",
-    "meaning": "기운, 공기, 날씨, 기체.",
-    "origin": "쌀(米)에서 밥이 지어질 때 피어오르는 수증기(气)를 나타낸 글자야. 눈에 보이지 않지만 분명히 존재하는 에너지가 氣야.",
-    "example": "空氣(공기): 우리가 숨쉬는 기체 / 電氣(전기): 전류의 힘 / 消火氣(소화기): 불 끄는 기구",
-    "grade": "6급"
-  },
-  {
-    "char": "風",
-    "kor": "바람 풍",
-    "chi": "fēng",
-    "stroke": "9획",
-    "meaning": "바람, 풍경, 풍속, 풍류.",
-    "origin": "원래는 봉황(鳳)에서 변형된 글자야. 봉황이 날개를 퍼덕이면 바람이 일어난다는 전설에서 유래했다고 해. 자연의 현상을 신화적으로 표현한 거야.",
-    "example": "颱風(태풍): 강한 열대성 폭풍 / 風速(풍속): 바람의 속도 / 風景(풍경): 경치",
-    "grade": "7급"
-  },
-  {
-    "char": "雨",
-    "kor": "비 우",
-    "chi": "yǔ",
-    "stroke": "8획",
-    "meaning": "비, 비가 오다.",
-    "origin": "하늘(一)에서 구름(冂) 아래로 빗방울들이 떨어지는 모습을 그린 글자야. 매우 직관적인 상형문자야. 스프링클러가 실내 인공비 역할을 한다고도 하지 😄",
-    "example": "降雨(강우): 비가 내림 / 雨水(우수): 빗물 / 梅雨(매우): 장마",
-    "grade": "7급"
-  },
-  {
-    "char": "花",
-    "kor": "꽃 화",
-    "chi": "huā",
-    "stroke": "8획",
-    "meaning": "꽃, 화려하다, 쓰다(돈을).",
-    "origin": "艹(풀 초)와 化(변할 화)가 합쳐진 글자야. 풀이 변해서 꽃이 된다는 뜻이야. 아름답게 변화하는 것이 꽃이라는 의미가 담겨 있어.",
-    "example": "花草(화초): 꽃과 풀 / 開花(개화): 꽃이 핌 / 花朝(화조): 꽃 피는 아침",
-    "grade": "6급"
-  },
-  {
-    "char": "幸",
-    "kor": "다행 행",
-    "chi": "xìng",
-    "stroke": "8획",
-    "meaning": "다행, 행복, 행운.",
-    "origin": "손에 수갑을 찬 모습에서 유래했다는 설이 있어. 사형을 선고받았다가 극적으로 목숨을 건진 다행스러운 상황에서 행운의 의미가 파생됐다는 거야.",
-    "example": "幸福(행복): 복스럽고 좋은 상태 / 多幸(다행): 얼마나 다행인가",
-    "grade": "5급"
-  },
-  {
-    "char": "福",
-    "kor": "복 복",
-    "chi": "fú",
-    "stroke": "13획",
-    "meaning": "복, 행복, 행운.",
-    "origin": "示(신에게 보임)와 畐(가득하다)가 합쳐진 글자야. 신에게 빌어서 집안에 복이 가득하게 해달라는 기원에서 나온 글자야.",
-    "example": "幸福(행복): 행운과 복 / 福祉(복지): 복되고 이로운 것 / 福音(복음): 기쁜 소식",
-    "grade": "5급"
-  },
-  {
-    "char": "望",
-    "kor": "바랄 망",
-    "chi": "wàng",
-    "stroke": "11획",
-    "meaning": "바라다, 바라보다, 희망, 보름달.",
-    "origin": "月(달)과 壬(임), 亡(망)이 합쳐진 글자야. 멀리 바라보며 바람이 이루어지기를 기다리는 모습에서 희망의 의미가 나왔어.",
-    "example": "希望(희망): 바라는 마음 / 絶望(절망): 바람이 끊어짐 / 願望(원망): 원하고 바람",
-    "grade": "5급"
-  },
-  {
-    "char": "思",
-    "kor": "생각할 사",
-    "chi": "sī",
-    "stroke": "9획",
-    "meaning": "생각하다, 그리워하다.",
-    "origin": "田(밭 전)과 心(마음 심)이 합쳐진 글자야. 마음의 밭에서 생각이 자란다는 의미야. 꼼꼼하게 밭을 일구듯 마음으로 깊이 생각하는 것이 思야.",
-    "example": "思想(사상): 깊이 생각한 것 / 思考(사고): 생각하고 헤아림 / 相思(상사): 서로 그리워함",
-    "grade": "5급"
-  },
-  {
-    "char": "正",
-    "kor": "바를 정",
-    "chi": "zhèng",
-    "stroke": "5획",
-    "meaning": "바르다, 올바르다, 정확하다.",
-    "origin": "一(하나, 목표)과 止(그칠 지, 발모양)가 합쳐진 글자야. 목표를 향해 곧게 발을 내딛는 것이 正이야. 흔들리지 않고 목적지를 향해 가는 것이 올바름이라는 뜻.",
-    "example": "正答(정답): 올바른 답 / 正直(정직): 바르고 곧음 / 公正(공정): 공평하고 바름",
-    "grade": "7급"
-  },
-  {
-    "char": "東",
-    "kor": "동녘 동",
-    "chi": "dōng",
-    "stroke": "8획",
-    "meaning": "동쪽, 동방, 주인.",
-    "origin": "나무(木) 사이로 해(日)가 떠오르는 모습이야. 해가 뜨는 방향이 동쪽이니까. 새벽에 나무들 사이로 해가 떠오르는 장면을 그대로 담은 아름다운 글자야.",
-    "example": "東西南北(동서남북): 네 방향 / 東方(동방): 동쪽 방향 / 中東(중동): 중간 동쪽",
-    "grade": "8급"
-  },
-  {
-    "char": "西",
-    "kor": "서녘 서",
-    "chi": "xī",
-    "stroke": "6획",
-    "meaning": "서쪽.",
-    "origin": "새가 둥지 위에 앉아 있는 모습이라는 설이 있어. 새들이 해가 지는 서쪽 방향 나무에 둥지를 틀고 돌아온다는 것에서 서쪽의 의미가 나왔다는 거야.",
-    "example": "東西(동서): 동쪽과 서쪽 / 西海(서해): 서쪽 바다 / 西方(서방): 서쪽 방향",
-    "grade": "8급"
-  },
-  {
-    "char": "南",
-    "kor": "남녘 남",
-    "chi": "nán",
-    "stroke": "9획",
-    "meaning": "남쪽, 남방.",
-    "origin": "악기 모양에서 유래했다는 설이 있어. 고대 중국에서 남쪽 지방의 악기를 그린 것이 南이 됐다는 거야. 해가 가장 높이 뜨는 방향이 남쪽이야.",
-    "example": "南北(남북): 남쪽과 북쪽 / 江南(강남): 강의 남쪽 / 南海(남해): 남쪽 바다",
-    "grade": "8급"
-  },
-  {
-    "char": "北",
-    "kor": "북녘 북",
-    "chi": "běi",
-    "stroke": "5획",
-    "meaning": "북쪽, 달아나다.",
-    "origin": "두 사람이 서로 등을 맞대고 있는 모습이야. 등을 보인다는 것은 싸움에서 지고 달아나는 것을 의미했어. 북쪽은 추워서 사람들이 등을 돌리는 방향이라는 설도 있어.",
-    "example": "南北(남북): 남쪽과 북쪽 / 北韓(북한): 북쪽 한국 / 敗北(패배): 싸움에서 짐",
-    "grade": "8급"
-  }
+  { char: "天", kor: "하늘 천", chi: "tiān", stroke: "4획", meaning: "하늘, 하느님, 자연. 가장 높고 넓은 것.", origin: "사람(大)이 팔을 벌리고 서 있는 모습에서, 그 머리 위에 획 하나를 더해 저 위를 가리킨 글자야.", example: "天地(천지): 하늘과 땅 / 天才(천재): 하늘이 내린 재주", grade: "8급" },
+  { char: "地", kor: "땅 지", chi: "dì", stroke: "6획", meaning: "땅, 토지, 장소, 위치.", origin: "土(흙 토)와 也(어조사 야)가 합쳐진 글자야. 흙이 넓게 펼쳐진 곳이 땅이라는 의미.", example: "地球(지구): 우리가 사는 행성 / 地下(지하): 땅 아래", grade: "8급" },
+  { char: "人", kor: "사람 인", chi: "rén", stroke: "2획", meaning: "사람, 인간, 타인.", origin: "사람이 두 다리를 벌리고 서 있는 옆모습을 그린 글자야.", example: "人間(인간): 사람 / 人生(인생): 사람이 살아가는 일", grade: "8급" },
+  { char: "日", kor: "해 일", chi: "rì", stroke: "4획", meaning: "해, 태양, 날(하루), 일본.", origin: "원래는 동그란 원 안에 점을 찍은 그림이었어. 태양의 모습을 직접 그린 거야.", example: "日出(일출): 해가 뜸 / 日記(일기): 날마다 쓰는 기록", grade: "8급" },
+  { char: "月", kor: "달 월", chi: "yuè", stroke: "4획", meaning: "달(moon), 달(month), 한 달.", origin: "초승달 모양을 그린 글자야. 달이 자주 이지러진 모습이기 때문에 오목하게 표현했어.", example: "月曜(월요): 월요일 / 歲月(세월): 흘러가는 시간", grade: "8급" },
+  { char: "火", kor: "불 화", chi: "huǒ", stroke: "4획", meaning: "불, 화재, 불꽃, 화요일.", origin: "불꽃이 타오르는 모습을 그린 그림문자야. 소방과 관련된 한자의 핵심 글자야!", example: "火災(화재): 불로 인한 재해 / 消火(소화): 불을 끔", grade: "8급" },
+  { char: "水", kor: "물 수", chi: "shuǐ", stroke: "4획", meaning: "물, 액체, 수요일.", origin: "물이 흘러가는 모습을 그린 글자야. 소방에서 수계소화설비의 핵심 글자!", example: "水道(수도): 물이 흐르는 길 / 消防水(소방수): 소방용 물", grade: "8급" },
+  { char: "木", kor: "나무 목", chi: "mù", stroke: "4획", meaning: "나무, 목재, 목요일.", origin: "뿌리는 아래로 뻗고 가지는 위로 퍼지는 나무의 모습을 그대로 그린 글자야.", example: "木材(목재): 건축·가구 재료 / 木造(목조): 나무로 지은", grade: "8급" },
+  { char: "山", kor: "산 산", chi: "shān", stroke: "3획", meaning: "산, 산지, 봉우리.", origin: "세 개의 봉우리가 솟은 산의 모습을 그대로 표현한 글자야.", example: "登山(등산): 산을 오름 / 봉서산(鳳棲山): J가 자주 가는 천안의 산", grade: "8급" },
+  { char: "大", kor: "클 대", chi: "dà", stroke: "3획", meaning: "크다, 위대하다, 어른.", origin: "사람(人)이 팔을 크게 벌리고 서 있는 모습이야.", example: "大學(대학): 큰 배움의 장 / 大韓(대한): 크고 위대한 나라 한국", grade: "8급" },
+  { char: "小", kor: "작을 소", chi: "xiǎo", stroke: "3획", meaning: "작다, 적다, 어리다.", origin: "大(크다)의 반대. 큰 것에서 작은 조각들이 흩어져 나가는 이미지를 표현했다는 설도 있어.", example: "小學(소학): 초등학교 / 消防은 消防이지 小方이 아니야 😄", grade: "8급" },
+  { char: "中", kor: "가운데 중", chi: "zhōng", stroke: "4획", meaning: "가운데, 중간, 중국.", origin: "깃발을 세운 모습이라는 설이 있어. 또는 과녁의 정중앙을 화살이 관통하는 모습이라는 설도 있어.", example: "中心(중심): 가운데 / 中間(중간): 두 사이의 가운데", grade: "8급" },
+  { char: "心", kor: "마음 심", chi: "xīn", stroke: "4획", meaning: "마음, 심장, 감정, 생각.", origin: "심장의 모양을 본뜬 글자야. 변으로 쓰이면 忄(심방변)이 되어 감정 관련 글자들을 만들어.", example: "心情(심정): 마음의 상태 / 決心(결심): 마음을 굳힘", grade: "7급" },
+  { char: "學", kor: "배울 학", chi: "xué", stroke: "16획", meaning: "배우다, 학문, 학교.", origin: "위에는 두 손으로 교재를 받드는 모습, 가운데는 지붕, 아래는 아이(子)가 있는 구조야.", example: "學習(학습): 배우고 익힘 / 學問(학문): 배움과 물음", grade: "7급" },
+  { char: "問", kor: "물을 문", chi: "wèn", stroke: "11획", meaning: "묻다, 질문하다, 안부를 묻다.", origin: "門(문) 안에 口(입)가 있는 구조야. 문 앞에서 입으로 안을 물어보는 장면이지.", example: "質問(질문): 묻는 것 / 問題(문제): 묻는 제목 → 문제", grade: "7급" },
+  { char: "答", kor: "대답 답", chi: "dá", stroke: "12획", meaning: "대답하다, 답, 해답.", origin: "竹(대나무 죽)과 合(합할 합)이 합쳐진 글자야. 問(묻다)의 짝꿍 글자야.", example: "回答(회답): 돌아와 답함 / 正答(정답): 바른 답", grade: "7급" },
+  { char: "知", kor: "알 지", chi: "zhī", stroke: "8획", meaning: "알다, 지식, 깨닫다.", origin: "矢(화살 시)와 口(입 구)가 합쳐진 글자야. 화살처럼 빠르고 정확하게 말하는 것을 의미해.", example: "知識(지식): 아는 것 / 無知(무지): 모르는 것", grade: "6급" },
+  { char: "道", kor: "길 도", chi: "dào", stroke: "12획", meaning: "길, 도리, 방법, 말하다.", origin: "辶(쉬엄쉬엄 갈 착)과 首(머리 수)가 합쳐진 글자야. 머리를 앞으로 향해 나아가는 길이라는 뜻이야.", example: "道路(도로): 길 / 水道(수도): 물이 가는 길", grade: "6급" },
+  { char: "德", kor: "덕 덕", chi: "dé", stroke: "15획", meaning: "덕, 덕행, 품성, 은혜.", origin: "彳(두인변)과 直(곧을 직), 心(마음 심)의 조합이야. 곧은 마음으로 남에게 베푸는 행동이 덕이야.", example: "道德(도덕): 삶의 올바른 길 / 德目(덕목): 덕스러운 항목", grade: "5급" },
+  { char: "禮", kor: "예도 례", chi: "lǐ", stroke: "18획", meaning: "예의, 예절, 의식, 선물.", origin: "示(보일 시)와 豊(풍성할 풍)이 합쳐진 글자야.", example: "禮儀(예의): 예절 / 禮節(예절): 몸가짐의 규범", grade: "5급" },
+  { char: "義", kor: "옳을 의", chi: "yì", stroke: "13획", meaning: "의리, 옳다, 의미, 뜻.", origin: "羊(양 양)과 我(나 아)가 합쳐진 글자야. 공자가 말한 仁義禮智 중 하나야.", example: "正義(정의): 바르고 옳은 것 / 意義(의의): 의미와 가치", grade: "5급" },
+  { char: "仁", kor: "어질 인", chi: "rén", stroke: "4획", meaning: "어질다, 인자함, 사랑.", origin: "人(사람 인)과 二(두 이)가 합쳐진 글자야. 공자 철학의 핵심 — 인간을 사랑하는 마음이 仁이야.", example: "仁義(인의): 어짊과 옳음 / 仁川(인천): 어진 물의 도시", grade: "5급" },
+  { char: "智", kor: "지혜 지", chi: "zhì", stroke: "12획", meaning: "지혜, 총명함, 슬기.", origin: "知(알다)와 日(해)이 합쳐진 형태야. 아는 것이 해처럼 밝게 빛나는 것이 智야.", example: "智慧(지혜): 슬기로운 앎 / 知智(지지): 알고 깨달음", grade: "5급" },
+  { char: "信", kor: "믿을 신", chi: "xìn", stroke: "9획", meaning: "믿다, 신뢰, 편지, 소식.", origin: "人(사람)과 言(말씀 언)이 합쳐진 글자야. 말과 행동이 일치하는 것이 信이야.", example: "信賴(신뢰): 믿고 의지함 / 信念(신념): 굳게 믿는 마음", grade: "5급" },
+  { char: "和", kor: "화할 화", chi: "hé", stroke: "8획", meaning: "화목, 평화, 합하다, 일본.", origin: "禾(벼 화)와 口(입 구)가 합쳐진 글자야. 먹을 것이 풍족할 때 입도 평화롭다는 뜻이야.", example: "和平(화평): 평화 / 調和(조화): 균형 있게 어울림", grade: "5급" },
+  { char: "平", kor: "평평할 평", chi: "píng", stroke: "5획", meaning: "평평하다, 평화, 고르다.", origin: "물 위에 수초가 평평하게 떠 있는 모습에서 유래했다는 설이 있어.", example: "平和(평화): 평온한 상태 / 平常(평상): 늘 고른 상태", grade: "5급" },
+  { char: "安", kor: "편안할 안", chi: "ān", stroke: "6획", meaning: "편안하다, 안전, 안정.", origin: "宀(집 면)과 女(여자 녀)가 합쳐진 글자야. 소방에서 안전(安全)의 安이야.", example: "安全(안전): 위험 없이 편안함 / 安心(안심): 마음이 편함", grade: "6급" },
+  { char: "全", kor: "온전할 전", chi: "quán", stroke: "6획", meaning: "온전하다, 전부, 완전.", origin: "入(들어갈 입)과 王(임금 왕)이 합쳐진 구조로 해석되기도 해. 소방에서 안전(安全)의 全이야!", example: "安全(안전): 완전히 편안한 / 全部(전부): 모든 것 다", grade: "7급" },
+  { char: "消", kor: "사라질 소", chi: "xiāo", stroke: "10획", meaning: "사라지다, 소멸, 소화하다.", origin: "水(물 수)와 肖(닮을 초)가 합쳐진 글자야. 소방(消防)의 消가 바로 이 글자야 — 불을 없애다!", example: "消防(소방): 불을 방비하고 없앰 / 消火(소화): 불을 끔", grade: "4급" },
+  { char: "防", kor: "막을 방", chi: "fáng", stroke: "7획", meaning: "막다, 방지, 방어.", origin: "阜(언덕 부)와 方(모 방)이 합쳐진 글자야. 소방(消防)의 防이야 — 불을 막다!", example: "消防(소방): 불을 끄고 막음 / 防火(방화): 불을 막음", grade: "4급" },
+  { char: "國", kor: "나라 국", chi: "guó", stroke: "11획", meaning: "나라, 국가.", origin: "囗(에울 위)와 或(혹시 혹)이 합쳐진 글자야. 울타리로 둘러싸인 땅을 창으로 지킨다는 뜻.", example: "韓國(한국): 우리나라 / 國民(국민): 나라의 백성", grade: "7급" },
+  { char: "韓", kor: "한국 한", chi: "hán", stroke: "17획", meaning: "한국, 한국인, 한씨.", origin: "원래는 고대 한반도 남부의 부족 연맹 삼한(三韓)을 가리키던 글자야.", example: "大韓民國(대한민국): 우리나라 공식 명칭 / 韓國語(한국어): 한국말", grade: "5급" },
+  { char: "民", kor: "백성 민", chi: "mín", stroke: "5획", meaning: "백성, 국민, 민간.", origin: "일반 사람들, 백성의 의미로 쓰이는 글자야.", example: "國民(국민): 나라의 백성 / 民主(민주): 백성이 주인", grade: "7급" },
+  { char: "家", kor: "집 가", chi: "jiā", stroke: "10획", meaning: "집, 가족, 집안, 전문가.", origin: "宀(지붕)과 豕(돼지 시)가 합쳐진 글자야.", example: "家族(가족): 한 집의 식구들 / 建築家(건축가): 건축 전문가", grade: "7급" },
+  { char: "父", kor: "아비 부", chi: "fù", stroke: "4획", meaning: "아버지, 부친, 아비.", origin: "손에 도끼를 쥐고 있는 모습이라는 설이 있어.", example: "父親(부친): 아버지 / 父母(부모): 아버지와 어머니", grade: "8급" },
+  { char: "母", kor: "어미 모", chi: "mǔ", stroke: "5획", meaning: "어머니, 모친, 근원.", origin: "女(여자 녀)의 변형으로, 젖을 먹이는 어머니의 모습을 나타냈어.", example: "父母(부모): 아버지와 어머니 / 母國(모국): 고향 나라", grade: "8급" },
+  { char: "子", kor: "아들 자", chi: "zǐ", stroke: "3획", meaning: "아들, 자식, 선생님에 대한 존칭.", origin: "아이가 두 팔을 벌리고 있는 모습이야.", example: "孔子(공자): 공씨 선생님 / 父子(부자): 아버지와 아들", grade: "8급" },
+  { char: "文", kor: "글월 문", chi: "wén", stroke: "4획", meaning: "글, 문자, 문학, 무늬.", origin: "사람 가슴에 문신을 새긴 모습이라는 설이 있어.", example: "文字(문자): 글자 / 作文(작문): 글 쓰기", grade: "7급" },
+  { char: "語", kor: "말씀 어", chi: "yǔ", stroke: "14획", meaning: "말, 언어, 이야기하다.", origin: "言(말씀 언)과 吾(나 오)가 합쳐진 글자야.", example: "語學(어학): 언어를 배우는 학문 / 韓國語(한국어): 한국말", grade: "6급" },
+  { char: "友", kor: "벗 우", chi: "yǒu", stroke: "4획", meaning: "친구, 벗, 우정.", origin: "두 손이 서로를 향해 있는 모습이야.", example: "友情(우정): 친구 사이의 정 / 親友(친우): 친한 친구", grade: "6급" },
+  { char: "愛", kor: "사랑 애", chi: "ài", stroke: "13획", meaning: "사랑하다, 아끼다, 좋아하다.", origin: "발걸음(夂)을 멈추고 마음(心)으로 돌아보는 모습이라고 해석하기도 해.", example: "愛情(애정): 사랑의 마음 / 愛國(애국): 나라를 사랑함", grade: "6급" },
+  { char: "書", kor: "글 서", chi: "shū", stroke: "10획", meaning: "책, 글, 쓰다, 편지.", origin: "붓(聿)으로 해(日)처럼 밝게 기록하는 모습이라는 해석이 있어.", example: "讀書(독서): 책 읽기 / 圖書館(도서관): 책 모아둔 곳", grade: "6급" },
+  { char: "年", kor: "해 년", chi: "nián", stroke: "6획", meaning: "해(year), 나이, 시절.", origin: "벼(禾)를 사람이 이고 가는 모습이라는 설이 있어.", example: "年齡(연령): 나이 / 靑年(청년): 젊은 사람", grade: "7급" },
+  { char: "力", kor: "힘 력", chi: "lì", stroke: "2획", meaning: "힘, 노력, 능력, 일꾼.", origin: "팔 근육을 구부린 모습이야.", example: "努力(노력): 힘을 다해 애씀 / 電力(전력): 전기의 힘", grade: "7급" },
+  { char: "氣", kor: "기운 기", chi: "qì", stroke: "10획", meaning: "기운, 공기, 날씨, 기체.", origin: "쌀(米)에서 밥이 지어질 때 피어오르는 수증기(气)를 나타낸 글자야.", example: "空氣(공기): 숨쉬는 기체 / 消火氣(소화기): 불 끄는 기구", grade: "6급" },
+  { char: "風", kor: "바람 풍", chi: "fēng", stroke: "9획", meaning: "바람, 풍경, 풍속, 풍류.", origin: "봉황(鳳)에서 변형된 글자야. 봉황이 날개를 퍼덕이면 바람이 인다는 전설에서 유래.", example: "颱風(태풍): 강한 열대성 폭풍 / 風景(풍경): 경치", grade: "7급" },
+  { char: "雨", kor: "비 우", chi: "yǔ", stroke: "8획", meaning: "비, 비가 오다.", origin: "하늘(一)에서 구름(冂) 아래로 빗방울들이 떨어지는 모습.", example: "降雨(강우): 비가 내림 / 梅雨(매우): 장마", grade: "7급" },
+  { char: "花", kor: "꽃 화", chi: "huā", stroke: "8획", meaning: "꽃, 화려하다, 쓰다(돈을).", origin: "艹(풀 초)와 化(변할 화)가 합쳐진 글자야. 풀이 변해서 꽃이 된다는 뜻이야.", example: "花草(화초): 꽃과 풀 / 開花(개화): 꽃이 핌", grade: "6급" },
+  { char: "幸", kor: "다행 행", chi: "xìng", stroke: "8획", meaning: "다행, 행복, 행운.", origin: "손에 수갑을 찬 모습에서 유래했다는 설이 있어.", example: "幸福(행복): 복스럽고 좋은 상태 / 多幸(다행): 얼마나 다행인가", grade: "5급" },
+  { char: "福", kor: "복 복", chi: "fú", stroke: "13획", meaning: "복, 행복, 행운.", origin: "示(신에게 보임)와 畐(가득하다)가 합쳐진 글자야.", example: "幸福(행복): 행운과 복 / 福祉(복지): 복되고 이로운 것", grade: "5급" },
+  { char: "望", kor: "바랄 망", chi: "wàng", stroke: "11획", meaning: "바라다, 바라보다, 희망, 보름달.", origin: "月(달)과 壬(임), 亡(망)이 합쳐진 글자야.", example: "希望(희망): 바라는 마음 / 絶望(절망): 바람이 끊어짐", grade: "5급" },
+  { char: "思", kor: "생각할 사", chi: "sī", stroke: "9획", meaning: "생각하다, 그리워하다.", origin: "田(밭 전)과 心(마음 심)이 합쳐진 글자야.", example: "思想(사상): 깊이 생각한 것 / 相思(상사): 서로 그리워함", grade: "5급" },
+  { char: "正", kor: "바를 정", chi: "zhèng", stroke: "5획", meaning: "바르다, 올바르다, 정확하다.", origin: "一(하나, 목표)과 止(그칠 지)가 합쳐진 글자야.", example: "正答(정답): 올바른 답 / 公正(공정): 공평하고 바름", grade: "7급" },
+  { char: "東", kor: "동녘 동", chi: "dōng", stroke: "8획", meaning: "동쪽, 동방, 주인.", origin: "나무(木) 사이로 해(日)가 떠오르는 모습이야.", example: "東西南北(동서남북): 네 방향 / 中東(중동): 중간 동쪽", grade: "8급" },
+  { char: "西", kor: "서녘 서", chi: "xī", stroke: "6획", meaning: "서쪽.", origin: "새가 둥지 위에 앉아 있는 모습이라는 설이 있어.", example: "東西(동서): 동쪽과 서쪽 / 西海(서해): 서쪽 바다", grade: "8급" },
+  { char: "南", kor: "남녘 남", chi: "nán", stroke: "9획", meaning: "남쪽, 남방.", origin: "고대 악기 모양에서 유래했다는 설이 있어.", example: "南北(남북): 남쪽과 북쪽 / 南海(남해): 남쪽 바다", grade: "8급" },
+  { char: "北", kor: "북녘 북", chi: "běi", stroke: "5획", meaning: "북쪽, 달아나다.", origin: "두 사람이 서로 등을 맞대고 있는 모습이야.", example: "南北(남북): 남쪽과 북쪽 / 敗北(패배): 싸움에서 짐", grade: "8급" }
 ];
 
 // ══════════════════════════════════════════
@@ -1631,9 +968,7 @@ const HANJA = [
 // ══════════════════════════════════════════
 const NOW = new Date();
 
-function todayKey() {
-  return `${NOW.getFullYear()}_${NOW.getMonth()}_${NOW.getDate()}`;
-}
+function todayKey() { return `${NOW.getFullYear()}_${NOW.getMonth()}_${NOW.getDate()}`; }
 function dateKey(y, m, d) { return `${y}_${m}_${d}`; }
 
 function ls(key, fallback = null) {
@@ -1643,7 +978,6 @@ function ls(key, fallback = null) {
   } catch { return fallback; }
 }
 
-// 마지막으로 이 키를 수정한 시각을 기록 — 동기화 시 "더 최신 데이터"를 가려내는 기준
 function touchKey(key) {
   try {
     const raw = localStorage.getItem('_ts_index');
@@ -1673,73 +1007,16 @@ function initDate() {
 }
 
 // ══════════════════════════════════════════
-// 습관 스트릭
-// ══════════════════════════════════════════
-function markTodayVisit() {
-  lsSet(`visit_${todayKey()}`, true);
-}
-
-function renderStreak() {
-  const container = document.getElementById('streakDays');
-  container.innerHTML = '';
-
-  // 이번 주 월요일부터 오늘까지 (또는 7일)
-  const dayNames = ['일','월','화','수','목','금','토'];
-  const result = [];
-  for (let i = 6; i >= 0; i--) {
-    const d = new Date(NOW);
-    d.setDate(d.getDate() - i);
-    result.push(d);
-  }
-
-  let streak = 0;
-  // 연속 방문 계산 (오늘부터 역순)
-  for (let i = 0; i < 7; i++) {
-    const d = new Date(NOW);
-    d.setDate(d.getDate() - i);
-    const k = `visit_${d.getFullYear()}_${d.getMonth()}_${d.getDate()}`;
-    if (ls(k)) streak++;
-    else break;
-  }
-  document.getElementById('streakCount').textContent = streak;
-
-  result.forEach(d => {
-    const isToday = d.toDateString() === NOW.toDateString();
-    const k = `visit_${d.getFullYear()}_${d.getMonth()}_${d.getDate()}`;
-    const visited = ls(k);
-
-    const el = document.createElement('div');
-    el.className = 'streak-day';
-
-    const label = document.createElement('div');
-    label.className = 'streak-day-label';
-    label.textContent = dayNames[d.getDay()];
-
-    const dot = document.createElement('div');
-    dot.className = 'streak-day-dot';
-    if (visited) dot.classList.add('visited');
-    if (isToday) dot.classList.add('today');
-    dot.textContent = visited ? '✓' : (isToday ? '·' : '');
-
-    el.appendChild(label);
-    el.appendChild(dot);
-    container.appendChild(el);
-  });
-}
-
-// ══════════════════════════════════════════
 // 명언
 // ══════════════════════════════════════════
 function getBaseQuoteIdx() {
   const d = NOW;
   return (d.getFullYear() * 366 + d.getMonth() * 31 + d.getDate()) % QUOTES.length;
 }
-
 function getCurrentQuoteIdx() {
   const offset = ls(`quote_offset_${todayKey()}`, 0);
-  return (getBaseQuoteIdx() + offset + QUOTES.length) % QUOTES.length;
+  return (getBaseQuoteIdx() + offset + QUOTES.length * 100) % QUOTES.length;
 }
-
 function renderQuote() {
   const idx = getCurrentQuoteIdx();
   const q = QUOTES[idx];
@@ -1748,26 +1025,12 @@ function renderQuote() {
   document.getElementById('quoteMeta').textContent = `${q.country}  ·  ${q.years}`;
   document.getElementById('quoteMeaning').textContent = q.meaning;
   document.getElementById('quoteIndex').textContent = `${idx + 1} / ${QUOTES.length}`;
-
-  // 의미 닫기
   const box = document.getElementById('quoteMeaning');
   const btn = document.getElementById('meaningToggle');
-  box.classList.remove('open');
-  btn.classList.remove('open');
-  btn.textContent = '의미 보기 ▾';
+  box.classList.remove('open'); btn.classList.remove('open'); btn.textContent = '의미 보기 ▾';
 }
-
-function nextQuote() {
-  const offset = ls(`quote_offset_${todayKey()}`, 0);
-  lsSet(`quote_offset_${todayKey()}`, offset + 1);
-  renderQuote();
-}
-function prevQuote() {
-  const offset = ls(`quote_offset_${todayKey()}`, 0);
-  lsSet(`quote_offset_${todayKey()}`, offset - 1);
-  renderQuote();
-}
-
+function nextQuote() { lsSet(`quote_offset_${todayKey()}`, ls(`quote_offset_${todayKey()}`, 0) + 1); renderQuote(); }
+function prevQuote() { lsSet(`quote_offset_${todayKey()}`, ls(`quote_offset_${todayKey()}`, 0) - 1); renderQuote(); }
 function toggleMeaning() {
   const box = document.getElementById('quoteMeaning');
   const btn = document.getElementById('meaningToggle');
@@ -1777,14 +1040,61 @@ function toggleMeaning() {
 }
 
 // ══════════════════════════════════════════
+// 사자성어
+// ══════════════════════════════════════════
+function getBaseIdiomIdx() {
+  const d = NOW;
+  return (d.getFullYear() * 366 + d.getMonth() * 31 + d.getDate() + 7) % IDIOMS.length;
+}
+function getCurrentIdiomIdx() {
+  const offset = ls(`idiom_offset_${todayKey()}`, 0);
+  return (getBaseIdiomIdx() + offset + IDIOMS.length * 100) % IDIOMS.length;
+}
+function renderIdiom() {
+  const idx = getCurrentIdiomIdx();
+  const it = IDIOMS[idx];
+  document.getElementById('idiomKor').textContent = it.kor;
+  document.getElementById('idiomHanja').textContent = it.hanja;
+  document.getElementById('idiomMeaning').textContent = it.meaning;
+  document.getElementById('idiomUsage').textContent = ' ' + it.usage;
+  document.getElementById('idiomIndex').textContent = `${idx + 1} / ${IDIOMS.length}`;
+}
+function nextIdiom() { lsSet(`idiom_offset_${todayKey()}`, ls(`idiom_offset_${todayKey()}`, 0) + 1); renderIdiom(); }
+function prevIdiom() { lsSet(`idiom_offset_${todayKey()}`, ls(`idiom_offset_${todayKey()}`, 0) - 1); renderIdiom(); }
+
+// ══════════════════════════════════════════
+// 영어단어
+// ══════════════════════════════════════════
+function getBaseWordIdx() {
+  const d = NOW;
+  return (d.getFullYear() * 366 + d.getMonth() * 31 + d.getDate() + 13) % ENGLISH.length;
+}
+function getCurrentWordIdx() {
+  const offset = ls(`word_offset_${todayKey()}`, 0);
+  return (getBaseWordIdx() + offset + ENGLISH.length * 100) % ENGLISH.length;
+}
+function renderEnglish() {
+  const idx = getCurrentWordIdx();
+  const w = ENGLISH[idx];
+  document.getElementById('engWord').textContent = w.word;
+  document.getElementById('engPos').textContent = w.pos;
+  document.getElementById('engPron').textContent = w.pron;
+  document.getElementById('engMeaning').textContent = w.meaning;
+  document.getElementById('engExample').textContent = w.example;
+  document.getElementById('engExampleKor').textContent = w.exampleKor;
+  document.getElementById('engIndex').textContent = `${idx + 1} / ${ENGLISH.length}`;
+}
+function nextWord() { lsSet(`word_offset_${todayKey()}`, ls(`word_offset_${todayKey()}`, 0) + 1); renderEnglish(); }
+function prevWord() { lsSet(`word_offset_${todayKey()}`, ls(`word_offset_${todayKey()}`, 0) - 1); renderEnglish(); }
+
+// ══════════════════════════════════════════
 // 한자
 // ══════════════════════════════════════════
 function getHanjaIdx() {
-  const start = new Date(2026, 5, 18); // 앱 시작일 기준
+  const start = new Date(2026, 5, 18);
   const diff = Math.floor((NOW - start) / 86400000);
   return ((diff % HANJA.length) + HANJA.length) % HANJA.length;
 }
-
 function renderHanja() {
   const h = HANJA[getHanjaIdx()];
   document.getElementById('hanjaChar').textContent = h.char;
@@ -1795,31 +1105,24 @@ function renderHanja() {
   document.getElementById('hanjaGrade').textContent = `한자검정 ${h.grade}`;
   document.getElementById('hanjaOrigin').textContent = h.origin;
   document.getElementById('hanjaExample').textContent = h.example;
+  document.getElementById('hanjaStrokeLink').href = 'https://hanja.dict.naver.com/search?query=' + encodeURIComponent(h.char);
 }
-
 function toggleHanja() {
   const detail = document.getElementById('hanjaDetail');
   const btn = document.getElementById('hanjaBtn');
   const open = detail.classList.toggle('open');
-  btn.textContent = open ? '유래 · 예시 닫기 ▴' : '유래 · 예시 보기 ▾';
+  btn.textContent = open ? '유래 · 예시 · 획순 닫기 ▴' : '유래 · 예시 · 획순 보기 ▾';
 }
 
 // ══════════════════════════════════════════
-// 오늘의 기록 (덧글 형태)
+// 오늘의 기록
 // ══════════════════════════════════════════
-
-// 과거 메모(단일 텍스트) 데이터를 화면에 표시할 때만 자동으로 덧글 형태로 변환
-// → 실제로 저장 형식을 바꾸진 않고, 보여줄 때만 합쳐서 보여줌 (예전 기록도 그대로 보이게)
 function getEntriesForDisplay(y, m, d) {
   const dk = dateKey(y, m, d);
   const arr = ls(`entries_${dk}`, []);
-  if (Array.isArray(arr) && arr.length) {
-    return arr.filter(e => !e.deleted);
-  }
+  if (Array.isArray(arr) && arr.length) return arr.filter(e => !e.deleted);
   const oldMemo = ls(`memo_${dk}`, '');
-  if (oldMemo && oldMemo.trim()) {
-    return [{ id: `legacy_${dk}`, time: '', text: oldMemo, ts: 0 }];
-  }
+  if (oldMemo && oldMemo.trim()) return [{ id: `legacy_${dk}`, time: '', text: oldMemo, ts: 0 }];
   return [];
 }
 
@@ -1827,41 +1130,28 @@ function submitEntry() {
   const input = document.getElementById('entryInput');
   const text = input.value.trim();
   if (!text) return;
-
   const now = new Date();
   const entry = {
     id: `${Date.now()}_${Math.random().toString(36).slice(2, 7)}`,
     time: `${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`,
-    text,
-    ts: Date.now()
+    text, ts: Date.now()
   };
-
   const arr = ls(`entries_${todayKey()}`, []);
   arr.push(entry);
   lsSet(`entries_${todayKey()}`, arr);
-
   input.value = '';
   renderEntries(true);
   showToast('기록 저장됨 ✓');
-  // 1시간 기다리지 않고 바로 클라우드에 올림
-  cloudPush();
+  syncAfterChange();
 }
 
 let editingEntryId = null;
-
-function startEditEntry(id) {
-  editingEntryId = id;
-  renderEntries();
-}
-
-function cancelEditEntry() {
-  editingEntryId = null;
-  renderEntries();
-}
+function startEditEntry(id) { editingEntryId = id; renderEntries(); }
+function cancelEditEntry() { editingEntryId = null; renderEntries(); }
 
 function saveEditEntry(id, newTextRaw) {
   const newText = (newTextRaw || '').trim();
-  if (!newText) return; // 빈 값으로는 저장하지 않음 (편집 상태 유지)
+  if (!newText) return;
   const arr = ls(`entries_${todayKey()}`, []);
   const idx = arr.findIndex(x => x.id === id);
   if (idx !== -1) {
@@ -1872,7 +1162,7 @@ function saveEditEntry(id, newTextRaw) {
   editingEntryId = null;
   renderEntries();
   showToast('수정됨 ✓');
-  cloudPush();
+  syncAfterChange();
 }
 
 function deleteEntry(id) {
@@ -1880,14 +1170,13 @@ function deleteEntry(id) {
   const arr = ls(`entries_${todayKey()}`, []);
   const idx = arr.findIndex(x => x.id === id);
   if (idx !== -1) {
-    // 실제로 지우지 않고 "삭제됨" 표시만 남김 — 다른 기기와 동기화할 때 되살아나지 않도록
     arr[idx].deleted = true;
     arr[idx].deletedTs = Date.now();
     lsSet(`entries_${todayKey()}`, arr);
   }
   renderEntries();
   showToast('삭제됨 ✓');
-  cloudPush();
+  syncAfterChange();
 }
 
 function renderEntries(scrollToBottom = false) {
@@ -1904,102 +1193,66 @@ function renderEntries(scrollToBottom = false) {
     const el = document.createElement('div');
     el.className = 'entry-item';
 
-    // 편집 중인 항목이면 입력창 형태로 보여줌
     if (editingEntryId === e.id) {
       el.classList.add('editing');
       const row = document.createElement('div');
       row.className = 'entry-edit-row';
-
       const input = document.createElement('input');
-      input.type = 'text';
-      input.className = 'entry-edit-input';
-      input.value = e.text;
-
+      input.type = 'text'; input.className = 'entry-edit-input'; input.value = e.text;
       const saveBtn = document.createElement('button');
-      saveBtn.className = 'entry-action-btn save';
-      saveBtn.textContent = '저장';
+      saveBtn.className = 'entry-action-btn save'; saveBtn.textContent = '저장';
       saveBtn.addEventListener('click', () => saveEditEntry(e.id, input.value));
-
       const cancelBtn = document.createElement('button');
-      cancelBtn.className = 'entry-action-btn';
-      cancelBtn.textContent = '취소';
+      cancelBtn.className = 'entry-action-btn'; cancelBtn.textContent = '취소';
       cancelBtn.addEventListener('click', cancelEditEntry);
-
       input.addEventListener('keydown', ev => {
         if (ev.key === 'Enter') { ev.preventDefault(); saveEditEntry(e.id, input.value); }
         if (ev.key === 'Escape') { ev.preventDefault(); cancelEditEntry(); }
       });
-
-      row.appendChild(input);
-      row.appendChild(saveBtn);
-      row.appendChild(cancelBtn);
-      el.appendChild(row);
-      list.appendChild(el);
-
-      setTimeout(() => {
-        input.focus();
-        input.setSelectionRange(input.value.length, input.value.length);
-      }, 0);
+      row.appendChild(input); row.appendChild(saveBtn); row.appendChild(cancelBtn);
+      el.appendChild(row); list.appendChild(el);
+      setTimeout(() => { input.focus(); input.setSelectionRange(input.value.length, input.value.length); }, 0);
       return;
     }
 
-    // 일반 표시
     const top = document.createElement('div');
     top.className = 'entry-item-top';
-
     if (e.time) {
       const timeSpan = document.createElement('span');
-      timeSpan.className = 'entry-time';
-      timeSpan.textContent = e.time;
+      timeSpan.className = 'entry-time'; timeSpan.textContent = e.time;
       top.appendChild(timeSpan);
     }
     if (e.editedTs) {
       const tag = document.createElement('span');
-      tag.className = 'entry-edited-tag';
-      tag.textContent = '(수정됨)';
+      tag.className = 'entry-edited-tag'; tag.textContent = '(수정됨)';
       top.appendChild(tag);
     }
-
     const actions = document.createElement('div');
     actions.className = 'entry-actions';
-
     const editBtn = document.createElement('button');
-    editBtn.className = 'entry-action-btn';
-    editBtn.textContent = '수정';
+    editBtn.className = 'entry-action-btn'; editBtn.textContent = '수정';
     editBtn.addEventListener('click', () => startEditEntry(e.id));
-
     const delBtn = document.createElement('button');
-    delBtn.className = 'entry-action-btn danger';
-    delBtn.textContent = '삭제';
+    delBtn.className = 'entry-action-btn danger'; delBtn.textContent = '삭제';
     delBtn.addEventListener('click', () => deleteEntry(e.id));
-
-    actions.appendChild(editBtn);
-    actions.appendChild(delBtn);
+    actions.appendChild(editBtn); actions.appendChild(delBtn);
     top.appendChild(actions);
 
     const textDiv = document.createElement('div');
-    textDiv.className = 'entry-text';
-    textDiv.textContent = e.text; // XSS 방지 위해 textContent 사용
+    textDiv.className = 'entry-text'; textDiv.textContent = e.text;
 
-    el.appendChild(top);
-    el.appendChild(textDiv);
+    el.appendChild(top); el.appendChild(textDiv);
     list.appendChild(el);
   });
 
-  // 새로 글을 남겼을 때만 가장 아래로 스크롤 (자동 동기화로 인한 불필요한 스크롤 깜빡임 방지)
-  if (scrollToBottom) {
-    list.scrollTop = list.scrollHeight;
-  }
+  if (scrollToBottom) list.scrollTop = list.scrollHeight;
 }
 
 document.addEventListener('DOMContentLoaded', () => {
   const input = document.getElementById('entryInput');
   if (input) {
     input.addEventListener('keydown', e => {
-      if (e.key === 'Enter') {
-        e.preventDefault();
-        submitEntry();
-      }
+      if (e.key === 'Enter') { e.preventDefault(); submitEntry(); }
     });
   }
 });
@@ -2026,27 +1279,18 @@ function renderCal() {
   document.getElementById('calTitle').textContent = `${calYear}년 ${months[calMonth]}`;
   const grid = document.getElementById('calGrid');
   grid.innerHTML = '';
-
   const first = new Date(calYear, calMonth, 1).getDay();
   const daysInMonth = new Date(calYear, calMonth + 1, 0).getDate();
-
   for (let i = 0; i < first; i++) {
-    const el = document.createElement('div');
-    el.className = 'cal-cell empty';
-    grid.appendChild(el);
+    const el = document.createElement('div'); el.className = 'cal-cell empty'; grid.appendChild(el);
   }
-
   for (let d = 1; d <= daysInMonth; d++) {
     const el = document.createElement('div');
-    el.className = 'cal-cell';
-    el.textContent = d;
-
+    el.className = 'cal-cell'; el.textContent = d;
     const hasEntries = getEntriesForDisplay(calYear, calMonth, d).length > 0;
     const isToday = calYear === NOW.getFullYear() && calMonth === NOW.getMonth() && d === NOW.getDate();
-
     if (isToday) el.classList.add('today');
     if (hasEntries) el.classList.add('has-memo');
-
     el.addEventListener('click', () => showDayDetail(calYear, calMonth, d, el));
     grid.appendChild(el);
   }
@@ -2055,29 +1299,22 @@ function renderCal() {
 function showDayDetail(y, m, d, cell) {
   document.querySelectorAll('.cal-cell.selected').forEach(c => c.classList.remove('selected'));
   if (cell) cell.classList.add('selected');
-
   const months = ['1월','2월','3월','4월','5월','6월','7월','8월','9월','10월','11월','12월'];
   document.getElementById('calDetailDate').textContent = `${y}년 ${months[m]} ${d}일`;
-
   const entries = getEntriesForDisplay(y, m, d);
   const body = document.getElementById('calDetailBody');
   body.innerHTML = '';
-
   if (entries.length) {
-    const wrap = document.createElement('div');
-    wrap.className = 'cal-detail-entries';
+    const wrap = document.createElement('div'); wrap.className = 'cal-detail-entries';
     entries.forEach(e => {
-      const row = document.createElement('div');
-      row.className = 'cal-detail-entry';
+      const row = document.createElement('div'); row.className = 'cal-detail-entry';
       if (e.time) {
         const timeSpan = document.createElement('span');
-        timeSpan.className = 'cal-detail-entry-time';
-        timeSpan.textContent = e.time;
+        timeSpan.className = 'cal-detail-entry-time'; timeSpan.textContent = e.time;
         row.appendChild(timeSpan);
       }
       const textSpan = document.createElement('span');
-      textSpan.className = 'cal-detail-entry-text';
-      textSpan.textContent = e.text;
+      textSpan.className = 'cal-detail-entry-text'; textSpan.textContent = e.text;
       row.appendChild(textSpan);
       wrap.appendChild(row);
     });
@@ -2089,7 +1326,6 @@ function showDayDetail(y, m, d, cell) {
     empty.textContent = isPast ? '이 날의 기록이 없어.' : '아직 기록이 없어. 오늘의 기록에 써봐 😊';
     body.appendChild(empty);
   }
-
   document.getElementById('calDetail').classList.add('show');
 }
 
@@ -2099,14 +1335,18 @@ function showDayDetail(y, m, d, cell) {
 let toastTimer = null;
 function showToast(msg = '저장됨 ✓') {
   const t = document.getElementById('toast');
-  t.textContent = msg;
-  t.classList.add('show');
+  t.textContent = msg; t.classList.add('show');
   clearTimeout(toastTimer);
   toastTimer = setTimeout(() => t.classList.remove('show'), 1800);
 }
 
 // ══════════════════════════════════════════
-// ☁️ JSONBin 자동 동기화
+// ☁️ JSONBin 동기화 (수정판)
+// ──────────────────────────────────────────
+// 예전 버전의 문제: 앱을 켜자마자 "받아오기(pull)"와 "올리기(push)"가
+// 동시에 따로 실행돼서, 받아오기 전에 push가 먼저 끝나버리면 다른 기기가
+// 방금 남긴 기록을 덮어써서 사라지게 만들었음.
+// → 이제는 반드시 "① 먼저 받아서 합치기 → ② 그 다음에 올리기" 순서만 사용.
 // ══════════════════════════════════════════
 const BIN_ID = '69e029c936566621a8ba3891';
 const API_KEY = '$2a$10$GmXIwyo5n3LB7JIEvjSycumI89.62DFRm8UGsH4FBgJs4jBdm/kBq';
@@ -2131,144 +1371,138 @@ function setSyncUI(state) {
   else { label.textContent = '동기화'; }
 }
 
-async function cloudPush() {
+// 클라우드로 현재 localStorage 전체를 올림 (병합은 이미 끝난 상태여야 함)
+async function cloudPushRaw() {
+  const data = { timestamp: Date.now(), device: detectDevice() };
+  for (let i = 0; i < localStorage.length; i++) {
+    const k = localStorage.key(i);
+    try { data[k] = JSON.parse(localStorage.getItem(k)); }
+    catch { data[k] = localStorage.getItem(k); }
+  }
+  await fetch(`https://api.jsonbin.io/v3/b/${BIN_ID}`, {
+    method: 'PUT',
+    headers: { 'Content-Type': 'application/json', 'X-Master-Key': API_KEY },
+    body: JSON.stringify(data)
+  });
+  lsSet('last_sync_ts', Date.now());
+}
+
+// 클라우드에서 받아와서 로컬과 합침 (여기서는 절대 push 하지 않음)
+async function cloudPullMerge() {
+  const res = await fetch(`https://api.jsonbin.io/v3/b/${BIN_ID}/latest`, {
+    headers: { 'X-Master-Key': API_KEY }
+  });
+  const json = await res.json();
+  const cloud = json.record;
+  if (!cloud) return;
+
+  const localIdx = ls('_ts_index', {}) || {};
+  const cloudIdx = cloud['_ts_index'] || {};
+  let idxChanged = false;
+
+  Object.keys(cloud).forEach(k => {
+    if (k === 'timestamp' || k === 'device' || k === '_ts_index') return;
+
+    // 오늘의 기록(entries_)은 항상 병합 — id 기준으로 더 최근 버전 채택
+    if (k.startsWith('entries_')) {
+      const localArr = ls(k, []) || [];
+      const cloudArr = Array.isArray(cloud[k]) ? cloud[k] : [];
+      const versionTime = e => Math.max(e.ts || 0, e.editedTs || 0, e.deletedTs || 0);
+      const map = new Map();
+      localArr.forEach(e => { if (e && e.id) map.set(e.id, e); });
+      cloudArr.forEach(e => {
+        if (!e || !e.id) return;
+        const existing = map.get(e.id);
+        if (!existing || versionTime(e) > versionTime(existing)) map.set(e.id, e);
+      });
+      const merged = Array.from(map.values()).sort((a, b) => (a.ts || 0) - (b.ts || 0));
+      if (JSON.stringify(merged) !== JSON.stringify(localArr)) {
+        try { localStorage.setItem(k, JSON.stringify(merged)); } catch {}
+      }
+      return;
+    }
+
+    // 그 외 일반 키 — 더 최신(타임스탬프가 큰) 쪽만 가져옴
+    const localExists = localStorage.getItem(k) !== null;
+    const cloudTs = cloudIdx[k] || 0;
+    const localTs = localIdx[k] || 0;
+    const shouldWrite = !localExists || cloudTs > localTs;
+
+    if (shouldWrite) {
+      try {
+        localStorage.setItem(k, typeof cloud[k] === 'string' ? cloud[k] : JSON.stringify(cloud[k]));
+        localIdx[k] = cloudTs || Date.now();
+        idxChanged = true;
+      } catch {}
+    }
+  });
+
+  if (idxChanged) {
+    try { localStorage.setItem('_ts_index', JSON.stringify(localIdx)); } catch {}
+  }
+}
+
+// 기록을 새로 남기거나 수정·삭제했을 때: 반드시 이 순서로만 진행
+// ① 클라우드에서 받아서 합치기 → ② 합쳐진 최종본을 클라우드에 올리기
+async function syncAfterChange() {
   setSyncUI('syncing');
   try {
-    const data = { timestamp: Date.now(), device: detectDevice() };
-    for (let i = 0; i < localStorage.length; i++) {
-      const k = localStorage.key(i);
-      try { data[k] = JSON.parse(localStorage.getItem(k)); }
-      catch { data[k] = localStorage.getItem(k); }
-    }
-    await fetch(`https://api.jsonbin.io/v3/b/${BIN_ID}`, {
-      method: 'PUT',
-      headers: { 'Content-Type': 'application/json', 'X-Master-Key': API_KEY },
-      body: JSON.stringify(data)
-    });
-    lsSet('last_sync_ts', Date.now());
+    await cloudPullMerge();
+    renderEntries();
+    await cloudPushRaw();
     setSyncUI('synced');
-    showToast('동기화 완료 ☁️');
   } catch {
     setSyncUI('idle');
   }
 }
 
-async function cloudPull(overwrite = false) {
-  try {
-    const res = await fetch(`https://api.jsonbin.io/v3/b/${BIN_ID}/latest`, {
-      headers: { 'X-Master-Key': API_KEY }
-    });
-    const json = await res.json();
-    const cloud = json.record;
-    if (!cloud) return;
-
-    const localIdx = ls('_ts_index', {}) || {};
-    const cloudIdx = cloud['_ts_index'] || {};
-    let idxChanged = false;
-
-    Object.keys(cloud).forEach(k => {
-      if (k === 'timestamp' || k === 'device' || k === '_ts_index') return;
-
-      // 덧글(entries_) 데이터는 절대 통째로 덮어쓰지 않고 항상 "합치기"
-      // → 같은 id가 양쪽에 있으면 더 최근에 수정·삭제된 버전을 채택 (수정/삭제가 기기 간에 제대로 반영되도록)
-      if (k.startsWith('entries_')) {
-        const localArr = ls(k, []) || [];
-        const cloudArr = Array.isArray(cloud[k]) ? cloud[k] : [];
-        const versionTime = e => Math.max(e.ts || 0, e.editedTs || 0, e.deletedTs || 0);
-        const map = new Map();
-        localArr.forEach(e => { if (e && e.id) map.set(e.id, e); });
-        cloudArr.forEach(e => {
-          if (!e || !e.id) return;
-          const existing = map.get(e.id);
-          if (!existing || versionTime(e) > versionTime(existing)) map.set(e.id, e);
-        });
-        const merged = Array.from(map.values()).sort((a, b) => (a.ts || 0) - (b.ts || 0));
-        if (JSON.stringify(merged) !== JSON.stringify(localArr)) {
-          try { localStorage.setItem(k, JSON.stringify(merged)); } catch {}
-        }
-        return;
-      }
-
-      // 그 외 일반 키 — 더 최신(타임스탬프가 큰) 쪽만 가져옴. 둘 다 없으면 비교 자체를 건너뜀
-      const localExists = localStorage.getItem(k) !== null;
-      const cloudTs = cloudIdx[k] || 0;
-      const localTs = localIdx[k] || 0;
-
-      let shouldWrite;
-      if (!localExists) shouldWrite = true;          // 로컬에 아예 없으면 무조건 받아옴
-      else if (overwrite) shouldWrite = cloudTs > localTs; // 더 최신일 때만 덮어씀
-      else shouldWrite = false;
-
-      if (shouldWrite) {
-        try {
-          localStorage.setItem(k, typeof cloud[k] === 'string' ? cloud[k] : JSON.stringify(cloud[k]));
-          localIdx[k] = cloudTs || Date.now();
-          idxChanged = true;
-        } catch {}
-      }
-    });
-
-    if (idxChanged) {
-      try { localStorage.setItem('_ts_index', JSON.stringify(localIdx)); } catch {}
-    }
-  } catch {}
-}
-
 async function manualSync() {
-  await cloudPush();
-  await cloudPull(true);
+  await syncAfterChange();
   renderEntries();
-  renderStreak();
 }
 
-async function autoSync() {
-  // 마지막 동기화로부터 1시간 이상 지났으면 자동 push
-  const last = ls('last_sync_ts', 0);
-  if (Date.now() - last > AUTO_SYNC_INTERVAL) {
-    await cloudPush();
-  } else {
+// 앱 켤 때 최초 동기화: 먼저 받아서 합치고, 필요할 때만 올림 (동시 실행 금지)
+async function initialSync() {
+  setSyncUI('syncing');
+  try {
+    await cloudPullMerge();
+    renderEntries();
     setSyncUI('synced');
+    const last = ls('last_sync_ts', 0);
+    if (Date.now() - last > AUTO_SYNC_INTERVAL) {
+      await cloudPushRaw();
+    }
+  } catch {
+    setSyncUI('idle');
   }
+}
+
+// 탭이 보일 때 / 주기적으로: 받아오기만 함 (push는 하지 않아 다른 기기 데이터를 절대 덮어쓰지 않음)
+async function backgroundPull() {
+  try {
+    await cloudPullMerge();
+    renderEntries();
+  } catch {}
 }
 
 // ══════════════════════════════════════════
 // 시작
 // ══════════════════════════════════════════
 initDate();
-markTodayVisit();
-renderStreak();
 renderQuote();
+renderIdiom();
 renderHanja();
+renderEnglish();
 renderEntries();
 
-// 클라우드 pull → 그 후 render 보정 (더 최신 데이터만 가져옴, 덧글은 항상 병합)
-cloudPull(true).then(() => {
-  renderEntries();
-  renderStreak();
-});
+initialSync();
 
-// 자동 동기화 (1시간마다 push)
-autoSync();
-setInterval(autoSync, AUTO_SYNC_INTERVAL);
-
-// 다른 화면 갔다가 이 탭으로 돌아오면 최신 기록 자동으로 가져옴
 document.addEventListener('visibilitychange', () => {
-  if (document.visibilityState === 'visible') {
-    cloudPull(true).then(() => {
-      renderEntries();
-      renderStreak();
-    });
-  }
+  if (document.visibilityState === 'visible') backgroundPull();
 });
 
-// 탭이 켜져 있는 동안 3분마다 다른 기기의 새 기록 확인
 setInterval(() => {
-  if (document.visibilityState === 'visible') {
-    cloudPull(true).then(() => {
-      renderEntries();
-      renderStreak();
-    });
-  }
+  if (document.visibilityState === 'visible') backgroundPull();
 }, 3 * 60 * 1000);
 </script>
 </body>
