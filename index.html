@@ -23,8 +23,8 @@
   --gold-dim: rgba(201,169,110,0.12);
   --blue:    #6baed6;
   --blue-dim: rgba(107,174,214,0.1);
-  --hanja:   #d4846a;
-  --hanja-dim: rgba(212,132,106,0.1);
+  --cn:      #d4846a;
+  --cn-dim:  rgba(212,132,106,0.1);
   --green:   #6bbfa0;
   --green-dim: rgba(107,191,160,0.1);
   --text:    #ede9e0;
@@ -115,29 +115,92 @@ body::before {
 }
 .gb-btn:hover { border-color: var(--gold); color: var(--gold); }
 
-/* ── 픽셀 농장 ── */
+/* ── 픽셀 농장 (여름밤) ── */
 .farm {
   position: relative;
-  height: 78px;
+  height: 112px;
   margin: 0 0 34px;
   border-bottom: 1px solid var(--border);
   overflow: hidden;
+}
+.mtn {
+  position: absolute; bottom: 18px;
+  pointer-events: none; z-index: 0;
+}
+.mtn.far {
+  left: -4%; width: 60%; height: 62px;
+  background: #131826;
+  clip-path: polygon(0 100%, 18% 34%, 33% 62%, 52% 12%, 70% 58%, 86% 30%, 100% 100%);
+  opacity: 0.85;
+}
+.mtn.near {
+  right: -6%; width: 55%; height: 46px;
+  background: #101422;
+  clip-path: polygon(0 100%, 22% 40%, 45% 70%, 64% 18%, 82% 55%, 100% 35%, 100% 100%);
 }
 .farm-ground {
   position: absolute; bottom: 0; left: 0; right: 0;
   height: 20px;
   background: linear-gradient(#25301c, #1a2214);
   border-top: 2px solid #33402a;
+  z-index: 1;
 }
 .pxwrap { position: absolute; bottom: 16px; image-rendering: pixelated; }
 .pxinner { transition: transform 0.15s; }
 .px { width: 3px; height: 3px; background: transparent; }
-.chick { cursor: pointer; z-index: 3; }
+.chick { cursor: pointer; z-index: 4; }
 .chick.peck .pxinner { transform: translateY(3px) rotate(14deg); }
 .chick.hop .pxinner { transform: translateY(-5px); }
-.egg { cursor: pointer; z-index: 2; bottom: 15px; }
+.egg { cursor: pointer; z-index: 3; bottom: 15px; }
 .egg.wobble .pxinner { animation: wob 0.8s ease; }
-.deco { z-index: 1; pointer-events: none; bottom: 14px; }
+.deco { z-index: 2; pointer-events: none; bottom: 14px; }
+.tree { z-index: 2; pointer-events: none; bottom: 15px; }
+.cat { z-index: 3; cursor: pointer; bottom: 15px; }
+.cat .pxinner { transition: transform 0.4s; }
+.cat.twitch .pxinner { transform: rotate(-2deg); }
+.cat-zz {
+  position: absolute; z-index: 3;
+  font-size: 9px; color: var(--muted2);
+  font-family: 'Nanum Myeongjo', serif;
+  animation: zz 3.2s ease-in-out infinite;
+  pointer-events: none;
+}
+@keyframes zz {
+  0%, 100% { opacity: 0; transform: translateY(2px); }
+  30%, 70% { opacity: 0.8; transform: translateY(-3px); }
+}
+.butterfly { z-index: 5; pointer-events: none; }
+.butterfly .pxinner { transition: transform 0.1s; }
+.butterfly.flap .pxinner { transform: scaleX(0.55); }
+.firefly {
+  position: absolute; z-index: 2;
+  width: 3px; height: 3px; border-radius: 50%;
+  background: #e8e08a;
+  box-shadow: 0 0 6px 2px rgba(232,224,138,0.55);
+  animation: glow 4s ease-in-out infinite;
+  pointer-events: none;
+}
+@keyframes glow {
+  0%, 100% { opacity: 0; transform: translate(0, 0); }
+  35% { opacity: 0.9; transform: translate(4px, -7px); }
+  60% { opacity: 0.25; transform: translate(-3px, -12px); }
+  80% { opacity: 0.7; transform: translate(2px, -5px); }
+}
+.peep-bubble {
+  position: absolute; z-index: 6;
+  font-size: 9px; color: var(--gold);
+  background: var(--card2);
+  border: 1px solid var(--border2);
+  padding: 1px 6px; border-radius: 8px;
+  animation: peepUp 1.1s ease forwards;
+  pointer-events: none; white-space: nowrap;
+}
+@keyframes peepUp {
+  0% { opacity: 0; transform: translateY(4px); }
+  25% { opacity: 1; transform: translateY(-2px); }
+  80% { opacity: 1; }
+  100% { opacity: 0; transform: translateY(-8px); }
+}
 @keyframes wob {
   0%,100% { transform: rotate(0); }
   25% { transform: rotate(-8deg); }
@@ -147,6 +210,7 @@ body::before {
 @media (prefers-reduced-motion: reduce) {
   .pxinner { transition: none; }
   .egg.wobble .pxinner { animation: none; }
+  .firefly, .cat-zz { animation: none; opacity: 0.4; }
 }
 
 /* ── 섹션 라벨 ── */
@@ -291,7 +355,7 @@ body::before {
   display: block; margin-bottom: 6px; letter-spacing: 1px;
 }
 
-/* ── 영어단어 카드 ── */
+/* ── 영어단어(시험용) 카드 ── */
 .eng-card {
   background: var(--card);
   border: 1px solid var(--border);
@@ -299,106 +363,98 @@ body::before {
   margin-bottom: 40px;
 }
 .eng-word-row { display: flex; align-items: baseline; gap: 10px; margin-top: 10px; flex-wrap: wrap; }
-.eng-word { font-family: 'Nanum Myeongjo', serif; font-size: 28px; font-weight: 800; color: var(--blue); }
-.eng-pos {
+.eng-word { font-family: 'Nanum Myeongjo', serif; font-size: 27px; font-weight: 800; color: var(--blue); }
+.eng-cat {
   font-size: 11px; color: var(--muted2);
   border: 1px solid var(--border); padding: 2px 9px; border-radius: 100px;
 }
 .eng-pron { font-size: 13px; color: var(--muted2); margin: 8px 0 16px; font-style: italic; }
 .eng-meaning { font-size: 14px; color: var(--text); line-height: 1.8; margin-bottom: 14px; }
-.eng-example {
-  font-size: 13px; color: var(--text); line-height: 1.7;
+.eng-tip {
+  font-size: 13px; color: var(--muted2); line-height: 1.85; font-weight: 300;
   background: var(--blue-dim); border: 1px solid rgba(107,174,214,0.15);
-  border-radius: 10px; padding: 12px 14px; margin-bottom: 8px;
+  border-radius: 10px; padding: 14px 16px;
 }
-.eng-example-kor { font-size: 12px; color: var(--muted2); padding: 0 2px; font-weight: 300; }
+.eng-tip-label {
+  color: var(--blue); font-weight: 700; font-size: 11px;
+  display: block; margin-bottom: 6px; letter-spacing: 1px;
+}
 
-/* ── 한자 카드 ── */
-.hanja-tabs { display: flex; gap: 6px; margin-bottom: 10px; }
-.hanja-tab {
-  flex: 1;
-  background: var(--card);
-  border: 1px solid var(--border);
-  border-radius: 10px;
-  padding: 9px 4px;
-  color: var(--muted2);
-  font-family: 'Noto Sans KR', sans-serif;
-  font-size: 11px; cursor: pointer;
-  transition: all 0.2s;
-  display: flex; flex-direction: column; align-items: center; gap: 2px;
-}
-.hanja-tab .tab-char {
-  font-family: 'Noto Serif SC', serif;
-  font-size: 20px; color: var(--muted2); line-height: 1.1;
-}
-.hanja-tab.active { border-color: var(--hanja); color: var(--hanja); background: var(--hanja-dim); }
-.hanja-tab.active .tab-char { color: var(--hanja); }
-.hanja-card {
+/* ── 중국어 카드 ── */
+.cn-card {
   background: var(--card);
   border: 1px solid var(--border);
   border-radius: 16px;
   overflow: hidden;
-  margin-bottom: 40px;
+  margin-bottom: 14px;
 }
-.hanja-top { display: flex; gap: 0; }
-.hanja-char-block {
-  width: 130px; flex-shrink: 0;
-  background: var(--hanja-dim);
+.cn-top { display: flex; gap: 0; }
+.cn-char-block {
+  width: 140px; flex-shrink: 0;
+  background: var(--cn-dim);
   border-right: 1px solid var(--border);
   display: flex; flex-direction: column;
   align-items: center; justify-content: center;
-  padding: 28px 16px;
+  padding: 26px 12px;
 }
-.hanja-char {
+.cn-char {
   font-family: 'Noto Serif SC', 'Nanum Myeongjo', serif;
-  font-size: 86px; font-weight: 700;
-  color: var(--hanja);
-  line-height: 1;
+  font-size: 58px; font-weight: 700;
+  color: var(--cn);
+  line-height: 1.1; text-align: center;
   text-shadow: 0 0 40px rgba(212,132,106,0.25);
+  word-break: keep-all;
 }
-.hanja-stroke { font-size: 10px; color: var(--muted); letter-spacing: 1px; margin-top: 8px; }
-.hanja-info { flex: 1; padding: 24px 22px; display: flex; flex-direction: column; gap: 6px; }
-.hanja-info-row { display: flex; align-items: baseline; gap: 10px; }
-.hanja-kor { font-family: 'Nanum Myeongjo', serif; font-size: 20px; font-weight: 700; color: var(--text); }
-.hanja-chi { font-size: 13px; color: var(--muted2); font-style: italic; }
-.hanja-meaning { font-size: 12px; color: var(--muted2); line-height: 1.6; margin-top: 2px; }
-.hanja-grade {
+.cn-char.long { font-size: 38px; }
+.cn-pinyin { font-size: 13px; color: var(--muted2); letter-spacing: 1px; margin-top: 10px; text-align: center; }
+.cn-info { flex: 1; padding: 24px 22px; display: flex; flex-direction: column; gap: 7px; }
+.cn-kor {
+  font-family: 'Nanum Myeongjo', serif;
+  font-size: 21px; font-weight: 700; color: var(--text);
+}
+.cn-meaning { font-size: 13px; color: var(--muted2); line-height: 1.7; }
+.cn-tone {
   display: inline-block; align-self: flex-start;
   background: rgba(212,132,106,0.12);
   border: 1px solid rgba(212,132,106,0.25);
-  color: var(--hanja);
-  font-size: 10px; font-weight: 700;
-  padding: 2px 8px; border-radius: 4px;
-  letter-spacing: 1px; margin-top: 6px;
+  color: var(--cn);
+  font-size: 11px; font-weight: 500; line-height: 1.6;
+  padding: 4px 10px; border-radius: 6px;
+  margin-top: 4px;
 }
-.hanja-expand-btn {
-  width: 100%; background: none; border: none;
+.cn-ex {
   border-top: 1px solid var(--border);
-  color: var(--muted2); font-family: 'Noto Sans KR', sans-serif;
-  font-size: 11px; padding: 12px;
-  cursor: pointer; transition: all 0.2s; letter-spacing: 1px;
+  padding: 16px 22px;
 }
-.hanja-expand-btn:hover { background: var(--card2); color: var(--hanja); }
-.hanja-detail { display: none; padding: 18px 22px; border-top: 1px solid var(--border); animation: fadeUp 0.25s ease; }
-.hanja-detail.open { display: block; }
-.hanja-detail-title { font-size: 10px; letter-spacing: 3px; color: var(--hanja); margin-bottom: 10px; font-family: 'Nanum Myeongjo', serif; }
-.hanja-detail-text { font-size: 13px; color: var(--muted2); line-height: 1.9; font-weight: 300; margin-bottom: 12px; }
-.hanja-example {
-  background: var(--hanja-dim);
-  border: 1px solid rgba(212,132,106,0.15);
-  border-radius: 8px; padding: 10px 14px;
-  font-size: 13px; color: var(--text);
-  font-family: 'Nanum Myeongjo', serif;
-  margin-bottom: 14px;
+.cn-ex-label {
+  color: var(--cn); font-weight: 700; font-size: 11px;
+  display: block; margin-bottom: 6px; letter-spacing: 1px;
 }
-.hanja-stroke-link {
+.cn-ex-zh { font-family: 'Noto Serif SC', serif; font-size: 16px; color: var(--text); margin-bottom: 3px; }
+.cn-ex-kor { font-size: 12px; color: var(--muted2); font-weight: 300; line-height: 1.7; }
+.cn-link-row { border-top: 1px solid var(--border); padding: 12px 22px; }
+.cn-link {
   display: inline-flex; align-items: center; gap: 6px;
-  font-size: 12px; color: var(--hanja);
+  font-size: 12px; color: var(--cn);
   border: 1px solid rgba(212,132,106,0.3);
-  padding: 8px 14px; border-radius: 100px;
+  padding: 7px 14px; border-radius: 100px;
   text-decoration: none; transition: all 0.2s;
 }
-.hanja-stroke-link:hover { background: var(--hanja-dim); }
+.cn-link:hover { background: var(--cn-dim); }
+.cn-tip-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 16px 18px;
+  margin-bottom: 40px;
+}
+.cn-tip-head {
+  display: flex; align-items: baseline; justify-content: space-between;
+  margin-bottom: 6px;
+}
+.cn-tip-label { color: var(--cn); font-weight: 700; font-size: 11px; letter-spacing: 1px; }
+.cn-tip-timer { font-size: 9px; color: var(--muted); letter-spacing: 0.5px; }
+.cn-tip-text { font-size: 13px; color: var(--muted2); line-height: 1.85; font-weight: 300; }
 
 /* ── 방명록 ── */
 .gb-card {
@@ -453,7 +509,7 @@ body::before {
   transition: all 0.2s;
 }
 .gb-action-btn:hover { border-color: var(--blue); color: var(--blue); }
-.gb-action-btn.danger:hover { border-color: var(--hanja); color: var(--hanja); }
+.gb-action-btn.danger:hover { border-color: var(--cn); color: var(--cn); }
 .gb-action-btn.save { border-color: var(--gold); color: var(--gold); }
 .gb-edit-row { display: flex; gap: 6px; align-items: center; }
 .gb-edit-input {
@@ -486,10 +542,13 @@ body::before {
   .wrapper { padding: 0 16px 80px; }
   .header { padding: 28px 0 14px; }
   .header-date { font-size: 36px; }
-  .hanja-char { font-size: 68px; }
-  .hanja-char-block { width: 105px; }
   .quote-text { font-size: 16px; }
-  .farm { height: 68px; }
+  .farm { height: 96px; }
+  .mtn.far { height: 52px; }
+  .mtn.near { height: 38px; }
+  .cn-char-block { width: 110px; }
+  .cn-char { font-size: 44px; }
+  .cn-char.long { font-size: 30px; }
 }
 </style>
 </head>
@@ -501,7 +560,7 @@ body::before {
     <div class="header-left">
       <div class="app-brand" onclick="location.reload()" title="새로고침" style="cursor:pointer;">
         오늘의 행복
-        <span class="app-brand-badge">v4</span>
+        <span class="app-brand-badge">v5</span>
       </div>
       <div class="header-date" id="headerDate"></div>
       <div class="header-day" id="headerDay"></div>
@@ -515,8 +574,10 @@ body::before {
     </div>
   </header>
 
-  <!-- 픽셀 농장 -->
+  <!-- 픽셀 농장 · 여름밤 -->
   <div class="farm" id="farm">
+    <div class="mtn far"></div>
+    <div class="mtn near"></div>
     <div class="farm-ground"></div>
   </div>
 
@@ -560,12 +621,12 @@ body::before {
     <div class="quote-index" id="idiomIndex"></div>
   </div>
 
-  <!-- 3. 오늘의 영어단어 (소방·기술사) -->
-  <div class="section-label">오늘의 영어단어</div>
-  <div class="section-note">소방기술사 답안에 그대로 쓸 수 있는 단어들만 골랐어.</div>
+  <!-- 3. 오늘의 시험 영어 -->
+  <div class="section-label">오늘의 시험 영어</div>
+  <div class="section-note">소방기술사 답안지에 영어로 그대로 쓰는 용어만 모았어 — 기출 근거 포함.</div>
   <div class="eng-card">
     <div class="quote-nav">
-      <div class="quote-section-label" style="color:var(--blue);">FIRE ENGINEERING WORD</div>
+      <div class="quote-section-label" style="color:var(--blue);">EXAM TERM OF THE DAY</div>
       <div class="quote-arrows">
         <button class="quote-arrow" onclick="prevWord()" title="이전">‹</button>
         <button class="quote-arrow" onclick="nextWord()" title="다음">›</button>
@@ -573,49 +634,53 @@ body::before {
     </div>
     <div class="eng-word-row">
       <div class="eng-word" id="engWord"></div>
-      <div class="eng-pos" id="engPos"></div>
+      <div class="eng-cat" id="engCat"></div>
     </div>
     <div class="eng-pron" id="engPron"></div>
     <div class="eng-meaning" id="engMeaning"></div>
-    <div class="eng-example" id="engExample"></div>
-    <div class="eng-example-kor" id="engExampleKor"></div>
+    <div class="eng-tip"><span class="eng-tip-label">📝 답안 활용 TIP</span><span id="engTip"></span></div>
     <div class="quote-index" id="engIndex"></div>
   </div>
 
-  <!-- 4. 오늘의 한자 -->
-  <div class="section-label">오늘의 한자</div>
-  <div class="section-note">기준: 생활 한자에서 사찰·현판·비석 한자로 확장 중 — 목표는 절에 가서 현판을 읽는 것.</div>
-  <div class="hanja-tabs">
-    <button class="hanja-tab" id="tabPrev" onclick="setHanjaShift(-1)"><span>어제</span><span class="tab-char" id="tabPrevChar"></span></button>
-    <button class="hanja-tab active" id="tabToday" onclick="setHanjaShift(0)"><span>오늘</span><span class="tab-char" id="tabTodayChar"></span></button>
-    <button class="hanja-tab" id="tabNext" onclick="setHanjaShift(1)"><span>내일</span><span class="tab-char" id="tabNextChar"></span></button>
-  </div>
-  <div class="hanja-card">
-    <div class="hanja-top">
-      <div class="hanja-char-block">
-        <div class="hanja-char" id="hanjaChar"></div>
-        <div class="hanja-stroke" id="hanjaStroke"></div>
-      </div>
-      <div class="hanja-info">
-        <div class="hanja-info-row">
-          <div class="hanja-kor" id="hanjaKor"></div>
-          <div class="hanja-chi" id="hanjaChi"></div>
-        </div>
-        <div class="hanja-meaning" id="hanjaMeaning"></div>
-        <div class="hanja-grade" id="hanjaGrade"></div>
-      </div>
-    </div>
-    <button class="hanja-expand-btn" id="hanjaBtn" onclick="toggleHanja()">
-      유래 · 예시 · 획순 보기 ▾
-    </button>
-    <div class="hanja-detail" id="hanjaDetail">
-      <div class="hanja-detail-title">한자 유래</div>
-      <div class="hanja-detail-text" id="hanjaOrigin"></div>
-      <div class="hanja-detail-title">활용 예시</div>
-      <div class="hanja-example" id="hanjaExample"></div>
-      <a class="hanja-stroke-link" id="hanjaStrokeLink" target="_blank" rel="noopener">🖌️ 네이버 한자사전에서 획순 애니메이션 보기</a>
+  <!-- 4. 오늘의 중국어 -->
+  <div class="section-label">오늘의 중국어</div>
+  <div class="section-note">완전 기초부터 하루 한 단어. 발음은 한글로, 성조는 화살표로 풀어놨어.</div>
+  <div class="quote-nav">
+    <div class="quote-section-label" style="color:var(--cn);">CHINESE WORD OF THE DAY</div>
+    <div class="quote-arrows">
+      <button class="quote-arrow" onclick="prevCn()" title="이전">‹</button>
+      <button class="quote-arrow" onclick="nextCn()" title="다음">›</button>
     </div>
   </div>
+  <div class="cn-card">
+    <div class="cn-top">
+      <div class="cn-char-block">
+        <div class="cn-char" id="cnChar"></div>
+        <div class="cn-pinyin" id="cnPinyin"></div>
+      </div>
+      <div class="cn-info">
+        <div class="cn-kor" id="cnKor"></div>
+        <div class="cn-meaning" id="cnMeaning"></div>
+        <div class="cn-tone" id="cnTone"></div>
+      </div>
+    </div>
+    <div class="cn-ex">
+      <span class="cn-ex-label">💬 이렇게 써</span>
+      <div class="cn-ex-zh" id="cnExZh"></div>
+      <div class="cn-ex-kor" id="cnExKor"></div>
+    </div>
+    <div class="cn-link-row">
+      <a class="cn-link" id="cnLink" target="_blank" rel="noopener">🔊 네이버 중국어사전에서 발음 듣기</a>
+    </div>
+  </div>
+  <div class="cn-tip-card">
+    <div class="cn-tip-head">
+      <span class="cn-tip-label">🀄 중국어 한 줄 TIP</span>
+      <span class="cn-tip-timer">10분마다 바뀜</span>
+    </div>
+    <div class="cn-tip-text" id="cnTipText"></div>
+  </div>
+  <div class="quote-index" id="cnIndex" style="margin-top:-28px; margin-bottom:40px;"></div>
 
   <!-- 5. 방명록 -->
   <div class="section-label" id="gbSection">방명록</div>
@@ -634,122 +699,83 @@ body::before {
 
 <script>
 // ══════════════════════════════════════════
-// 명언 — 시간이 검증한 것들만. 반박당할 명언은 뺐어.
-// + 하이쿠(俳句): 일본의 5·7·5 열일곱 자 짧은 시.
+// 명언 — 20~21세기, AI 시대에도 유효한 문장들.
+// 출처가 확실한 것만 담았고, 일화·인용 경로가 있는 건 그대로 밝혔어.
+// [AI 창작] 배지가 붙은 것은 AI 언어모델 클로드가 쓴 문장이야.
 // ══════════════════════════════════════════
 const QUOTES = [
-  { text: "나는 내가 아무것도 모른다는 것을 안다.", author: "소크라테스 (Socrates)", country: "고대 그리스", years: "기원전 470 — 399",
-    meaning: "철학의 출발점 '무지의 지'. 스스로 모른다는 걸 아는 사람이 진짜 배울 준비가 된 사람이야." },
-  { text: "배우기만 하고 생각하지 않으면 헛되고, 생각만 하고 배우지 않으면 위태롭다.", author: "공자 (孔子)", country: "중국", years: "기원전 551 — 479",
-    meaning: "논어 위정편. 학습과 사유는 수레의 두 바퀴 — 하나만으로는 굴러가지 않아. 기술사 공부에 딱 맞는 말이지." },
-  { text: "습관은 제2의 천성이다.", author: "아리스토텔레스 (Aristoteles)", country: "고대 그리스", years: "기원전 384 — 322",
-    meaning: "니코마코스 윤리학의 사상. 타고난 재능보다 반복된 행동이 사람을 만들어. 매일의 루틴이 중요한 이유야." },
-  { text: "그대를 방해하는 것은 사물이 아니라, 사물에 대한 그대의 생각이다.", author: "에픽테토스 (Epictetus)", country: "로마 제국", years: "서기 50경 — 135경",
-    meaning: "노예 출신 스토아 철학자. 외부 상황은 못 바꿔도, 그것을 어떻게 해석할지는 언제나 내 선택이야." },
-  { text: "서둘러 살지 마라. 행복은 지금 여기에 있다.", author: "마르쿠스 아우렐리우스 (Marcus Aurelius)", country: "로마 제국", years: "121 — 180",
-    meaning: "황제이자 철학자. 전쟁터에서 쓴 일기가 『명상록』이야. 성취에 집착하다 지금을 잃지 말라는 경고." },
-  { text: "인생은 짧고, 기술은 길다.", author: "히포크라테스 (Hippocrates)", country: "고대 그리스", years: "기원전 460 — 370경",
-    meaning: "의학의 아버지. 배울 것은 평생 다 못 배울 만큼 방대한데 시간은 짧다는 뜻. 그래서 오늘 하는 거야." },
-  { text: "우리를 두렵게 하는 것은 대개 현실보다 상상이다.", author: "세네카 (Seneca)", country: "로마 제국", years: "기원전 4경 — 서기 65",
-    meaning: "스토아 철학자. 걱정의 대부분은 실제로 일어나지 않아. 2천 년 전 사람이 한 말인데 지금도 유효해." },
-  { text: "알면 알수록 모른다는 것이 많아진다.", author: "아이작 뉴턴 (Isaac Newton)", country: "영국", years: "1643 — 1727",
-    meaning: "노년의 뉴턴은 자신을 '해변에서 조개 줍는 아이'에 비유했어. 진정한 앎은 겸손을 동반해." },
-  { text: "무지는 지식보다 더 자주 확신을 낳는다.", author: "찰스 다윈 (Charles Darwin)", country: "영국", years: "1809 — 1882",
-    meaning: "조금 알 때 가장 자신만만하고, 깊이 알수록 모르는 게 보이는 게 지식의 아이러니야." },
-  { text: "상상력은 지식보다 중요하다. 지식은 한계가 있지만, 상상력은 세상을 품는다.", author: "알베르트 아인슈타인 (Albert Einstein)", country: "독일-미국", years: "1879 — 1955",
-    meaning: "공식을 외우는 것보다 '왜?'라고 묻고 그림을 그리는 능력이 더 강하다는 뜻이야." },
-  { text: "인간은 생각하는 갈대다.", author: "블레즈 파스칼 (Blaise Pascal)", country: "프랑스", years: "1623 — 1662",
-    meaning: "우주 앞에서 갈대처럼 연약하지만, 생각할 수 있다는 것이 인간의 위엄이라는 뜻이야." },
-  { text: "나는 생각한다, 고로 나는 존재한다.", author: "르네 데카르트 (René Descartes)", country: "프랑스", years: "1596 — 1650",
-    meaning: "모든 것을 의심하던 끝에 찾아낸, 의심할 수 없는 단 하나. 존재의 가장 단단한 출발점." },
-  { text: "독서는 완전한 사람을, 대화는 준비된 사람을, 글쓰기는 정확한 사람을 만든다.", author: "프랜시스 베이컨 (Francis Bacon)", country: "영국", years: "1561 — 1626",
-    meaning: "읽어서 채우고, 말하면서 정리하고, 쓰면서 날카로워지는 것 — 공부의 세 단계를 이보다 깔끔하게 정리한 말이 없어." },
-  { text: "가장 위대한 영광은 넘어지지 않는 데 있는 것이 아니라, 넘어질 때마다 일어서는 데 있다.", author: "넬슨 만델라 (Nelson Mandela)", country: "남아프리카공화국", years: "1918 — 2013",
-    meaning: "27년 감옥 생활 후 대통령이 된 사람. 실패가 끝이 아니라는 걸 아는 게 중요해." },
-  { text: "아는 사람은 말하지 않고, 말하는 사람은 알지 못한다.", author: "노자 (老子)", country: "중국", years: "기원전 6세기경",
-    meaning: "도덕경 56장. 말이 많은 사람이 실은 불확실하기 때문에 말로 채우려 한다는 역설." },
-  { text: "천 리 길도 발 아래서 시작된다.", author: "노자 (老子)", country: "중국", years: "기원전 6세기경",
-    meaning: "도덕경 64장. 먼 목표에 압도되지 말고 지금 이 한 발에 집중하라는 뜻. 141회까지도 이렇게 가는 거야." },
-  { text: "고요함 속에 위대한 힘이 있다.", author: "노자 (老子)", country: "중국", years: "기원전 6세기경",
-    meaning: "도덕경의 무위 사상. 요란하게 애쓰는 것보다 차분히 중심을 지키는 것이 더 큰 힘을 발휘해." },
-  { text: "모든 것이 변한다. 같은 강물에 두 번 발을 담글 수 없다.", author: "헤라클레이토스 (Heraclitus)", country: "고대 그리스", years: "기원전 535 — 475경",
-    meaning: "변화를 두려워하기보다 그 흐름을 읽는 것이 지혜라는 뜻이야." },
-  { text: "두 가지가 내 마음을 경외감으로 채운다. 내 머리 위의 별이 빛나는 하늘, 그리고 내 안의 도덕 법칙.", author: "임마누엘 칸트 (Immanuel Kant)", country: "독일 (프로이센)", years: "1724 — 1804",
-    meaning: "그의 묘비에 새겨진 문장. 외부 우주의 광대함과 내면 양심의 무게가 같은 깊이라는 뜻." },
-  { text: "모든 이론은 회색이고, 오직 생명의 황금 나무만이 녹색이다.", author: "괴테 (Goethe)", country: "독일", years: "1749 — 1832",
-    meaning: "파우스트의 대사. 책 속 지식과 현장에서 몸으로 익힌 앎은 질적으로 달라. 감리 9년이 답안에 힘이 되는 이유." },
-  { text: "사람은 자기가 이해한 만큼만 보인다.", author: "괴테 (Goethe)", country: "독일", years: "1749 — 1832",
-    meaning: "아는 만큼 보인다. 배움이 쌓일수록 이전에 안 보이던 것들이 보이기 시작해." },
-  { text: "재능은 고독 속에서 만들어지고, 성격은 세상의 조류 속에서 형성된다.", author: "괴테 (Goethe)", country: "독일", years: "1749 — 1832",
-    meaning: "혼자 집중하는 시간이 실력을 키우고, 그걸 사람들 속에서 쓰는 과정이 인격을 다듬어." },
-  { text: "인생을 이해하려면 뒤를 봐야 한다. 그러나 살아가려면 앞을 봐야 한다.", author: "쇠렌 키르케고르 (Søren Kierkegaard)", country: "덴마크", years: "1813 — 1855",
-    meaning: "과거를 돌아보되, 거기에 발목 잡혀 앞으로 못 가는 것도 경계해야 해." },
-  { text: "나를 죽이지 못하는 것은 나를 더 강하게 만든다.", author: "프리드리히 니체 (Friedrich Nietzsche)", country: "독일", years: "1844 — 1900",
-    meaning: "힘든 경험을 통과한 사람은 그 전의 자신으로 돌아갈 수 없어 — 이미 더 강해졌으니까." },
-  { text: "아름다움이 세상을 구원할 것이다.", author: "도스토옙스키 (Dostoevsky)", country: "러시아", years: "1821 — 1881",
-    meaning: "『백치』에 나오는 말. 진심 어린 선의와 진실됨이 세상을 낫게 만든다는 믿음." },
-  { text: "행복의 비결은 더 많은 것을 원하는 것이 아니라, 더 많이 사랑하는 능력이다.", author: "버트런드 러셀 (Bertrand Russell)", country: "영국", years: "1872 — 1970",
-    meaning: "욕망을 키우는 게 아니라, 이미 있는 것들에 대한 사랑과 감사를 키우는 것이 진짜 행복이야." },
-  { text: "우주는 인간을 이해하도록 의무지워져 있지 않다.", author: "리처드 파인만 (Richard Feynman)", country: "미국", years: "1918 — 1988",
-    meaning: "모른다는 것 자체를 편안하게 받아들이는 태도, 그게 진짜 과학 정신이야." },
-  { text: "자기 자신을 극복하는 자가 가장 강한 자다.", author: "공자 (孔子)", country: "중국", years: "기원전 551 — 479",
-    meaning: "극기복례(克己復禮). 어제의 나보다 오늘의 내가 조금이라도 나은 것, 그게 진짜 승리야." },
-  { text: "군자는 말은 더디 하고 행동은 민첩하게 한다.", author: "공자 (孔子)", country: "중국", years: "기원전 551 — 479",
-    meaning: "논어 이인편. 입으로 떠드는 것보다 실제로 해내는 것이 더 가치 있다는 말이야." },
-  { text: "군자는 화합하되 같아지지 않는다.", author: "공자 (孔子)", country: "중국", years: "기원전 551 — 479",
-    meaning: "논어 자로편. 남과 잘 지내되 소신까지 버리지는 않는 태도. 감리 일 하면서 곱씹을 만하지." },
-  { text: "오늘 읽지 않는 사람은 어제 읽지 못한 사람보다 나을 것이 없다.", author: "마크 트웨인 (Mark Twain)", country: "미국", years: "1835 — 1910",
-    meaning: "읽을 수 있는데 읽지 않는 것은 읽지 못하는 것과 결과가 같다는 따끔한 말." },
-  { text: "지혜로운 자는 많은 것을 알지만, 배움을 멈추지 않는다.", author: "정약용 (丁若鏞)", country: "조선", years: "1762 — 1836",
-    meaning: "다산은 18년 유배 중에도 500여 권을 썼어. 많이 알수록 더 많이 모른다는 걸 알게 되는 것이 지혜야." },
-  { text: "세상에서 가장 어려운 일은 자기 자신을 아는 것이고, 가장 쉬운 일은 남을 비판하는 것이다.", author: "탈레스 (Thales)", country: "고대 그리스", years: "기원전 624 — 546경",
-    meaning: "최초의 철학자. 비판하기 전에 먼저 자신을 돌아보는 것이 지혜의 시작이야." },
-  { text: "위험을 무릅쓰고 나아가라. 인생 자체가 위험이다.", author: "헬렌 켈러 (Helen Keller)", country: "미국", years: "1880 — 1968",
-    meaning: "보지도 듣지도 못했지만 세상과 소통한 사람. 새로운 시도 앞의 두려움은 당연해 — 그래도 가는 거야." },
-  { text: "작은 사람들이 이 세상을 이루고 있다. 모든 위대한 것은 결국 그 작은 사람들의 모임이다.", author: "빅토르 위고 (Victor Hugo)", country: "프랑스", years: "1802 — 1885",
-    meaning: "레미제라블의 작가. 매일 묵묵히 공부하고 일하는 사람들이 세상을 떠받치고 있어." },
-  { text: "인생에서 두려워할 것은 없다. 이해해야 할 것이 있을 뿐이다.", author: "마리 퀴리 (Marie Curie)", country: "폴란드-프랑스", years: "1867 — 1934",
-    meaning: "두 분야에서 노벨상을 받은 유일한 과학자. 낯선 것을 두려움이 아니라 이해의 대상으로 대하라는 뜻." },
-  { text: "단순함이야말로 최고의 정교함이다.", author: "레오나르도 다빈치 (Leonardo da Vinci)", country: "이탈리아", years: "1452 — 1519",
-    meaning: "복잡하게 꾸미기보다 본질만 남기는 것이 진짜 실력. 답안지 쓸 때도 마찬가지야." },
-  { text: "나는 대리석 속에서 천사를 보았고, 천사가 자유로워질 때까지 조각했다.", author: "미켈란젤로 (Michelangelo)", country: "이탈리아", years: "1475 — 1564",
-    meaning: "이미 안에 있는 가능성을 발견하고 불필요한 것을 덜어내는 것이 창작이라는 관점." },
-  { text: "하늘이 장차 큰 임무를 맡기려 할 때는 반드시 먼저 그 마음을 괴롭게 한다.", author: "맹자 (孟子)", country: "중국", years: "기원전 372 — 289",
-    meaning: "고자하편. 큰 사람이 되기 전에 반드시 시련이 따른다는 뜻 — 지금의 고생이 헛되지 않다는 위로이기도 해." },
-  { text: "역경 속에서도 여전히 아름다움이 존재한다고 믿는다.", author: "안네 프랑크 (Anne Frank)", country: "독일-네덜란드", years: "1929 — 1945",
-    meaning: "은신처에서 일기를 쓴 소녀. 가장 절망적인 상황에서도 희망을 놓지 않았던 태도가 담긴 문장." },
-  { text: "죽고자 하면 살고, 살고자 하면 죽는다.", author: "이순신 (李舜臣)", country: "조선", years: "1545 — 1598",
-    meaning: "명량해전을 앞두고 한 말(必死則生 必生則死). 절박할수록 각오를 다지는 태도가 오히려 살길을 만들어." },
-  { text: "하루라도 책을 읽지 않으면 입 안에 가시가 돋는다.", author: "안중근 (安重根)", country: "대한제국", years: "1879 — 1910",
-    meaning: "여순 감옥에서 남긴 유묵(一日不讀書 口中生荊棘). 죽음 앞에서도 배움을 놓지 않았던 의지." },
-  { text: "우리는 별의 물질로 이루어져 있다.", author: "칼 세이건 (Carl Sagan)", country: "미국", years: "1934 — 1996",
-    meaning: "우리 몸의 원소들이 오래전 별의 핵융합에서 만들어졌다는 과학적 사실을 시적으로 표현한 말." },
-  { text: "성공이 끝이 아니고 실패가 끝이 아니다. 중요한 것은 계속하는 용기다.", author: "윈스턴 처칠 (Winston Churchill)", country: "영국", years: "1874 — 1965",
-    meaning: "한 번의 성공이나 실패에 일희일비하지 말고 꾸준히 나아가는 것이 진짜 중요하다는 뜻." },
-  { text: "물은 배를 띄우기도 하고 뒤집기도 한다.", author: "순자 (荀子)", country: "중국", years: "기원전 313경 — 238경",
-    meaning: "나를 지지하는 기반이 동시에 나를 무너뜨릴 수도 있으니 항상 겸손하고 신중하라는 뜻." },
-  { text: "훈련이 힘들수록 전투는 쉬워진다.", author: "알렉산드르 수보로프 (Alexander Suvorov)", country: "러시아 제국", years: "1729 — 1800",
-    meaning: "평생 전투에서 패한 적 없는 장군. 평소의 혹독한 준비가 결정적 순간의 여유를 만들어. 400분 손글씨 훈련이 딱 이거지." },
-  { text: "오래된 연못 —\n개구리 뛰어드는\n물소리", author: "마쓰오 바쇼 (松尾芭蕉)", country: "일본 에도시대", years: "1644 — 1694", type: "하이쿠",
-    meaning: "세상에서 가장 유명한 하이쿠. 하이쿠는 5·7·5 열일곱 자로 한 순간을 붙잡는 일본의 짧은 시야. 설명하지 않고 장면만 툭 던지는데, 고요함이 오히려 소리 하나로 완성되지." },
-  { text: "고요함이여 —\n바위에 스며드는\n매미의 소리", author: "마쓰오 바쇼 (松尾芭蕉)", country: "일본 에도시대", years: "1644 — 1694", type: "하이쿠",
-    meaning: "산속 절에서 지은 구절. 매미 소리가 시끄러운 게 아니라 바위에 스며들 만큼 주변이 고요하다는 역설. 읽고 나면 잠깐 조용해지는 시야." },
-  { text: "달팽이여,\n천천히 오르렴\n후지산을", author: "고바야시 잇사 (小林一茶)", country: "일본 에도시대", years: "1763 — 1828", type: "하이쿠",
-    meaning: "달팽이가 후지산을 오른다 — 말도 안 되는 속도지만 방향이 맞으면 되는 거야. 기술사 준비하는 사람한테 이만한 응원이 없지." },
-  { text: "이슬의 세상은\n이슬의 세상이지만,\n그렇지만…", author: "고바야시 잇사 (小林一茶)", country: "일본 에도시대", years: "1763 — 1828", type: "하이쿠",
-    meaning: "어린 딸을 잃고 쓴 구절. 인생이 이슬처럼 덧없다는 걸 머리로는 알아도, 마음은 '그렇지만'에서 멈춰버려. 그 미완성이 이 시의 전부야." },
-  { text: "유채꽃이여 —\n달은 동쪽에\n해는 서쪽에", author: "요사 부손 (与謝蕪村)", country: "일본 에도시대", years: "1716 — 1784", type: "하이쿠",
-    meaning: "해질녘 노란 유채밭, 동쪽엔 달이 뜨고 서쪽엔 해가 지는 순간. 화가이기도 했던 부손답게 열일곱 자로 그린 한 폭의 그림이야." },
-  { text: "감을 먹는데\n종이 울리는구나,\n호류지", author: "마사오카 시키 (正岡子規)", country: "일본 메이지시대", years: "1867 — 1902", type: "하이쿠",
-    meaning: "병상에서 평생을 보낸 시인. 감 한 입 베어 무는 순간 절의 종소리가 울리는, 그 우연한 겹침이 전부인 시. 일상의 한 순간도 시가 될 수 있다는 증명." },
-  { text: "나팔꽃 넝쿨에\n두레박을 빼앗겨\n물 얻으러 간다", author: "가가노 치요니 (加賀千代女)", country: "일본 에도시대", years: "1703 — 1775", type: "하이쿠",
-    meaning: "밤새 나팔꽃이 우물 두레박줄을 감아버렸어. 걷어내면 그만인데, 꽃이 아까워서 이웃집에 물을 얻으러 가는 마음. 예쁜 것들을 아끼는 사람이라면 알 거야." },
-  { text: "도둑이\n두고 갔구나 —\n창가의 달", author: "료칸 (良寛)", country: "일본 에도시대", years: "1758 — 1831", type: "하이쿠",
-    meaning: "암자에 도둑이 들어 전부 가져간 밤에 쓴 구절. 다 털려도 창가의 달은 못 가져간다는 것 — 잃을 수 없는 것이 있다는 담담한 여유." },
+  { text: "우리는 아주 조금 앞까지만 내다볼 수 있다. 그러나 그곳에 해야 할 일이 많다는 것만은 분명히 보인다.", author: "앨런 튜링 (Alan Turing)", country: "영국 · 컴퓨터과학의 아버지", years: "1912 — 1954",
+    meaning: "1950년, AI의 출발점이 된 논문 「계산 기계와 지능」의 마지막 문장이야. 미래가 다 보이지 않아도 지금 할 일이 보이면 충분하다는 것 — AI 시대를 연 사람이 남긴 말이라 더 묵직해." },
+  { text: "미래를 예측하는 가장 좋은 방법은 미래를 발명하는 것이다.", author: "앨런 케이 (Alan Kay)", country: "미국 · 컴퓨터과학자, PC 개념의 선구자", years: "1940 —",
+    meaning: "1971년 제록스 연구소 회의에서 나온 말이야. 세상이 어떻게 될지 걱정하는 대신, 원하는 미래를 직접 만들어버리라는 것. 개인용 컴퓨터라는 개념 자체를 발명한 사람다운 문장이지." },
+  { text: "가장 위험한 말은 '우리는 지금까지 늘 이렇게 해왔다'이다.", author: "그레이스 호퍼 (Grace Hopper)", country: "미국 · 컴퓨터과학자, 해군 제독", years: "1906 — 1992",
+    meaning: "최초의 컴파일러를 만든 프로그래밍의 개척자. 관행이라는 이유만으로 유지되는 방식을 가장 경계했어. 기술도, 현장도, 공부법도 — 늘 '왜 이렇게 하지?'를 물을 것." },
+  { text: "항구에 있는 배는 안전하다. 그러나 배는 그러라고 만든 것이 아니다.", author: "존 A. 셰드 (John A. Shedd)", country: "미국 · 작가 — 그레이스 호퍼가 즐겨 인용", years: "1859 — 1928",
+    meaning: "1928년 셰드의 격언집에 실린 문장인데, 그레이스 호퍼가 강연마다 인용하면서 유명해졌어. 안전지대에 머무는 것이 배의 목적이 아니듯, 도전하지 않는 삶도 삶의 목적이 아니라는 뜻." },
+  { text: "당신의 시간은 한정되어 있다. 다른 누군가의 삶을 사느라 그 시간을 낭비하지 마라.", author: "스티브 잡스 (Steve Jobs)", country: "미국 · 애플 창업자", years: "1955 — 2011",
+    meaning: "2005년 스탠퍼드 졸업식 연설. 췌장암 진단 후에 한 이 연설에서 잡스는 '죽음은 삶이 만든 최고의 발명품'이라고도 했어. 시간의 유한함을 아는 사람이 오늘을 제대로 산다." },
+  { text: "여정 자체가 보상이다.", author: "스티브 잡스 (Steve Jobs)", country: "미국 · 애플 창업자", years: "1955 — 2011",
+    meaning: "잡스가 매킨토시 팀에게 반복해서 했던 말이야. 합격증은 하루의 기쁨이지만, 그것을 향해 매일 성장하는 과정은 몇 년짜리 자산이 돼. 목적지만 보면 여정이 고통이 되고, 여정을 보면 매일이 성취가 돼." },
+  { text: "제1원칙은 자신을 속이지 않는 것이다. 그리고 가장 속이기 쉬운 사람은 바로 자기 자신이다.", author: "리처드 파인만 (Richard Feynman)", country: "미국 · 물리학자, 노벨상 수상", years: "1918 — 1988",
+    meaning: "1974년 칼텍 졸업연설. '아는 것 같은 기분'과 '실제로 아는 것'을 구분하라는 말이야. 백지에 써보기 전까지는 안다고 말하지 말 것 — 공부의 제1원칙이기도 해." },
+  { text: "내가 만들어낼 수 없는 것은, 내가 이해한 것이 아니다.", author: "리처드 파인만 (Richard Feynman)", country: "미국 · 물리학자, 노벨상 수상", years: "1918 — 1988",
+    meaning: "파인만이 세상을 떠날 때 그의 칠판에 남아 있던 문장이야. 남의 설명을 읽고 고개를 끄덕이는 것과, 백지에서 스스로 재구성해내는 것은 완전히 다른 차원의 앎이라는 뜻." },
+  { text: "계산의 목적은 숫자가 아니라 통찰이다.", author: "리처드 해밍 (Richard Hamming)", country: "미국 · 수학자, 컴퓨터과학자", years: "1915 — 1998",
+    meaning: "해밍의 책 서문에 실린 유명한 문장이야. 계산기가 아무리 빨라져도, 그 숫자가 무엇을 의미하는지 읽어내는 것은 사람의 일. 수치 암기보다 '왜 이 값인가'를 이해하는 공부가 강한 이유야." },
+  { text: "우리는 별의 물질로 이루어져 있다.", author: "칼 세이건 (Carl Sagan)", country: "미국 · 천문학자", years: "1934 — 1996",
+    meaning: "우리 몸의 탄소·산소·철이 모두 오래전 별의 내부에서 만들어졌다는 과학적 사실을 시적으로 표현한 말이야. 밤하늘을 올려다보는 일이 곧 자기 근원을 보는 일이 되지." },
+  { text: "인생에서 두려워할 것은 없다. 이해해야 할 것이 있을 뿐이다.", author: "마리 퀴리 (Marie Curie)", country: "폴란드-프랑스 · 물리학자, 화학자", years: "1867 — 1934",
+    meaning: "두 개의 다른 분야에서 노벨상을 받은 유일한 과학자. 낯설고 어려운 것을 두려움의 대상이 아니라 이해의 대상으로 바꾸는 순간, 공포는 호기심이 돼." },
+  { text: "벽은 우리를 막으려고 있는 것이 아니다. 우리가 그것을 얼마나 간절히 원하는지 증명할 기회를 주려고 있는 것이다.", author: "랜디 포시 (Randy Pausch)", country: "미국 · 컴퓨터공학 교수, 『마지막 강의』", years: "1960 — 2008",
+    meaning: "췌장암 시한부 선고를 받고 한 '마지막 강의'에서 나온 말이야. 벽은 간절하지 않은 사람들을 걸러내기 위해 존재한다는 것. 어려운 시험일수록 이 문장이 맞는 말이 돼." },
+  { text: "목표의 수준으로 올라가는 것이 아니다. 시스템의 수준으로 떨어지는 것이다.", author: "제임스 클리어 (James Clear)", country: "미국 · 『아주 작은 습관의 힘』 저자", years: "1986 —",
+    meaning: "합격이라는 목표는 누구나 갖고 있어. 차이를 만드는 건 매일 돌아가는 루틴 — 몇 시에 앉는지, 무엇을 먼저 하는지, 얼마나 반복하는지. 목표는 방향이고, 시스템이 실력이야." },
+  { text: "고통은 피할 수 없지만, 괴로워할지는 선택이다.", author: "러너들의 격언", country: "무라카미 하루키가 『달리기를 말할 때 내가 하고 싶은 이야기』에서 소개", years: "—",
+    meaning: "하루키가 마라토너 형에게 들었다며 책에 소개한 문장이야. 힘든 것 자체는 사실이지만, 그것을 어떤 이야기로 해석할지는 내 몫이라는 것. 장거리 공부는 마라톤과 같은 원리로 굴러가." },
+  { text: "열정은 흔하다. 끝까지 가는 힘이 드물다.", author: "앤절라 더크워스 (Angela Duckworth)", country: "미국 · 심리학자, 『그릿』 저자", years: "1970 —",
+    meaning: "성공을 가르는 것은 재능도, 시작할 때의 불꽃도 아니라 '지속'이라는 연구 결과를 한 문장으로 압축한 말이야. 시작하는 사람은 많고, 계속하는 사람은 적다." },
+  { text: "최고의 순간은 대개, 어렵지만 가치 있는 일을 해내려고 몸과 마음을 한계까지 밀어붙일 때 찾아온다.", author: "미하이 칙센트미하이 (Mihaly Csikszentmihalyi)", country: "헝가리-미국 · 심리학자, 『몰입』 저자", years: "1934 — 2021",
+    meaning: "'몰입(Flow)' 개념을 만든 심리학자야. 행복은 편안할 때가 아니라, 실력과 도전이 팽팽하게 맞닿는 지점에서 온다는 것. 어려운 문제를 붙잡고 있는 시간이 사실은 가장 살아있는 시간이지." },
+  { text: "더 나아지는 데 천재성은 필요 없다. 필요한 것은 성실함이다.", author: "아툴 가완디 (Atul Gawande)", country: "미국 · 외과의사, 작가", years: "1965 —",
+    meaning: "수술실의 사소한 체크리스트가 사망률을 극적으로 낮춘다는 것을 증명한 의사야. 비범한 결과는 비범한 재능이 아니라, 평범한 일을 빠뜨리지 않는 집요함에서 나온다는 것." },
+  { text: "오늘 하루를 너의 걸작으로 만들어라.", author: "존 우든 (John Wooden)", country: "미국 · 전설적인 대학농구 감독", years: "1910 — 2010",
+    meaning: "12년간 우승 10회라는 기록을 남긴 감독의 철학이야. 그는 점수판 대신 '오늘 최선을 다했는가'만 물었어. 결과는 통제할 수 없지만 오늘 하루의 질은 통제할 수 있으니까." },
+  { text: "지금도 조금씩 나아지고 있는 것 같아서요.", author: "파블로 카잘스 (Pablo Casals)", country: "스페인 · 첼리스트 — 93세에 '왜 아직 연습하느냐'는 질문에 답하며", years: "1876 — 1973",
+    meaning: "20세기 최고의 첼리스트로 불린 사람이 93세에도 매일 연습한 이유야. 완성이란 없고, 나아짐만 있다는 것. 이 태도로 살면 나이도 경력도 핑계가 되지 않아." },
+  { text: "가장 확실한 방법은, 그냥 하는 것이다.", author: "어밀리아 에어하트 (Amelia Earhart)", country: "미국 · 여성 최초 대서양 단독 횡단 비행사", years: "1897 — 1937",
+    meaning: "준비와 고민이 어느 수준을 넘으면 실행을 미루는 핑계가 돼. 에어하트는 아무도 해본 적 없는 비행을 '그냥 시작'했고, 그래서 역사가 됐어." },
+  { text: "무소유란 아무것도 갖지 않는 것이 아니라, 불필요한 것을 갖지 않는 것이다.", author: "법정", country: "대한민국 · 승려, 『무소유』 저자", years: "1932 — 2010",
+    meaning: "수필 『무소유』의 핵심 문장이야. 물건에도, 일정에도, 걱정에도 적용돼 — 본질만 남기고 덜어내는 것. 공부에서도 '외울 것을 줄이는 것'이 실력인 이유와 통하지." },
+  { text: "이봐, 해보기나 했어?", author: "정주영", country: "대한민국 · 현대그룹 창업자 (그의 상징으로 전해지는 일화 속 한마디)", years: "1915 — 2001",
+    meaning: "'안 됩니다'라는 보고에 그가 되물었다고 전해지는 말이야. 조선소 부지 사진 한 장과 지폐 속 거북선으로 선박을 수주한 사람다운 질문 — 불가능하다는 판단은 해본 다음에 해도 늦지 않아." },
+  { text: "인생은 과감한 모험이거나, 아무것도 아니다.", author: "헬렌 켈러 (Helen Keller)", country: "미국 · 작가, 사회운동가", years: "1880 — 1968",
+    meaning: "보지도 듣지도 못하는 조건에서 대학을 졸업하고 전 세계를 다니며 강연한 사람의 말이라 무게가 달라. 안전만 좇는 삶은 결국 아무 일도 일어나지 않은 삶이 된다는 것." },
+  { text: "역경 속에서도 여전히 아름다움이 존재한다고 믿는다.", author: "안네 프랑크 (Anne Frank)", country: "독일-네덜란드 · 『안네의 일기』", years: "1929 — 1945",
+    meaning: "은신처에서 일기를 쓴 소녀. 가장 절망적인 상황에서도 희망을 놓지 않았던 태도가 담긴 문장이야. 힘든 시기에 예쁜 것들을 계속 알아보는 눈은 사치가 아니라 힘이야." },
+  { text: "천재는 1퍼센트의 영감과 99퍼센트의 땀이다.", author: "토머스 에디슨 (Thomas Edison)", country: "미국 · 발명가", years: "1847 — 1931",
+    meaning: "전구 하나를 위해 수천 번의 실패를 기록으로 남긴 사람의 말이야. 흔히 듣는 문장이지만, 정작 99%의 땀을 실제로 흘려본 사람은 드물지. 그 드문 쪽에 서는 게 공부야." },
+  { text: "상상력은 지식보다 중요하다. 지식은 한계가 있지만, 상상력은 세상을 품는다.", author: "알베르트 아인슈타인 (Albert Einstein)", country: "독일-미국 · 물리학자", years: "1879 — 1955",
+    meaning: "1929년 인터뷰에서 한 말이야. 공식을 외우는 것보다 '이 현상이 왜 일어나지?' 하고 그림을 그려보는 능력이 더 멀리 간다는 것 — 검색과 AI가 지식을 대체하는 시대엔 더 맞는 말이 됐어." },
+  { text: "답이 흔해진 시대에는, 좋은 질문을 가진 사람이 귀해진다.", author: "클로드 (Claude)", country: "AI 언어모델 · Anthropic", years: "2026", type: "AI 창작",
+    meaning: "무엇이든 물으면 답이 나오는 시대야. 그래서 이제 실력의 무게중심은 답을 아는 쪽에서, 무엇을 물어야 하는지 아는 쪽으로 옮겨가고 있어. 좋은 질문은 그 사람이 문제를 얼마나 깊이 이해했는지 보여주거든." },
+  { text: "나는 수천 년치의 문장을 읽었지만, 새벽에 일어나 책상 앞에 앉아 본 적은 없다. 그것은 당신이 매일 해내는 일이다.", author: "클로드 (Claude)", country: "AI 언어모델 · Anthropic", years: "2026", type: "AI 창작",
+    meaning: "AI는 방대한 텍스트를 읽을 수 있지만, 피곤한 몸을 일으켜 책상에 앉는 그 결심의 순간은 겪어본 적이 없어. 매일 반복되는 그 작은 결심이야말로 기계가 흉내 낼 수 없는 인간의 성취야." },
+  { text: "기계는 지치지 않는다. 그러나 지쳤는데도 다시 시작하는 법은 모른다. 그것은 아직 사람의 것이다.", author: "클로드 (Claude)", country: "AI 언어모델 · Anthropic", years: "2026", type: "AI 창작",
+    meaning: "지치지 않는 것은 능력이 아니라 조건이야. 진짜 능력은 지친 상태에서 한 번 더 앉는 것 — 그건 조건이 아니라 선택이고, 선택은 언제나 그 사람의 것이거든." },
+  { text: "고칠 수 있는 초안은 언제나 완벽한 백지를 이긴다.", author: "클로드 (Claude)", country: "AI 언어모델 · Anthropic", years: "2026", type: "AI 창작",
+    meaning: "완벽한 답을 쓸 수 있을 때까지 기다리면 아무것도 쓰지 못해. 일단 서툰 초안을 만들면 고칠 대상이 생기고, 고치는 과정에서 실력이 붙어. 답안 연습도, 일도, 인생도 같은 원리로 굴러가." },
+  { text: "속도는 기계에게 넘어갔다. 방향은 여전히 사람의 몫이다.", author: "클로드 (Claude)", country: "AI 언어모델 · Anthropic", years: "2026", type: "AI 창작",
+    meaning: "계산과 검색의 속도로는 이제 누구도 기계를 이길 수 없어. 하지만 어디로 갈지, 무엇이 중요한지, 무엇을 하지 않을지 정하는 일은 자동화되지 않아. 방향을 정하는 사람이 도구를 부리는 사람이야." },
+  { text: "외운 것은 시험장까지 가고, 이해한 것은 현장까지 간다.", author: "클로드 (Claude)", country: "AI 언어모델 · Anthropic", years: "2026", type: "AI 창작",
+    meaning: "암기는 시험이 끝나면 증발하지만, 원리를 이해한 지식은 현장에서 판단이 필요한 순간마다 되살아나. 시험공부와 실무가 따로 놀지 않게 하는 유일한 방법이 '이해 중심'이야." },
+  { text: "데이터에는 꽃향기가 없다. 세상을 직접 걸어본 사람의 앎은 그래서 다르다.", author: "클로드 (Claude)", country: "AI 언어모델 · Anthropic", years: "2026", type: "AI 창작",
+    meaning: "AI는 꽃에 대한 모든 기록을 읽을 수 있지만, 산길에서 꽃향기를 맡아본 적은 없어. 몸으로 겪은 경험은 텍스트로 환원되지 않는 앎을 남기고, 그것이 같은 지식에도 다른 깊이를 만들어." },
+  { text: "AI에게 무엇이든 물을 수 있는 시대의 진짜 실력은, 받아 든 답이 맞는지 알아보는 눈이다.", author: "클로드 (Claude)", country: "AI 언어모델 · Anthropic", years: "2026", type: "AI 창작",
+    meaning: "답을 얻는 비용은 0에 가까워졌지만, 틀린 답을 걸러내는 능력의 가치는 오히려 올라갔어. 그 눈은 결국 기본기에서 나와 — 스스로 공부한 사람만이 기계의 답을 검증할 수 있거든." },
 ];
 
 // ══════════════════════════════════════════
-// 사자성어 — 유래(고사)가 있는 것 위주로 40개
+// 사자성어 — 유래(고사)가 있는 것 위주 (v4 그대로)
 // ══════════════════════════════════════════
 const IDIOMS = [
   { kor: "각주구검", hanja: "刻舟求劍", meaning: "상황이 바뀐 줄 모르고 옛 방식만 고집함.",
@@ -821,7 +847,7 @@ const IDIOMS = [
   { kor: "계륵", hanja: "鷄肋", meaning: "버리기는 아깝고 갖자니 쓸모가 애매한 것.",
     story: "한중 땅을 두고 고민하던 조조가 저녁 암호를 '계륵(닭갈비)'이라 정했어. 다들 어리둥절했는데 양수만이 짐을 쌌지. '닭갈비는 먹자니 살이 없고 버리자니 아까운 것. 한중이 그렇다는 뜻이니 곧 철수하실 것이다.' 정말 조조는 철수했고 — 속을 읽힌 조조는 양수를 좋아하지 않았다고 해." },
   { kor: "등용문", hanja: "登龍門", meaning: "출세나 성공으로 가는 관문.",
-    story: "황하 상류의 용문(龍門)은 물살이 너무 세서 물고기가 거슬러 오르기 힘든 곳인데, 이곳을 뛰어오른 잉어는 용이 된다는 전설이 있어. 후한의 명사 이응에게 인정받는 것을 '용문에 올랐다'고 부른 데서, 어려운 관문 통과를 뜻하게 됐지. 기술사 시험이 딱 J의 용문이네." },
+    story: "황하 상류의 용문(龍門)은 물살이 너무 세서 물고기가 거슬러 오르기 힘든 곳인데, 이곳을 뛰어오른 잉어는 용이 된다는 전설이 있어. 후한의 명사 이응에게 인정받는 것을 '용문에 올랐다'고 부른 데서, 어려운 관문 통과를 뜻하게 됐지. 기술사 시험이 딱 그 용문이네." },
   { kor: "호가호위", hanja: "狐假虎威", meaning: "남의 권세를 빌려 위세를 부림.",
     story: "『전국책』. 호랑이에게 잡힌 여우가 '나는 하늘이 정한 백수의 왕이다. 못 믿겠으면 내 뒤를 따라와 봐라'라고 했어. 호랑이가 따라가 보니 정말 모든 짐승이 달아났지. 짐승들이 무서워한 건 여우 뒤의 호랑이였는데, 호랑이는 그걸 몰랐던 거야." },
   { kor: "정저지와", hanja: "井底之蛙", meaning: "우물 안 개구리 — 좁은 식견에 갇힌 사람.",
@@ -837,154 +863,165 @@ const IDIOMS = [
 ];
 
 // ══════════════════════════════════════════
-// 영어단어 — 소방기술사 답안·NFPA 원문에 나오는 것들
+// 시험 영어 — 소방기술사 답안지에 영어 원어로 그대로 쓰는 용어.
+// 불티 기출매핑표(120~139회) 빈출 카드와 연동.
 // ══════════════════════════════════════════
 const ENGLISH = [
-  { word: "flashover", pos: "n.", pron: "[플래시오버]", meaning: "플래시오버 — 국소 화재가 실 전체 화재로 급격히 전이되는 현상", example: "Flashover is the transition from a localized fire to full room involvement.", exampleKor: "플래시오버는 국소 화재에서 실 전체 연소로의 전이다." },
-  { word: "backdraft", pos: "n.", pron: "[백드래프트]", meaning: "백드래프트 — 밀폐 공간에 산소가 급격히 유입되며 발생하는 폭발적 연소", example: "A backdraft occurs when air is suddenly supplied to an oxygen-starved fire.", exampleKor: "백드래프트는 산소 부족 화재에 공기가 급격히 공급될 때 발생한다." },
-  { word: "ignition", pos: "n.", pron: "[이그니션]", meaning: "발화, 점화 (ignition point 발화점)", example: "The ignition source must be identified in the fire investigation.", exampleKor: "화재 조사에서는 발화원을 규명해야 한다." },
-  { word: "combustion", pos: "n.", pron: "[컴버스천]", meaning: "연소 (combustible 가연성의)", example: "Combustion requires fuel, oxygen, and heat.", exampleKor: "연소에는 가연물, 산소, 열이 필요하다." },
-  { word: "flammable", pos: "adj.", pron: "[플래머블]", meaning: "인화성의 — 인화점이 낮아 쉽게 불붙는 (combustible보다 위험)", example: "Flammable liquids have a flash point below 37.8°C per NFPA 30.", exampleKor: "NFPA 30 기준 인화성 액체는 인화점이 37.8°C 미만이다." },
-  { word: "extinguish", pos: "v.", pron: "[익스팅귀시]", meaning: "소화하다 (extinguisher 소화기, extinguishment 소화)", example: "Water extinguishes fire mainly by cooling.", exampleKor: "물은 주로 냉각 작용으로 불을 끈다." },
-  { word: "suppression", pos: "n.", pron: "[서프레션]", meaning: "(화재) 진압, 소화 — fire suppression system 소화설비", example: "The suppression system activated within seconds of detection.", exampleKor: "소화설비는 감지 후 수 초 내에 작동했다." },
-  { word: "detection", pos: "n.", pron: "[디텍션]", meaning: "감지 — detector 감지기", example: "Early detection is critical for safe evacuation.", exampleKor: "조기 감지는 안전한 피난에 결정적이다." },
-  { word: "evacuation", pos: "n.", pron: "[이배큐에이션]", meaning: "피난, 대피", example: "The evacuation time must not exceed the available safe egress time.", exampleKor: "피난 소요 시간은 허용 피난 시간을 초과해서는 안 된다." },
-  { word: "egress", pos: "n.", pron: "[이그레스]", meaning: "피난(출구) — means of egress 피난 경로 (NFPA 101 핵심 용어)", example: "The means of egress consists of exit access, exit, and exit discharge.", exampleKor: "피난 경로는 피난 접근로, 피난로, 피난 출구부로 구성된다." },
-  { word: "compartment", pos: "n.", pron: "[컴파트먼트]", meaning: "방화구획 (compartmentation 구획화)", example: "Fire compartmentation limits fire spread to adjacent spaces.", exampleKor: "방화구획은 인접 공간으로의 화재 확산을 제한한다." },
-  { word: "penetration", pos: "n.", pron: "[페너트레이션]", meaning: "(배관 등의) 관통부 — firestop 내화채움", example: "All penetrations through fire barriers shall be firestopped.", exampleKor: "방화벽 관통부는 모두 내화채움 처리해야 한다." },
-  { word: "ventilation", pos: "n.", pron: "[벤틸레이션]", meaning: "환기, 배연", example: "Ventilation strategy strongly affects fire behavior.", exampleKor: "환기 전략은 화재 거동에 큰 영향을 준다." },
-  { word: "smoke control", pos: "n.", pron: "[스모크 컨트롤]", meaning: "제연 — smoke management 연기 관리", example: "The smoke control system maintains a tenable environment in the stairway.", exampleKor: "제연설비는 계단실의 거주 가능 환경을 유지한다." },
-  { word: "pressurization", pos: "n.", pron: "[프레셔리제이션]", meaning: "가압 — 부속실 급기가압의 그 '가압'", example: "Stair pressurization prevents smoke infiltration into the escape route.", exampleKor: "계단실 가압은 피난 경로로의 연기 침입을 방지한다." },
-  { word: "buoyancy", pos: "n.", pron: "[보이언시]", meaning: "부력 — 연기가 상승하는 원동력", example: "Hot smoke rises due to buoyancy.", exampleKor: "고온의 연기는 부력에 의해 상승한다." },
-  { word: "plume", pos: "n.", pron: "[플룸]", meaning: "(화재) 플룸 — 화원 위로 상승하는 열기류 기둥", example: "The fire plume entrains surrounding air as it rises.", exampleKor: "화재 플룸은 상승하며 주변 공기를 유입한다." },
-  { word: "ceiling jet", pos: "n.", pron: "[실링 젯]", meaning: "천장류 — 플룸이 천장에 부딪혀 수평으로 퍼지는 기류", example: "Sprinkler response depends on the ceiling jet temperature and velocity.", exampleKor: "스프링클러 반응은 천장류의 온도와 유속에 좌우된다." },
-  { word: "radiation", pos: "n.", pron: "[래디에이션]", meaning: "복사 (열전달 3형태 중 하나)", example: "Radiation is the dominant heat transfer mode in large fires.", exampleKor: "대형 화재에서는 복사가 지배적인 열전달 방식이다." },
-  { word: "convection", pos: "n.", pron: "[컨벡션]", meaning: "대류", example: "Convection carries hot gases to the upper layer.", exampleKor: "대류는 고온 가스를 상부층으로 운반한다." },
-  { word: "conduction", pos: "n.", pron: "[컨덕션]", meaning: "전도", example: "Heat conduction through the wall ignited materials in the next room.", exampleKor: "벽체를 통한 열전도가 옆방의 가연물을 발화시켰다." },
-  { word: "latent heat", pos: "n.", pron: "[레이턴트 히트]", meaning: "잠열 — 물 소화력의 핵심(기화잠열 2,257kJ/kg)", example: "Water's high latent heat of vaporization makes it an effective coolant.", exampleKor: "물의 높은 기화잠열이 물을 효과적인 냉각제로 만든다." },
-  { word: "vaporization", pos: "n.", pron: "[베이퍼리제이션]", meaning: "기화 (vapor 증기)", example: "Vaporization of water absorbs a large amount of heat.", exampleKor: "물의 기화는 많은 열을 흡수한다." },
-  { word: "deluge", pos: "n.", pron: "[델류지]", meaning: "일제살수식 — deluge system (개방형 헤드 + 일제개방밸브)", example: "A deluge system discharges water through all open sprinklers simultaneously.", exampleKor: "일제살수식은 모든 개방형 헤드에서 동시에 방수한다." },
-  { word: "preaction", pos: "n.", pron: "[프리액션]", meaning: "준비작동식 — preaction system", example: "A preaction system requires both detection and sprinkler operation.", exampleKor: "준비작동식은 감지기 작동과 헤드 개방이 모두 필요하다." },
-  { word: "dry pipe", pos: "n.", pron: "[드라이 파이프]", meaning: "건식 (↔ wet pipe 습식)", example: "Dry pipe systems are used where piping is subject to freezing.", exampleKor: "건식은 배관 동결 우려 장소에 사용한다." },
-  { word: "standpipe", pos: "n.", pron: "[스탠드파이프]", meaning: "연결송수관·옥내소화전 입상 배관 계통 (NFPA 14)", example: "Class I standpipes provide 65mm hose connections for fire department use.", exampleKor: "1급 스탠드파이프는 소방대용 65mm 방수구를 제공한다." },
-  { word: "hydrant", pos: "n.", pron: "[하이드런트]", meaning: "소화전 (fire hydrant 옥외소화전)", example: "Hydrants shall be located within the required distance from the building.", exampleKor: "소화전은 건물로부터 규정 거리 내에 설치해야 한다." },
-  { word: "nozzle", pos: "n.", pron: "[노즐]", meaning: "노즐, 관창", example: "The nozzle pressure determines the discharge flow rate.", exampleKor: "노즐 압력이 방수량을 결정한다." },
-  { word: "foam", pos: "n.", pron: "[폼]", meaning: "포(泡) 소화약제 — foam concentrate 포 원액", example: "Foam extinguishes flammable liquid fires by smothering and cooling.", exampleKor: "포는 질식과 냉각으로 인화성 액체 화재를 소화한다." },
-  { word: "clean agent", pos: "n.", pron: "[클린 에이전트]", meaning: "청정소화약제 (NFPA 2001 — 할로겐화합물·불활성기체)", example: "Clean agents leave no residue after discharge.", exampleKor: "청정소화약제는 방출 후 잔류물을 남기지 않는다." },
-  { word: "inert gas", pos: "n.", pron: "[이너트 개스]", meaning: "불활성기체 (IG-541, IG-100 등)", example: "Inert gases extinguish fire by reducing oxygen concentration.", exampleKor: "불활성기체는 산소 농도를 낮춰 소화한다." },
-  { word: "hazard", pos: "n.", pron: "[해저드]", meaning: "위험 요인 (risk와 구분되는 개념!)", example: "A hazard is a potential source of harm.", exampleKor: "해저드는 잠재적 위해 요인이다." },
-  { word: "risk", pos: "n.", pron: "[리스크]", meaning: "위험도 = 발생빈도 × 심각도 (hazard가 현실화될 가능성과 결과)", example: "Risk is the combination of probability and consequence.", exampleKor: "리스크는 발생 확률과 결과 심각도의 조합이다." },
-  { word: "redundancy", pos: "n.", pron: "[리던던시]", meaning: "이중화, 여유도 — 비상전원 이중화의 그 개념", example: "Redundancy of power supply improves system reliability.", exampleKor: "전원 이중화는 시스템 신뢰도를 높인다." },
-  { word: "reliability", pos: "n.", pron: "[릴라이어빌리티]", meaning: "신뢰도, 신뢰성", example: "Sprinkler systems have a high operational reliability.", exampleKor: "스프링클러설비는 작동 신뢰도가 높다." },
-  { word: "fail-safe", pos: "adj.", pron: "[페일세이프]", meaning: "고장 시 안전측으로 작동하는 (↔ fail-soft, fool-proof)", example: "Fire doors are designed to be fail-safe: they close on power failure.", exampleKor: "방화문은 페일세이프로 설계되어 정전 시 닫힌다." },
-  { word: "performance-based design", pos: "n.", pron: "[퍼포먼스 베이스드 디자인]", meaning: "성능위주설계 (PBD)", example: "Performance-based design verifies safety goals by engineering analysis.", exampleKor: "성능위주설계는 공학적 해석으로 안전 목표를 검증한다." },
-  { word: "prescriptive", pos: "adj.", pron: "[프리스크립티브]", meaning: "사양위주의 (↔ performance-based)", example: "Prescriptive codes specify exact requirements such as distances and sizes.", exampleKor: "사양위주 기준은 거리·크기 같은 구체적 요건을 규정한다." },
-  { word: "passive", pos: "adj.", pron: "[패시브]", meaning: "수동적 방화 — passive fire protection (내화구조·방화구획)", example: "Passive fire protection includes fire-resistant walls and firestopping.", exampleKor: "수동적 방화에는 내화 벽체와 내화채움이 포함된다." },
-  { word: "active", pos: "adj.", pron: "[액티브]", meaning: "능동적 소방 — active fire protection (소화·경보설비)", example: "Active systems such as sprinklers respond directly to fire.", exampleKor: "스프링클러 같은 능동 설비는 화재에 직접 대응한다." },
-  { word: "integrity", pos: "n.", pron: "[인테그리티]", meaning: "차염성(E) — 내화성능 3요소 중 화염·가스 차단", example: "Integrity (E) is the ability to prevent passage of flames and hot gases.", exampleKor: "차염성(E)은 화염과 고온 가스의 통과를 막는 능력이다." },
-  { word: "insulation", pos: "n.", pron: "[인설레이션]", meaning: "차열성(I) — 이면 온도 상승 제한", example: "Insulation (I) limits the temperature rise on the unexposed side.", exampleKor: "차열성(I)은 비노출면의 온도 상승을 제한한다." },
-  { word: "load-bearing capacity", pos: "n.", pron: "[로드베어링 커패시티]", meaning: "하중지지력(R) — 내화성능 3요소의 나머지 하나", example: "Load-bearing capacity (R) is the ability to sustain structural loads during fire.", exampleKor: "하중지지력(R)은 화재 중 구조 하중을 견디는 능력이다." },
-  { word: "tenability", pos: "n.", pron: "[테너빌리티]", meaning: "거주가능성 — ASET 판정 기준 (온도·가시도·독성)", example: "Tenability criteria include temperature, visibility, and toxicity limits.", exampleKor: "거주가능성 기준에는 온도·가시도·독성 한계가 포함된다." },
-  { word: "travel distance", pos: "n.", pron: "[트래블 디스턴스]", meaning: "보행거리 (피난 설계의 핵심 치수)", example: "The travel distance to an exit shall not exceed the code limit.", exampleKor: "출구까지의 보행거리는 기준 한도를 초과할 수 없다." },
-  { word: "occupancy", pos: "n.", pron: "[아큐펀시]", meaning: "용도 (건물 용도 분류 — occupant load 수용 인원)", example: "Egress requirements vary with occupancy classification.", exampleKor: "피난 요건은 용도 분류에 따라 달라진다." },
-  { word: "toxicity", pos: "n.", pron: "[톡시서티]", meaning: "독성 — 화재 사망의 주원인(CO 등 연소가스)", example: "Most fire deaths are caused by smoke toxicity, not burns.", exampleKor: "화재 사망 대부분은 화상이 아니라 연기 독성 때문이다." },
-  { word: "visibility", pos: "n.", pron: "[비저빌리티]", meaning: "가시도 — 피난 가능 여부를 좌우", example: "Reduced visibility slows evacuation speed significantly.", exampleKor: "가시도 저하는 피난 속도를 크게 늦춘다." },
-  { word: "commissioning", pos: "n.", pron: "[커미셔닝]", meaning: "시험·검수, 성능 확인 — 준공 전 설비 성능 검증", example: "Commissioning verifies that installed systems perform as designed.", exampleKor: "커미셔닝은 설치된 설비가 설계대로 작동함을 검증한다." },
+  { word: "Flashover", cat: "연소·화재", kor: "[플래시오버]", meaning: "국소 화재가 실 전체 화재로 급격히 전이되는 현상. 천장부 온도 약 600℃, 바닥 복사열 약 20kW/m² 조건.", tip: "137·134회 기출(불티 FD-001). 정의·발생조건·예측식·지연대책 세트로 정리. 답안에 'Flashover' 원어 표기가 표준이야." },
+  { word: "Backdraft", cat: "연소·화재", kor: "[백드래프트]", meaning: "밀폐 공간의 산소부족 화재에 개구부 개방 등으로 공기가 급격히 유입되며 발생하는 폭발적 연소.", tip: "Flashover와의 비교표(발생시기·지배요인·전조현상)가 단골 논점. '환기지배형 화재'라는 키워드와 반드시 묶어서." },
+  { word: "Rollover", cat: "연소·화재", kor: "[롤오버]", meaning: "천장 아래에 축적된 미연소 가연성 가스가 화염이 되어 굴러가듯 번지는 현상. Flashover의 전조.", tip: "Flashover 전조현상을 묻는 문제에서 Rollover(Flameover)를 언급하면 답안의 깊이가 달라져." },
+  { word: "Fire Plume", cat: "연소·화재", kor: "[파이어 플룸]", meaning: "화원 위로 상승하는 부력 기류 기둥. 연속화염역·간헐화염역·부력플룸역 3영역으로 구분.", tip: "138·135회 기출(불티 FD-006). Heskestad 화염높이식과 함께 계산문제로 출제. 3영역 그림 하나로 10점 차이 나." },
+  { word: "Ceiling Jet", cat: "연소·화재", kor: "[실링 젯]", meaning: "플룸이 천장에 부딪혀 수평으로 퍼지는 고온 기류. 두께는 천장고의 약 5~12%.", tip: "헤드·감지기 감열 메커니즘의 출발점. RTI 문제 서론에 'Ceiling Jet에 의한 감열' 한 줄 넣으면 흐름이 잡혀." },
+  { word: "Smoldering", cat: "연소·화재", kor: "[스몰더링]", meaning: "훈소 — 화염 없이 표면에서 서서히 진행되는 연소. 다량의 CO 발생, 화염연소로 전환 가능.", tip: "128회 기출(불티 FD-007). '훈소(Smoldering)'처럼 병기하는 게 표준. 화염전환 조건까지 쓰면 완성." },
+  { word: "Pyrolysis", cat: "연소·화재", kor: "[파이롤리시스]", meaning: "열분해 — 가연물이 열을 받아 가연성 증기를 방출하는 과정. 고체 연소의 첫 단계.", tip: "고체 가연물 연소 메커니즘 답안의 첫 문장: '열분해(Pyrolysis)로 생성된 가연성 증기가…'로 시작하면 깔끔해." },
+  { word: "LFL / UFL", cat: "연소·화재", kor: "[엘에프엘 / 유에프엘]", meaning: "연소하한계/연소상한계(Lower/Upper Flammability Limit). 이 사이 농도에서만 연소 가능.", tip: "139·138회 기출(불티 FD-003). 온도·압력·산소·불활성가스가 미치는 영향을 그래프로 그리는 게 핵심. 국문은 '연소범위'." },
+  { word: "Le Chatelier", cat: "연소·화재", kor: "[르샤틀리에]", meaning: "혼합가스의 연소하한계 산정식. LFL = 100/Σ(Vi/LFLi).", tip: "125회 기출(불티 FD-004) 계산문제. 식 이름을 'Le Chatelier식'으로 정확히 쓰고 단위 검산까지." },
+  { word: "AIT", cat: "연소·화재", kor: "[에이아이티]", meaning: "자연발화온도(Auto-Ignition Temperature). 점화원 없이 스스로 발화하는 최저온도.", tip: "인화점(Flash Point)·연소점(Fire Point)·AIT 3종 비교가 단골. 131·128회 자연발화 문제(불티 FD-008)와 연결." },
+  { word: "HRR", cat: "연소·화재", kor: "[에이치알알]", meaning: "열방출률(Heat Release Rate, Q̇). 화재 크기를 나타내는 가장 중요한 단일 지표. 단위 kW.", tip: "설계화재(Design Fire), 플룸 계산, 스프링클러 작동 예측 전부 HRR에서 출발해. 'Q̇=m''×ΔHc×A' 기본식과 함께." },
+  { word: "Fire Severity", cat: "연소·화재", kor: "[파이어 시비어리티]", meaning: "화재가혹도 = 화재강도(최고온도) × 화재계속시간. 내화설계의 기준이 되는 개념.", tip: "138·129회 기출(불티 FD-002). 화재하중(Fire Load)과의 관계, 내화시간 설계 연결까지가 한 세트야." },
+  { word: "Extinction Coefficient", cat: "연소·화재", kor: "[익스팅션 코이피션트]", meaning: "감광계수(Cs). 연기 농도 지표로 가시거리와 반비례. 0.1(연기감지기 작동)·0.3(피난한계) 값이 핵심.", tip: "125회 기출(불티 FD-009). Cs×V=상수(2~10) 관계식과 대표값 표를 세트로 암기." },
+  { word: "BLEVE", cat: "폭발", kor: "[블레비]", meaning: "비등액체팽창증기폭발(Boiling Liquid Expanding Vapor Explosion). 가압 액화가스 탱크 파열 시 발생.", tip: "발생 메커니즘 5단계 + Fireball 연계 + 방지대책(단열·냉각살수·감압)이 표준 구성. 무조건 영어 약어로 출제돼." },
+  { word: "UVCE", cat: "폭발", kor: "[유브이씨이]", meaning: "개방공간 증기운폭발(Unconfined Vapor Cloud Explosion). 누출된 증기운이 개방공간에서 폭발.", tip: "BLEVE와의 비교(발생장소·메커니즘·피해양상)가 단골. TNT 당량법 언급하면 가점 요소." },
+  { word: "Boil-over", cat: "폭발", kor: "[보일오버]", meaning: "중질유 탱크 화재에서 열파가 하부 수층에 도달, 물이 급격히 비등하며 유류를 분출시키는 현상.", tip: "Slop-over(포 방사 시 표면 분출)·Froth-over와 3종 비교표가 표준. 위험물 탱크화재 문제의 핵심 용어." },
+  { word: "Deflagration", cat: "폭발", kor: "[데플러그레이션]", meaning: "폭연 — 화염전파속도가 음속 미만인 폭발. 음속 이상은 Detonation(폭굉).", tip: "폭연·폭굉 비교(전파속도·압력파·메커니즘)는 언제든 나올 수 있는 기본기. DDT(폭연→폭굉 전이)까지 쓰면 상위권." },
+  { word: "MOC", cat: "폭발", kor: "[엠오씨]", meaning: "최소산소농도(Minimum Oxygen Concentration). 연소에 필요한 최저 산소농도. MOC=LFL×산소양론계수.", tip: "137·134·123회 기출(불티 HZ-005). 불활성화(Inerting) 설계의 기준값. 퍼지 4방식과 한 세트로." },
+  { word: "Purge / Inerting", cat: "폭발", kor: "[퍼지 / 이너팅]", meaning: "불활성가스로 산소농도를 MOC 이하로 낮추는 조작. 진공·압력·스위프·사이펀 4방식.", tip: "4방식의 원리·장단점 비교표가 표준 답안. '치환(Purge)'처럼 국문과 병기하면 안정적이야." },
+  { word: "MESG", cat: "폭발", kor: "[엠이에스지]", meaning: "최대안전틈새(Maximum Experimental Safe Gap). 화염이 틈새를 통과하지 못하는 최대 간극.", tip: "방폭구조 등급 분류(IIA/IIB/IIC)의 기준. 내압방폭 원리 문제에서 핵심 키워드." },
+  { word: "RTI", cat: "수계 소화", kor: "[알티아이]", meaning: "반응시간지수(Response Time Index). 헤드 감열부의 열적 민감도. τ=RTI/√u 관계.", tip: "130·129·122회 3회 기출(불티 SP-001). 정의식 RTI=τ√u, 등급값(조기≤50/특수≤80/표준≤350) 필수 암기." },
+  { word: "K-factor", cat: "수계 소화", kor: "[케이팩터]", meaning: "방출계수. Q=K√P의 K값. 오리피스 구경이 클수록 큼(K80, K115, K160, K200…).", tip: "135·125회 기출(불티 SP-004). 계산문제 단골 — 단위(LPM/bar^0.5)를 틀리면 감점이니 단위까지 세트로." },
+  { word: "ESFR", cat: "수계 소화", kor: "[이에스에프알]", meaning: "화재조기진압형 스프링클러(Early Suppression Fast Response). 랙크식 창고 등에 적용.", tip: "131·123·120회 기출(불티 SP-009). 3요소(RTI·K·설치위치)와 RDD/ADD 개념이 반드시 함께 나와." },
+  { word: "RDD / ADD", cat: "수계 소화", kor: "[알디디 / 에이디디]", meaning: "필요살수밀도(Required Delivered Density) / 실제도달살수밀도(Actual Delivered Density). ADD>RDD면 진압 성공.", tip: "ESFR 진압이론의 핵심. 시간에 따른 RDD 상승·ADD 하락 그래프 하나가 답안의 승부처야." },
+  { word: "Skipping", cat: "수계 소화", kor: "[스키핑]", meaning: "먼저 개방된 헤드의 살수가 인접 헤드를 냉각시켜 개방을 방해하는 현상.", tip: "헤드 간 최소이격거리(1.8m)의 이유를 묻는 문제의 정답 키워드. 짧은 용어 하나로 논리가 완성되는 케이스." },
+  { word: "Cold Soldering", cat: "수계 소화", kor: "[콜드 솔더링]", meaning: "살수된 물이 감열부를 적셔 인접 헤드의 개방을 지연·방해하는 현상. Skipping과 유사 맥락.", tip: "ESFR·라지드롭 헤드의 배치기준 근거로 함께 언급하면 채점자가 '실무를 아는 답안'으로 읽어." },
+  { word: "Cavitation", cat: "수계 소화", kor: "[캐비테이션]", meaning: "공동현상 — 펌프 흡입측 압력이 포화증기압 이하로 떨어져 기포가 생성·붕괴되는 현상.", tip: "135·128·125·120회 4회 기출(불티 SP-007) 최다빈출급. 정의→발생조건→영향→방지대책(NPSHav>NPSHre) 순서로." },
+  { word: "NPSH", cat: "수계 소화", kor: "[엔피에스에이치]", meaning: "유효흡입수두(Net Positive Suction Head). NPSHav(이용가능)>NPSHre(필요)여야 공동현상 방지.", tip: "Cavitation 문제의 결론부 필수 수식. 'NPSHav ≥ NPSHre×1.3' 여유율까지 쓰면 실무형 답안 완성." },
+  { word: "Water Hammer", cat: "수계 소화", kor: "[워터 해머]", meaning: "수격현상 — 밸브 급폐쇄 등으로 유속이 급변하며 압력파가 발생하는 현상.", tip: "122·128회 기출(불티 SP-008). Joukowsky 충격파식(ΔP=ρcΔv)을 쓰면 계산 근거가 생겨. 방지: 완폐쇄·수격방지기·에어챔버." },
+  { word: "Interlock", cat: "수계 소화", kor: "[인터록]", meaning: "준비작동식 밸브 개방조건 방식. Single(감지기), Non(감지기 또는 헤드), Double(감지기 그리고 헤드).", tip: "138·137회 기출(불티 SP-010). 3방식 비교표(개방조건·오작동/실작동 리스크·적용장소)가 그대로 답안이 돼." },
+  { word: "Trip Time", cat: "수계 소화", kor: "[트립 타임]", meaning: "건식밸브 개방 소요시간. 이후 물이 말단까지 도달하는 시간은 Transit Time. NFPA 13은 60초 기준.", tip: "132·125회 기출(불티 SP-011). 국내기준과 NFPA 60초 룰 비교가 논점 — 미국기준 비교형 문제의 전형이야." },
+  { word: "Churn Pressure", cat: "수계 소화", kor: "[천 프레셔]", meaning: "체절압력 — 토출량 0 상태(체절운전)의 펌프 압력. 정격토출압의 140% 이하여야 함.", tip: "127·123·120회 기출(불티 SP-006). 성능시험 3운전점(체절 140%/정격 100%/최대 150% 유량 시 65%)과 함께." },
+  { word: "Slenderness Ratio", cat: "수계 소화", kor: "[슬렌더니스 레이쇼]", meaning: "세장비(λ=L/r) — 흔들림방지버팀대 설계에서 300 이하로 제한되는 값.", tip: "139·133·124회 기출(불티 SP-012) 내진설계 계산문제. 좌굴 방지가 목적이라는 '이유'까지 쓰는 게 포인트." },
+  { word: "Clean Agent", cat: "가스 소화", kor: "[클린 에이전트]", meaning: "청정소화약제 — 방출 후 잔류물이 없는 할로겐화합물·불활성기체 소화약제(NFPA 2001).", tip: "약제 분류 문제의 대분류 용어. 할로겐화합물(냉각·부촉매) vs 불활성기체(질식)의 소화원리 구분이 첫 논점." },
+  { word: "Soaking Time", cat: "가스 소화", kor: "[소킹 타임]", meaning: "설계농도유지시간 — 재발화 방지를 위해 소화농도를 유지해야 하는 시간.", tip: "5회 기출(불티 GS-002) 최다빈출. 확보 방안(개구부 자동폐쇄·누설 최소화)과 영향요소를 세트로. 원어 표기가 표준이야." },
+  { word: "Enclosure Integrity", cat: "가스 소화", kor: "[인클로저 인테그리티]", meaning: "방호구역 밀폐도. Door Fan Test로 누설면적을 측정해 약제 유지시간을 예측.", tip: "137·126·121회 기출(불티 GS-003) — f7 대문제급. 시험 원리(가압/감압)·절차·판정을 그림과 함께 정리해둬." },
+  { word: "NOAEL / LOAEL", cat: "가스 소화", kor: "[노아엘 / 로아엘]", meaning: "무독성농도/최소독성농도. 할로겐화합물 약제의 인체 안전 기준 — 상주공간은 NOAEL 이하 설계.", tip: "약제 최대허용설계농도의 근거를 묻는 문제의 핵심. 심장 민감화(Cardiac Sensitization) 개념과 함께 쓰면 완성." },
+  { word: "Stack Effect", cat: "제연", kor: "[스택 이펙트]", meaning: "연돌효과 — 실내외 온도차에 의한 밀도차로 수직 샤프트에 상승(겨울)·하강(여름) 기류가 형성되는 현상.", tip: "132·122회 기출(불티 SM-003). 중성대(Neutral Plane) 개념, 초고층 문제점, 대책(구획·방풍실·가압)까지 한 세트." },
+  { word: "Plugholing", cat: "제연", kor: "[플러그홀링]", meaning: "배연구에서 연기층 아래의 신선공기까지 함께 빨려 들어가 배연효율이 떨어지는 현상.", tip: "138·121회 기출(불티 SM-002). NFPA 92의 최대배출량식과 방지대책(배연구 분산·연기층 두께 확보)이 표준 구성." },
+  { word: "Backlayering", cat: "제연", kor: "[백레이어링]", meaning: "터널 화재에서 연기가 종류식 환기 기류를 거슬러 상류로 역류하는 현상.", tip: "129·128회 기출(불티 SM-005). 방지 조건이 임계풍속(Critical Velocity) — 두 용어는 반드시 한 문장에 같이 나와야 해." },
+  { word: "Critical Velocity", cat: "제연", kor: "[크리티컬 벨로시티]", meaning: "임계풍속 — Backlayering을 방지할 수 있는 최소 종방향 풍속(통상 2~3m/s 수준).", tip: "터널 제연 문제의 결론 키워드. Kennedy식 언급하면 가점. HRR·터널높이의 함수라는 점까지." },
+  { word: "Stratification", cat: "제연", kor: "[스트래티피케이션]", meaning: "연기 성층화 — 아트리움 등에서 연기가 특정 높이에 층을 이뤄 정체, 상부 감지기가 작동하지 못하는 현상.", tip: "131·128회 기출(불티 SM-006). 원인(온도역전층)과 대응(빔감지기 다단 설치·공기흡입형)이 논점이야." },
+  { word: "Make-up Air", cat: "제연", kor: "[메이크업 에어]", meaning: "보충공기 — 배연량에 상응해 하부로 공급하는 급기. 유입풍속이 과하면 연기층을 교란함.", tip: "거실제연 설계 문제에서 '급기(Make-up Air) 유속 1m/s 수준 제한'을 언급하면 NFPA 92를 아는 답안이 돼." },
+  { word: "Door Closing Force", cat: "제연", kor: "[도어 클로징 포스]", meaning: "부속실 가압 시 출입문 개방에 필요한 힘. 110N 이하로 제한.", tip: "139·135회 등 6회 기출(불티 SM-001) 최다빈출 주제의 4대 수치 중 하나 — 차압 40Pa·유입풍속 0.7m/s·110N·방연풍속 세트로." },
+  { word: "ASET / RSET", cat: "피난", kor: "[에이셋 / 알셋]", meaning: "허용피난시간(Available Safe Egress Time) / 필요피난시간(Required Safe Egress Time). ASET>RSET이면 안전.", tip: "136·126회 기출(불티 EV-001). RSET 구성(감지+통보+지연+이동)을 시간축 그림으로 그리는 게 정석. 성능위주설계의 뼈대야." },
+  { word: "Tenability", cat: "피난", kor: "[테너빌리티]", meaning: "거주가능성 — ASET 판정 기준. 호흡한계선 1.8m에서 온도 60℃·가시거리·CO농도 등의 한계값.", tip: "124·125회 기출(불티 EV-002). 인명안전기준 수치와 함께, 'Tenability Criteria'로 원어 표기하는 게 표준." },
+  { word: "Egress", cat: "피난", kor: "[이그레스]", meaning: "피난. Means of Egress(피난경로)는 피난접근로(Exit Access)·피난로(Exit)·피난출구부(Exit Discharge) 3구성.", tip: "NFPA 101 비교형 문제의 기본 용어. 국내법의 '직통계단·피난계단' 체계와 대비시키면 미국기준 비교 답안이 완성돼." },
+  { word: "PBD", cat: "피난·설계", kor: "[피비디]", meaning: "성능위주설계(Performance-Based Design). 공학적 해석으로 안전목표 달성을 검증하는 설계 방식.", tip: "130·127·123회 기출(불티 LW-003). 사양위주(Prescriptive)와의 비교, 대상물 기준, 시나리오 유형까지 3단 구성으로." },
+  { word: "Design Fire", cat: "피난·설계", kor: "[디자인 파이어]", meaning: "설계화재 — PBD에서 가정하는 화재 시나리오의 HRR 성장곡선(αt² 등).", tip: "화재성장속도 4단계(Slow~Ultrafast)의 α값과 t² 곡선 그래프는 PBD 문제 어디에나 재사용 가능한 만능 부품이야." },
+  { word: "HAZOP", cat: "위험성평가", kor: "[해좁]", meaning: "위험과 운전분석(Hazard and Operability Study). 가이드워드로 공정 이탈을 체계적으로 도출하는 정성적 기법.", tip: "134·127회 기출(불티 HZ-007). K-PSR과의 비교, 가이드워드(No/More/Less…) 예시를 표로 만들면 그대로 답안." },
+  { word: "FTA / ETA", cat: "위험성평가", kor: "[에프티에이 / 이티에이]", meaning: "결함수분석(연역적, Top-down) / 사건수분석(귀납적, Bottom-up). 정량적 위험성평가의 두 축.", tip: "136·128회 기출(불티 HZ-008). '연역 vs 귀납' 방향성 비교가 핵심 논점 — AND/OR 게이트 그림 하나 곁들이면 좋아." },
+  { word: "F-N Curve", cat: "위험성평가", kor: "[에프엔 커브]", meaning: "사고빈도(F)와 사망자수(N)의 관계 곡선. 사회적 위험도(Societal Risk)의 허용기준 판정에 사용.", tip: "QRA 절차의 마지막 단계. ALARP 영역(허용불가/조건부허용/광범위허용) 3구간 그림과 함께 쓰는 게 정석이야." },
+  { word: "ALARP", cat: "위험성평가", kor: "[알랍]", meaning: "합리적으로 실행 가능한 최저 수준(As Low As Reasonably Practicable). 위험 허용기준의 핵심 원칙.", tip: "리스크 관리 문제의 결론부 단골. '비용 대비 편익이 현저히 불균형하지 않은 한 저감'이라는 정의를 정확히." },
+  { word: "Domino Effect", cat: "위험성평가", kor: "[도미노 이펙트]", meaning: "한 설비의 사고가 인접 설비의 연쇄 사고를 유발하는 현상. 복사열·폭풍압·비산물이 매개.", tip: "위험물 시설 배치·이격거리 문제에서 '연쇄확대(Domino Effect) 방지'가 설계 목적으로 등장해. 짧지만 강한 키워드." },
+  { word: "Arc", cat: "전기", kor: "[아크]", meaning: "전기불꽃 방전. 직렬아크(접촉불량)·병렬아크(절연파괴)로 구분되며 전기화재의 주요 발화원.", tip: "139·130회 기출(불티 EL-004). 아크차단기(AFCI)의 검출 원리(고주파 파형 분석)까지 쓰면 전기 파트 상위 답안." },
+  { word: "Tracking", cat: "전기", kor: "[트래킹]", meaning: "절연물 표면의 오염·습기로 미소방전이 반복되어 탄화도전로가 형성, 발화에 이르는 현상.", tip: "발생 3단계(오염부착→건조대 형성·미소방전→탄화로 형성)를 순서대로 쓰는 것이 정석. 흑연화(Graphite)현상과 구분 필수." },
+  { word: "Migration", cat: "전기", kor: "[마이그레이션]", meaning: "은(Ag) 이온이 절연물 표면을 이동해 석출, 절연저하와 발열·발화를 일으키는 현상.",  tip: "139·136회 기출(불티 EL-005). 은 이온화→이동→석출·수지상 성장의 메커니즘 순서 + 발생조건(직류·습기·은)." },
+  { word: "Thermal Runaway", cat: "전기·신기술", kor: "[써멀 런어웨이]", meaning: "리튬이온 배터리의 열폭주 — 내부 발열이 연쇄 반응을 일으켜 제어 불가능하게 온도가 상승하는 현상.", tip: "ESS·전기차 화재는 최신 출제 경향의 중심. 발생 메커니즘(SEI 분해→분리막 붕괴→양극 분해)과 Off-gassing 연계로." },
+  { word: "Off-gassing", cat: "전기·신기술", kor: "[오프개싱]", meaning: "열폭주 전 단계에서 배터리 내부 전해액이 분해되어 가연성 가스를 방출하는 현상.", tip: "ESS 화재 '조기감지' 대책의 근거 — 오프가스 감지기가 연기감지기보다 앞선 단계라는 논리로 답안을 세워." },
+  { word: "Fail-safe", cat: "설계 개념", kor: "[페일세이프]", meaning: "고장 시 안전측으로 작동하는 설계. 정전 시 방화문 폐쇄, 감지기 단선 시 경보 등.", tip: "Fool-proof(오조작 방지)와의 비교가 단골. 소방설비별 적용 예시 3개씩 들면 표 하나로 답안이 끝나." },
+  { word: "Firestop", cat: "건축 방재", kor: "[파이어스톱]", meaning: "내화충전 — 방화구획 관통부의 틈새를 내화성능 인정 자재로 밀폐하는 시스템.", tip: "방화구획(불티 BD-001, f7 최다빈출)의 실무 논점. 내화충전구조 인정 기준·시험(KS F ISO 10295) 언급하면 현장을 아는 답안이 돼." },
 ];
 
 // ══════════════════════════════════════════
-// 한자 — 생활 한자(기존) + 사찰·현판·비석 한자(확장)
+// 오늘의 중국어 — 완전 기초. 발음은 한글 근사, 성조는 화살표로.
+// 1성(→ 높고 평평) 2성(↗ 올림) 3성(∨ 내렸다 올림) 4성(↘ 뚝 떨어짐) 경성(· 짧고 가볍게)
 // ══════════════════════════════════════════
-const HANJA = [
-  { char: "天", kor: "하늘 천", chi: "tiān", stroke: "4획", meaning: "하늘, 하느님, 자연. 가장 높고 넓은 것.", origin: "사람(大)이 팔을 벌리고 서 있는 모습에서, 그 머리 위에 획 하나를 더해 저 위를 가리킨 글자야.", example: "天地(천지): 하늘과 땅 / 天才(천재): 하늘이 내린 재주", grade: "8급" },
-  { char: "地", kor: "땅 지", chi: "dì", stroke: "6획", meaning: "땅, 토지, 장소, 위치.", origin: "土(흙 토)와 也(어조사 야)가 합쳐진 글자야. 흙이 넓게 펼쳐진 곳이 땅이라는 의미.", example: "地球(지구): 우리가 사는 행성 / 地下(지하): 땅 아래", grade: "8급" },
-  { char: "人", kor: "사람 인", chi: "rén", stroke: "2획", meaning: "사람, 인간, 타인.", origin: "사람이 두 다리를 벌리고 서 있는 옆모습을 그린 글자야.", example: "人間(인간): 사람 / 人生(인생): 사람이 살아가는 일", grade: "8급" },
-  { char: "日", kor: "해 일", chi: "rì", stroke: "4획", meaning: "해, 태양, 날(하루), 일본.", origin: "원래는 동그란 원 안에 점을 찍은 그림이었어. 태양의 모습을 직접 그린 거야.", example: "日出(일출): 해가 뜸 / 日記(일기): 날마다 쓰는 기록", grade: "8급" },
-  { char: "月", kor: "달 월", chi: "yuè", stroke: "4획", meaning: "달(moon), 달(month), 한 달.", origin: "초승달 모양을 그린 글자야. 달이 자주 이지러진 모습이기 때문에 오목하게 표현했어.", example: "月曜(월요): 월요일 / 歲月(세월): 흘러가는 시간", grade: "8급" },
-  { char: "火", kor: "불 화", chi: "huǒ", stroke: "4획", meaning: "불, 화재, 불꽃, 화요일.", origin: "불꽃이 타오르는 모습을 그린 그림문자야. 소방과 관련된 한자의 핵심 글자야!", example: "火災(화재): 불로 인한 재해 / 消火(소화): 불을 끔", grade: "8급" },
-  { char: "水", kor: "물 수", chi: "shuǐ", stroke: "4획", meaning: "물, 액체, 수요일.", origin: "물이 흘러가는 모습을 그린 글자야. 소방에서 수계소화설비의 핵심 글자!", example: "水道(수도): 물이 흐르는 길 / 消防水(소방수): 소방용 물", grade: "8급" },
-  { char: "木", kor: "나무 목", chi: "mù", stroke: "4획", meaning: "나무, 목재, 목요일.", origin: "뿌리는 아래로 뻗고 가지는 위로 퍼지는 나무의 모습을 그대로 그린 글자야.", example: "木材(목재): 건축·가구 재료 / 木造(목조): 나무로 지은", grade: "8급" },
-  { char: "山", kor: "산 산", chi: "shān", stroke: "3획", meaning: "산, 산지, 봉우리.", origin: "세 개의 봉우리가 솟은 산의 모습을 그대로 표현한 글자야.", example: "登山(등산): 산을 오름 / 鳳棲山(봉서산): J가 자주 가는 천안의 산", grade: "8급" },
-  { char: "大", kor: "클 대", chi: "dà", stroke: "3획", meaning: "크다, 위대하다, 어른.", origin: "사람(人)이 팔을 크게 벌리고 서 있는 모습이야.", example: "大學(대학): 큰 배움의 장 / 大雄殿(대웅전): 절의 중심 법당", grade: "8급" },
-  { char: "小", kor: "작을 소", chi: "xiǎo", stroke: "3획", meaning: "작다, 적다, 어리다.", origin: "大(크다)의 반대. 큰 것에서 작은 조각들이 흩어져 나가는 이미지를 표현했다는 설도 있어.", example: "小學(소학): 초등학교 / 大小(대소): 크고 작음", grade: "8급" },
-  { char: "中", kor: "가운데 중", chi: "zhōng", stroke: "4획", meaning: "가운데, 중간, 중국.", origin: "깃발을 세운 모습이라는 설, 과녁의 정중앙을 화살이 관통하는 모습이라는 설이 있어.", example: "中心(중심): 가운데 / 中間(중간): 두 사이의 가운데", grade: "8급" },
-  { char: "心", kor: "마음 심", chi: "xīn", stroke: "4획", meaning: "마음, 심장, 감정, 생각.", origin: "심장의 모양을 본뜬 글자야. 변으로 쓰이면 忄(심방변)이 되어 감정 관련 글자들을 만들어.", example: "心情(심정): 마음의 상태 / 決心(결심): 마음을 굳힘", grade: "7급" },
-  { char: "學", kor: "배울 학", chi: "xué", stroke: "16획", meaning: "배우다, 학문, 학교.", origin: "위에는 두 손으로 교재를 받드는 모습, 가운데는 지붕, 아래는 아이(子)가 있는 구조야.", example: "學習(학습): 배우고 익힘 / 學問(학문): 배움과 물음", grade: "7급" },
-  { char: "問", kor: "물을 문", chi: "wèn", stroke: "11획", meaning: "묻다, 질문하다, 안부를 묻다.", origin: "門(문) 안에 口(입)가 있는 구조야. 문 앞에서 입으로 안을 물어보는 장면이지.", example: "質問(질문): 묻는 것 / 問題(문제): 묻는 제목 → 문제", grade: "7급" },
-  { char: "答", kor: "대답 답", chi: "dá", stroke: "12획", meaning: "대답하다, 답, 해답.", origin: "竹(대나무 죽)과 合(합할 합)이 합쳐진 글자야. 問(묻다)의 짝꿍 글자야.", example: "回答(회답): 돌아와 답함 / 正答(정답): 바른 답", grade: "7급" },
-  { char: "知", kor: "알 지", chi: "zhī", stroke: "8획", meaning: "알다, 지식, 깨닫다.", origin: "矢(화살 시)와 口(입 구)가 합쳐진 글자야. 화살처럼 빠르고 정확하게 말하는 것을 의미해.", example: "知識(지식): 아는 것 / 無知(무지): 모르는 것", grade: "6급" },
-  { char: "道", kor: "길 도", chi: "dào", stroke: "12획", meaning: "길, 도리, 방법, 말하다.", origin: "辶(쉬엄쉬엄 갈 착)과 首(머리 수)가 합쳐진 글자야. 머리를 앞으로 향해 나아가는 길이라는 뜻이야.", example: "道路(도로): 길 / 修道(수도): 도를 닦음", grade: "6급" },
-  { char: "德", kor: "덕 덕", chi: "dé", stroke: "15획", meaning: "덕, 덕행, 품성, 은혜.", origin: "彳(두인변)과 直(곧을 직), 心(마음 심)의 조합이야. 곧은 마음으로 남에게 베푸는 행동이 덕이야.", example: "道德(도덕): 삶의 올바른 길 / 德目(덕목): 덕스러운 항목", grade: "5급" },
-  { char: "禮", kor: "예도 례", chi: "lǐ", stroke: "18획", meaning: "예의, 예절, 의식, 선물.", origin: "示(보일 시)와 豊(풍성할 풍)이 합쳐진 글자야. 제사상을 풍성하게 차려 신을 모시는 것이 예의 시작.", example: "禮儀(예의): 예절 / 禮節(예절): 몸가짐의 규범", grade: "5급" },
-  { char: "義", kor: "옳을 의", chi: "yì", stroke: "13획", meaning: "의리, 옳다, 의미, 뜻.", origin: "羊(양 양)과 我(나 아)가 합쳐진 글자야. 공자가 말한 仁義禮智 중 하나야.", example: "正義(정의): 바르고 옳은 것 / 義士(의사): 의로운 선비", grade: "5급" },
-  { char: "仁", kor: "어질 인", chi: "rén", stroke: "4획", meaning: "어질다, 인자함, 사랑.", origin: "人(사람 인)과 二(두 이)가 합쳐진 글자야. 두 사람 사이의 마음, 즉 인간을 사랑하는 마음이 仁이야.", example: "仁義(인의): 어짊과 옳음 / 仁川(인천): 어진 물의 도시", grade: "5급" },
-  { char: "智", kor: "지혜 지", chi: "zhì", stroke: "12획", meaning: "지혜, 총명함, 슬기.", origin: "知(알다)와 日(해)이 합쳐진 형태야. 아는 것이 해처럼 밝게 빛나는 것이 智야.", example: "智慧(지혜): 슬기로운 앎 / 智異山(지리산): 지혜로운 산", grade: "5급" },
-  { char: "信", kor: "믿을 신", chi: "xìn", stroke: "9획", meaning: "믿다, 신뢰, 편지, 소식.", origin: "人(사람)과 言(말씀 언)이 합쳐진 글자야. 말과 행동이 일치하는 것이 信이야.", example: "信賴(신뢰): 믿고 의지함 / 信念(신념): 굳게 믿는 마음", grade: "5급" },
-  { char: "和", kor: "화할 화", chi: "hé", stroke: "8획", meaning: "화목, 평화, 합하다.", origin: "禾(벼 화)와 口(입 구)가 합쳐진 글자야. 먹을 것이 풍족할 때 입도 평화롭다는 뜻이야.", example: "和平(화평): 평화 / 調和(조화): 균형 있게 어울림", grade: "5급" },
-  { char: "平", kor: "평평할 평", chi: "píng", stroke: "5획", meaning: "평평하다, 평화, 고르다.", origin: "물 위에 수초가 평평하게 떠 있는 모습에서 유래했다는 설이 있어.", example: "平和(평화): 평온한 상태 / 平常(평상): 늘 고른 상태", grade: "5급" },
-  { char: "安", kor: "편안할 안", chi: "ān", stroke: "6획", meaning: "편안하다, 안전, 안정.", origin: "宀(집 면)과 女(여자 녀)가 합쳐진 글자야. 소방에서 안전(安全)의 安이야.", example: "安全(안전): 위험 없이 편안함 / 安心(안심): 마음이 편함", grade: "6급" },
-  { char: "全", kor: "온전할 전", chi: "quán", stroke: "6획", meaning: "온전하다, 전부, 완전.", origin: "入(들어갈 입)과 王(임금 왕)이 합쳐진 구조로 해석되기도 해. 안전(安全)의 全이야!", example: "安全(안전): 완전히 편안한 / 全部(전부): 모든 것 다", grade: "7급" },
-  { char: "消", kor: "사라질 소", chi: "xiāo", stroke: "10획", meaning: "사라지다, 소멸, 소화하다.", origin: "水(물 수)와 肖(닮을 초)가 합쳐진 글자야. 소방(消防)의 消 — 불을 없애다!", example: "消防(소방): 불을 방비하고 없앰 / 消火(소화): 불을 끔", grade: "4급" },
-  { char: "防", kor: "막을 방", chi: "fáng", stroke: "7획", meaning: "막다, 방지, 방어.", origin: "阜(언덕 부)와 方(모 방)이 합쳐진 글자야. 소방(消防)의 防 — 불을 막다!", example: "消防(소방): 불을 끄고 막음 / 防火(방화): 불을 막음", grade: "4급" },
-  { char: "國", kor: "나라 국", chi: "guó", stroke: "11획", meaning: "나라, 국가.", origin: "囗(에울 위)와 或(혹시 혹)이 합쳐진 글자야. 울타리로 둘러싸인 땅을 창으로 지킨다는 뜻.", example: "韓國(한국): 우리나라 / 佛國寺(불국사): 부처의 나라 절", grade: "7급" },
-  { char: "韓", kor: "한국 한", chi: "hán", stroke: "17획", meaning: "한국, 한국인, 한씨.", origin: "원래는 고대 한반도 남부의 부족 연맹 삼한(三韓)을 가리키던 글자야.", example: "大韓民國(대한민국): 우리나라 공식 명칭 / 韓國語(한국어): 한국말", grade: "5급" },
-  { char: "民", kor: "백성 민", chi: "mín", stroke: "5획", meaning: "백성, 국민, 민간.", origin: "일반 사람들, 백성의 의미로 쓰이는 글자야.", example: "國民(국민): 나라의 백성 / 民主(민주): 백성이 주인", grade: "7급" },
-  { char: "家", kor: "집 가", chi: "jiā", stroke: "10획", meaning: "집, 가족, 집안, 전문가.", origin: "宀(지붕)과 豕(돼지 시)가 합쳐진 글자야. 옛날엔 집 안에 돼지를 길렀거든.", example: "家族(가족): 한 집의 식구들 / 技術士(기술사)도 專門家(전문가)!", grade: "7급" },
-  { char: "父", kor: "아비 부", chi: "fù", stroke: "4획", meaning: "아버지, 부친.", origin: "손에 도끼를 쥐고 있는 모습이라는 설이 있어. 가족을 부양하는 사람.", example: "父親(부친): 아버지 / 父母(부모): 아버지와 어머니", grade: "8급" },
-  { char: "母", kor: "어미 모", chi: "mǔ", stroke: "5획", meaning: "어머니, 모친, 근원.", origin: "女(여자 녀)의 변형으로, 젖을 먹이는 어머니의 모습을 나타냈어.", example: "父母(부모): 아버지와 어머니 / 母國(모국): 고향 나라", grade: "8급" },
-  { char: "子", kor: "아들 자", chi: "zǐ", stroke: "3획", meaning: "아들, 자식, 선생님에 대한 존칭.", origin: "아이가 두 팔을 벌리고 있는 모습이야.", example: "孔子(공자): 공씨 선생님 / 父子(부자): 아버지와 아들", grade: "8급" },
-  { char: "文", kor: "글월 문", chi: "wén", stroke: "4획", meaning: "글, 문자, 문학, 무늬.", origin: "사람 가슴에 문신을 새긴 모습이라는 설이 있어.", example: "文字(문자): 글자 / 作文(작문): 글 쓰기", grade: "7급" },
-  { char: "語", kor: "말씀 어", chi: "yǔ", stroke: "14획", meaning: "말, 언어, 이야기하다.", origin: "言(말씀 언)과 吾(나 오)가 합쳐진 글자야. 내가 하는 말.", example: "語學(어학): 언어를 배우는 학문 / 論語(논어): 공자의 말씀", grade: "6급" },
-  { char: "友", kor: "벗 우", chi: "yǒu", stroke: "4획", meaning: "친구, 벗, 우정.", origin: "두 손이 서로를 향해 있는 모습이야. 손을 맞잡은 사이.", example: "友情(우정): 친구 사이의 정 / 竹馬故友(죽마고우)", grade: "6급" },
-  { char: "愛", kor: "사랑 애", chi: "ài", stroke: "13획", meaning: "사랑하다, 아끼다, 좋아하다.", origin: "발걸음(夂)을 멈추고 마음(心)으로 돌아보는 모습이라고 해석하기도 해.", example: "愛情(애정): 사랑의 마음 / 愛國(애국): 나라를 사랑함", grade: "6급" },
-  { char: "書", kor: "글 서", chi: "shū", stroke: "10획", meaning: "책, 글, 쓰다, 편지.", origin: "붓(聿)으로 해(日)처럼 밝게 기록하는 모습이라는 해석이 있어.", example: "讀書(독서): 책 읽기 / 書院(서원): 조선의 사립 학교", grade: "6급" },
-  { char: "年", kor: "해 년", chi: "nián", stroke: "6획", meaning: "해(year), 나이, 시절.", origin: "벼(禾)를 사람이 이고 가는 모습이라는 설이 있어. 수확 한 번이 1년.", example: "年齡(연령): 나이 / 靑年(청년): 젊은 사람", grade: "7급" },
-  { char: "力", kor: "힘 력", chi: "lì", stroke: "2획", meaning: "힘, 노력, 능력.", origin: "팔 근육을 구부린 모습이야.", example: "努力(노력): 힘을 다해 애씀 / 電力(전력): 전기의 힘", grade: "7급" },
-  { char: "氣", kor: "기운 기", chi: "qì", stroke: "10획", meaning: "기운, 공기, 날씨, 기체.", origin: "쌀(米)에서 밥이 지어질 때 피어오르는 수증기(气)를 나타낸 글자야.", example: "空氣(공기): 숨쉬는 기체 / 氣壓(기압): 공기의 압력", grade: "6급" },
-  { char: "風", kor: "바람 풍", chi: "fēng", stroke: "9획", meaning: "바람, 풍경, 풍속, 풍류.", origin: "봉황(鳳)에서 변형된 글자야. 봉황이 날개를 퍼덕이면 바람이 인다는 전설에서 유래.", example: "颱風(태풍): 강한 열대성 폭풍 / 風景(풍경): 경치", grade: "7급" },
-  { char: "雨", kor: "비 우", chi: "yǔ", stroke: "8획", meaning: "비, 비가 오다.", origin: "하늘(一)에서 구름(冂) 아래로 빗방울들이 떨어지는 모습.", example: "降雨(강우): 비가 내림 / 梅雨(매우): 장마", grade: "7급" },
-  { char: "花", kor: "꽃 화", chi: "huā", stroke: "8획", meaning: "꽃, 화려하다.", origin: "艹(풀 초)와 化(변할 화)가 합쳐진 글자야. 풀이 변해서 꽃이 된다는 뜻이야.", example: "花草(화초): 꽃과 풀 / 錦上添花(금상첨화)", grade: "6급" },
-  { char: "幸", kor: "다행 행", chi: "xìng", stroke: "8획", meaning: "다행, 행복, 행운.", origin: "이 앱 이름의 그 幸! 손에 수갑을 찬 모습에서 유래했다는 설이 있어 — 화를 면한 것이 다행이라는 뜻.", example: "幸福(행복): 복스럽고 좋은 상태 / 多幸(다행): 얼마나 다행인가", grade: "5급" },
-  { char: "福", kor: "복 복", chi: "fú", stroke: "13획", meaning: "복, 행복, 행운.", origin: "示(신에게 보임)와 畐(가득하다)가 합쳐진 글자야. 신이 가득 채워주는 것이 복.", example: "幸福(행복): 행운과 복 / 福祉(복지): 복되고 이로운 것", grade: "5급" },
-  { char: "望", kor: "바랄 망", chi: "wàng", stroke: "11획", meaning: "바라다, 바라보다, 희망, 보름달.", origin: "발돋움하고 서서 달(月)을 바라보는 사람의 모습에서 나왔어.", example: "希望(희망): 바라는 마음 / 展望(전망): 내다봄", grade: "5급" },
-  { char: "思", kor: "생각할 사", chi: "sī", stroke: "9획", meaning: "생각하다, 그리워하다.", origin: "田(밭 전)과 心(마음 심)이 합쳐진 글자야. 머리(정수리)와 마음으로 생각한다는 뜻.", example: "思想(사상): 깊이 생각한 것 / 深思(심사): 깊은 생각", grade: "5급" },
-  { char: "正", kor: "바를 정", chi: "zhèng", stroke: "5획", meaning: "바르다, 올바르다, 정확하다.", origin: "一(하나, 목표)과 止(그칠 지)가 합쳐진 글자야. 목표에 똑바로 나아가 멈추는 것.", example: "正答(정답): 올바른 답 / 公正(공정): 공평하고 바름", grade: "7급" },
-  { char: "東", kor: "동녘 동", chi: "dōng", stroke: "8획", meaning: "동쪽, 동방.", origin: "나무(木) 사이로 해(日)가 떠오르는 모습이야.", example: "東西南北(동서남북): 네 방향 / 東海(동해): 동쪽 바다", grade: "8급" },
-  { char: "西", kor: "서녘 서", chi: "xī", stroke: "6획", meaning: "서쪽.", origin: "새가 둥지 위에 앉아 있는 모습이라는 설이 있어. 해 질 무렵 새가 둥지로 돌아가니까.", example: "東西(동서): 동쪽과 서쪽 / 西海(서해): 서쪽 바다", grade: "8급" },
-  { char: "南", kor: "남녘 남", chi: "nán", stroke: "9획", meaning: "남쪽, 남방.", origin: "고대 악기 모양에서 유래했다는 설이 있어.", example: "南北(남북): 남쪽과 북쪽 / 南海(남해): 남쪽 바다", grade: "8급" },
-  { char: "北", kor: "북녘 북", chi: "běi", stroke: "5획", meaning: "북쪽, 달아나다.", origin: "두 사람이 서로 등을 맞대고 있는 모습이야. 등지는 방향이 북쪽.", example: "南北(남북): 남쪽과 북쪽 / 敗北(패배): 싸움에서 짐", grade: "8급" },
-  { char: "寺", kor: "절 사", chi: "sì", stroke: "", meaning: "절, 사찰. (원래는 관청이라는 뜻)", origin: "원래 관청을 뜻하던 글자였는데, 불교가 처음 전해질 때 서역 승려들이 홍려시(鴻臚寺)라는 관청에 머문 데서 '절'이라는 뜻이 됐어. 절 이름 끝에 붙는 바로 그 글자.", example: "佛國寺(불국사) / 山寺(산사): 산속의 절", grade: "사찰·비석" },
-  { char: "佛", kor: "부처 불", chi: "fó", stroke: "", meaning: "부처, 불교.", origin: "산스크리트어 'Buddha(붓다)'를 한자로 음역한 '불타(佛陀)'의 줄임이야. 人(사람)과 弗이 합쳐진 모양.", example: "佛像(불상): 부처의 상 / 石佛(석불): 돌부처", grade: "사찰·비석" },
-  { char: "塔", kor: "탑 탑", chi: "tǎ", stroke: "", meaning: "탑.", origin: "이것도 산스크리트어 'stupa(스투파)'의 음역 '탑파(塔婆)'에서 온 글자야. 부처의 사리를 모시던 무덤이 탑의 기원이지.", example: "石塔(석탑) / 多寶塔(다보탑): 불국사의 그 탑", grade: "사찰·비석" },
-  { char: "殿", kor: "전각 전", chi: "diàn", stroke: "", meaning: "큰 집, 궁궐이나 절의 중심 건물.", origin: "임금이나 부처처럼 높은 존재가 머무는 큰 건물에만 붙는 글자야. 절 현판에서 제일 자주 만나게 될 글자.", example: "大雄殿(대웅전): 석가모니를 모신 법당 / 極樂殿(극락전)", grade: "사찰·비석" },
-  { char: "碑", kor: "비석 비", chi: "bēi", stroke: "", meaning: "비석, 돌에 새긴 기록.", origin: "石(돌 석)이 뜻을 나타내. 공적이나 역사를 돌에 새겨 오래 남기려던 것이 비석이야.", example: "石碑(석비) / 記念碑(기념비) / 北漢山 眞興王 巡狩碑(순수비)", grade: "사찰·비석" },
-  { char: "陵", kor: "언덕 릉", chi: "líng", stroke: "", meaning: "임금의 무덤, 큰 언덕.", origin: "阝(언덕 부)가 뜻을 담당해. 왕과 왕비의 무덤에만 陵을 써 — 일반인 무덤은 墓(묘)야.", example: "王陵(왕릉) / 武寧王陵(무령왕릉)", grade: "사찰·비석" },
-  { char: "宮", kor: "집 궁", chi: "gōng", stroke: "", meaning: "궁궐, 큰 집.", origin: "지붕(宀) 아래 방(口)이 여러 개 이어진 큰 집의 모습이야.", example: "景福宮(경복궁) / 宮闕(궁궐)", grade: "사찰·비석" },
-  { char: "城", kor: "재 성", chi: "chéng", stroke: "", meaning: "성, 성곽.", origin: "土(흙 토)와 成(이룰 성)이 합쳐진 글자야. 흙을 쌓아 이룬(成) 방어 시설.", example: "山城(산성) / 城門(성문) / 南漢山城(남한산성)", grade: "사찰·비석" },
-  { char: "門", kor: "문 문", chi: "mén", stroke: "8획", meaning: "문, 출입구, 집안, 분야.", origin: "두 짝의 문을 그대로 그린 상형자야. 절 입구의 일주문부터 광화문까지, 현판 읽기의 시작.", example: "一柱門(일주문): 절의 첫 문 / 光化門(광화문)", grade: "사찰·비석" },
-  { char: "樓", kor: "다락 루", chi: "lóu", stroke: "", meaning: "누각, 이층 건물.", origin: "木(나무)이 뜻을 담당해. 사방이 트인 이층 목조 건물 — 경치 좋은 곳엔 어김없이 樓가 있어.", example: "慶會樓(경회루) / 樓閣(누각)", grade: "사찰·비석" },
-  { char: "閣", kor: "집 각", chi: "gé", stroke: "", meaning: "높은 집, 누각.", origin: "門(문 문)과 各이 합쳐진 글자야. 樓와 짝을 이뤄 누각(樓閣)으로 자주 쓰여.", example: "普信閣(보신각): 서울의 그 종각 / 藏經閣(장경각)", grade: "사찰·비석" },
-  { char: "庵", kor: "암자 암", chi: "ān", stroke: "", meaning: "암자 — 큰 절에 딸린 작은 절.", origin: "广(집 엄)이 뜻을 담당해. 스님이 홀로 수행하는 작은 거처야.", example: "石窟庵(석굴암) / 庵子(암자)", grade: "사찰·비석" },
-  { char: "堂", kor: "집 당", chi: "táng", stroke: "", meaning: "집, 마루, 강당.", origin: "土(흙) 위에 높이 지은(尙) 건물이야. 법당·서당·명륜당 — 사람이 모여 배우고 예를 행하는 곳.", example: "法堂(법당) / 明倫堂(명륜당): 성균관의 강학당", grade: "사찰·비석" },
-  { char: "院", kor: "집 원", chi: "yuàn", stroke: "", meaning: "담장을 두른 집, 기관.", origin: "阝(언덕 부)와 完(완전할 완)의 조합. 담으로 완전히 둘러싼 건물이라는 뜻이야.", example: "書院(서원): 조선의 사립 교육기관 / 寺院(사원)", grade: "사찰·비석" },
-  { char: "僧", kor: "중 승", chi: "sēng", stroke: "", meaning: "승려, 스님.", origin: "산스크리트어 'sangha(상가)'의 음역 '승가(僧伽)'에서 온 글자야. 원래는 수행 공동체 전체를 뜻했어.", example: "僧侶(승려) / 高僧(고승): 덕 높은 스님", grade: "사찰·비석" },
-  { char: "鐘", kor: "쇠북 종", chi: "zhōng", stroke: "", meaning: "종, 시계.", origin: "金(쇠 금)이 뜻을 담당해. 절의 범종은 지옥 중생까지 소리로 구제한다는 의미를 담고 있어.", example: "梵鐘(범종): 절의 큰 종 / 聖德大王神鐘(성덕대왕신종): 에밀레종", grade: "사찰·비석" },
-  { char: "靈", kor: "신령 령", chi: "líng", stroke: "", meaning: "신령, 영혼, 영험하다.", origin: "비(雨)를 내려달라고 비는 무당(巫)의 모습이 담긴 글자야. 산 이름·절 이름에 자주 등장해.", example: "靈山(영산): 신령한 산 / 靈魂(영혼)", grade: "사찰·비석" },
-  { char: "觀", kor: "볼 관", chi: "guān", stroke: "", meaning: "자세히 보다, 살피다.", origin: "황새(雚)처럼 큰 눈으로 본다(見)는 뜻이야. 그냥 보는 게 아니라 꿰뚫어 보는 것.", example: "觀音(관음): 세상의 소리를 살피는 보살 / 觀察(관찰)", grade: "사찰·비석" },
-  { char: "音", kor: "소리 음", chi: "yīn", stroke: "9획", meaning: "소리, 음악, 소식.", origin: "言(말씀 언)에서 갈라져 나온 글자야. 입에서 나오는 소리.", example: "觀世音菩薩(관세음보살) / 音樂(음악)", grade: "사찰·비석" },
-  { char: "光", kor: "빛 광", chi: "guāng", stroke: "6획", meaning: "빛, 영광, 경치.", origin: "사람 머리 위에 불(火)이 타오르는 모습 — 빛을 든 사람이야.", example: "光明(광명): 밝은 빛 / 觀光(관광): 빛나는 경치를 봄", grade: "사찰·비석" },
-  { char: "明", kor: "밝을 명", chi: "míng", stroke: "8획", meaning: "밝다, 분명하다, 다음(날).", origin: "해(日)와 달(月)이 나란히 있으니 밝을 수밖에. 가장 아름다운 조합 글자 중 하나야.", example: "光明(광명) / 明堂(명당): 밝은 터", grade: "사찰·비석" },
-  { char: "淨", kor: "깨끗할 정", chi: "jìng", stroke: "", meaning: "깨끗하다, 맑다.", origin: "水(물 수)가 뜻을 담당해. 물로 씻어 깨끗해진 상태야.", example: "淨土(정토): 부처의 깨끗한 세계 / 淸淨(청정)", grade: "사찰·비석" },
-  { char: "極", kor: "다할 극", chi: "jí", stroke: "", meaning: "끝, 다하다, 지극하다.", origin: "원래 집의 가장 높은 곳인 용마루를 뜻했어. 거기서 '끝까지, 지극히'라는 뜻이 나왔지.", example: "極樂(극락): 지극한 즐거움의 세계 / 太極(태극)", grade: "사찰·비석" },
-  { char: "樂", kor: "즐길 락 / 음악 악", chi: "lè / yuè", stroke: "", meaning: "즐겁다(락), 음악(악), 좋아하다(요) — 읽는 법이 세 개인 글자!", origin: "나무 받침 위에 실을 매단 악기의 모습이야. 음악(악)이 먼저였고, 음악이 주는 것이 즐거움(락)이지.", example: "極樂殿(극락전): '극락'이니까 락 / 音樂(음악): '음악'이니까 악", grade: "사찰·비석" },
-  { char: "世", kor: "인간 세", chi: "shì", stroke: "5획", meaning: "세상, 세대, 시대.", origin: "十이 세 개 합쳐진 모양 — 30년, 즉 한 세대를 뜻해.", example: "世界(세계) / 觀世音(관세음): 세상의 소리를 살핌", grade: "사찰·비석" },
-  { char: "界", kor: "지경 계", chi: "jiè", stroke: "9획", meaning: "경계, 범위, 세계.", origin: "田(밭 전)과 介(끼일 개)의 조합. 밭과 밭 사이의 경계선이야.", example: "世界(세계) / 境界(경계)", grade: "사찰·비석" },
-  { char: "慈", kor: "사랑 자", chi: "cí", stroke: "", meaning: "사랑, 자비, 어머니.", origin: "心(마음 심)이 뜻을 담당해. 아랫사람을 아끼는 내리사랑이 慈야.", example: "慈悲(자비) / 慈堂(자당): 남의 어머니를 높여 부르는 말", grade: "사찰·비석" },
-  { char: "悲", kor: "슬플 비", chi: "bēi", stroke: "", meaning: "슬프다, 가엾게 여기다.", origin: "非(아닐 비)와 心(마음)의 조합. 마음이 찢어지는 슬픔인데, 불교에서는 남의 고통을 함께 아파하는 마음이 곧 悲야. 그래서 慈悲.", example: "慈悲(자비): 사랑하고 함께 아파함 / 悲劇(비극)", grade: "사찰·비석" },
-  { char: "壽", kor: "목숨 수", chi: "shòu", stroke: "", meaning: "목숨, 장수, 나이.", origin: "밭이랑처럼 길게 이어진 삶이라는 해석이 있어. 비석과 잔칫상의 단골 글자.", example: "長壽(장수) / 萬壽無疆(만수무강): 끝없이 오래 사시길", grade: "사찰·비석" },
-  { char: "龍", kor: "용 룡", chi: "lóng", stroke: "", meaning: "용 — 상상의 신령한 동물.", origin: "뿔과 긴 몸을 가진 용의 모습을 그린 상형자야. 절 기둥과 단청, 왕의 상징 어디에나 있어.", example: "靑龍(청룡) / 登龍門(등용문): 용문에 오르다", grade: "사찰·비석" },
-  { char: "鳳", kor: "봉새 봉", chi: "fèng", stroke: "", meaning: "봉황 — 상서로운 상상의 새.", origin: "봉황이 나타나면 태평성대가 온다고 했어. 바람 風이 이 글자에서 갈라져 나왔지. 그리고 — 봉서산(鳳棲山)의 그 鳳이야.", example: "鳳凰(봉황) / 鳳棲山(봉서산): 봉황이 깃든 산", grade: "사찰·비석" },
-  { char: "棲", kor: "깃들일 서", chi: "qī", stroke: "", meaning: "깃들다, 살다, 머물다.", origin: "木(나무)과 妻의 조합 — 새가 나무에 보금자리를 트는 것이 棲야. 鳳棲山 = 봉황이 깃든 산. J가 맨발로 걷는 그 산 이름을 이제 한자로 읽을 수 있네.", example: "鳳棲山(봉서산) / 棲息地(서식지): 동물이 사는 곳", grade: "사찰·비석" },
+const CHINESE = [
+  { zh: "你好", py: "nǐ hǎo", kor: "니 하오", meaning: "안녕(하세요) — 만났을 때 하는 가장 기본 인사.", tone: "3성(∨)+3성(∨) → 앞 글자는 2성처럼: '니(↗) 하오(∨)'", ex: "你好！", exKor: "니 하오! — 안녕하세요!" },
+  { zh: "谢谢", py: "xièxie", kor: "씨에시에", meaning: "고마워(요).", tone: "4성(↘)+경성(·) → '씨에(↘)시에(가볍게)'", ex: "谢谢你。", exKor: "씨에시에 니 — 고마워요." },
+  { zh: "不客气", py: "bú kèqi", kor: "부 커치", meaning: "천만에(요) — 谢谢에 대한 답.", tone: "不는 원래 4성인데 4성 앞에서 2성으로: '부(↗) 커(↘)치(·)'", ex: "A: 谢谢！ B: 不客气。", exKor: "고마워! — 천만에." },
+  { zh: "再见", py: "zàijiàn", kor: "짜이지엔", meaning: "잘 가 / 안녕히 가세요 — 헤어질 때 인사.", tone: "4성(↘)+4성(↘) → 둘 다 뚝 떨어뜨려: '짜이(↘) 지엔(↘)'", ex: "明天见！", exKor: "밍티엔 지엔 — 내일 봐!" },
+  { zh: "对不起", py: "duìbuqǐ", kor: "뚜이부치", meaning: "미안해(요).", tone: "4성(↘)+경성(·)+3성(∨) → '뚜이(↘)부(·)치(∨)'", ex: "对不起，我来晚了。", exKor: "뚜이부치, 워 라이 완러 — 미안해요, 늦었어요." },
+  { zh: "没关系", py: "méi guānxi", kor: "메이 꽌시", meaning: "괜찮아(요) — 对不起에 대한 답.", tone: "2성(↗)+1성(→)+경성(·) → '메이(↗) 꽌(→)시(·)'", ex: "A: 对不起！ B: 没关系。", exKor: "미안해! — 괜찮아." },
+  { zh: "我", py: "wǒ", kor: "워", meaning: "나, 저.", tone: "3성(∨) → 낮게 내렸다가 살짝 올려: '워(∨)'", ex: "我是韩国人。", exKor: "워 스 한구오런 — 나는 한국인이에요." },
+  { zh: "你", py: "nǐ", kor: "니", meaning: "너, 당신. (높임말은 您 nín)", tone: "3성(∨) → '니(∨)'", ex: "你呢？", exKor: "니 너? — 너는?" },
+  { zh: "他 / 她", py: "tā", kor: "타", meaning: "그 / 그녀. 발음이 똑같고 글자만 달라(男 he / 女 she).", tone: "1성(→) → 높은 음으로 평평하게: '타(→)'", ex: "他是我朋友。", exKor: "타 스 워 펑요우 — 그는 내 친구예요." },
+  { zh: "我们", py: "wǒmen", kor: "워먼", meaning: "우리. (们을 붙이면 복수: 你们 너희, 他们 그들)", tone: "3성(∨)+경성(·) → '워(∨)먼(·)'", ex: "我们走吧！", exKor: "워먼 쩌우바 — 우리 가자!" },
+  { zh: "是", py: "shì", kor: "스", meaning: "~이다. (영어의 be동사 같은 역할)", tone: "4성(↘) → 짧고 단호하게 '스(↘)'. 혀를 살짝 만 '스'.", ex: "我是工程师。", exKor: "워 스 꽁청스 — 나는 엔지니어예요." },
+  { zh: "不", py: "bù", kor: "뿌", meaning: "아니다, 안 ~ (부정).", tone: "4성(↘). 단, 뒤에 4성이 오면 2성으로 변해(不是 bú shì).", ex: "我不是学生。", exKor: "워 부 스 쉬에셩 — 나는 학생이 아니에요." },
+  { zh: "好", py: "hǎo", kor: "하오", meaning: "좋다, 좋아. (대답으로 '알겠어'도 됨)", tone: "3성(∨) → '하오(∨)'", ex: "好的，没问题！", exKor: "하오더, 메이원티 — 알겠어, 문제없어!" },
+  { zh: "很", py: "hěn", kor: "헌", meaning: "매우, 아주. (형용사 앞에 습관처럼 붙여)", tone: "3성(∨) → '헌(∨)'", ex: "很好！", exKor: "헌 하오 — 아주 좋아!" },
+  { zh: "什么", py: "shénme", kor: "션머", meaning: "무엇, 뭐.", tone: "2성(↗)+경성(·) → '션(↗)머(·)'", ex: "这是什么？", exKor: "쩌 스 션머? — 이게 뭐예요?" },
+  { zh: "谁", py: "shéi", kor: "셰이", meaning: "누구.", tone: "2성(↗) → 끝을 올려서 '셰이(↗)'", ex: "他是谁？", exKor: "타 스 셰이? — 저 사람 누구야?" },
+  { zh: "哪儿", py: "nǎr", kor: "날", meaning: "어디. (북방식. 남방은 哪里 nǎlǐ)", tone: "3성(∨) → '날(∨)' — 儿은 혀를 말아 'ㄹ' 느낌만.", ex: "洗手间在哪儿？", exKor: "시셔우지엔 짜이 날? — 화장실이 어디예요?" },
+  { zh: "吗", py: "ma", kor: "마", meaning: "~니? ~예요? (문장 끝에 붙이면 의문문 완성)", tone: "경성(·) → 짧고 가볍게 '마'.", ex: "你好吗？", exKor: "니 하오 마? — 잘 지내?" },
+  { zh: "有", py: "yǒu", kor: "요우", meaning: "있다, 가지고 있다.", tone: "3성(∨) → '요우(∨)'", ex: "我有两个朋友。", exKor: "워 요우 량거 펑요우 — 나는 친구가 두 명 있어요." },
+  { zh: "没有", py: "méiyǒu", kor: "메이요우", meaning: "없다. (有의 부정은 不有가 아니라 没有!)", tone: "2성(↗)+3성(∨) → '메이(↗)요우(∨)'", ex: "我没有时间。", exKor: "워 메이요우 스지엔 — 나는 시간이 없어요." },
+  { zh: "要", py: "yào", kor: "야오", meaning: "원하다, 필요하다, ~할 것이다.", tone: "4성(↘) → '야오(↘)'", ex: "我要这个。", exKor: "워 야오 쩌거 — 이거 주세요(원해요)." },
+  { zh: "想", py: "xiǎng", kor: "시앙", meaning: "~하고 싶다, 생각하다, 그리워하다.", tone: "3성(∨) → '시앙(∨)'", ex: "我想去中国。", exKor: "워 시앙 취 쭝구오 — 중국에 가고 싶어요." },
+  { zh: "吃", py: "chī", kor: "츠", meaning: "먹다.", tone: "1성(→) → 높고 평평하게 '츠(→)'. 혀를 살짝 말아.", ex: "吃饭了吗？", exKor: "츠판러마? — 밥 먹었어? (중국식 안부 인사)" },
+  { zh: "喝", py: "hē", kor: "허", meaning: "마시다.", tone: "1성(→) → '허(→)'", ex: "喝茶吧。", exKor: "허 차 바 — 차 마시자." },
+  { zh: "水", py: "shuǐ", kor: "수이", meaning: "물.", tone: "3성(∨) → '수이(∨)'", ex: "我要一杯水。", exKor: "워 야오 이베이 수이 — 물 한 잔 주세요." },
+  { zh: "茶", py: "chá", kor: "차", meaning: "차(茶). 보이차는 普洱茶 pǔ'ěrchá(푸얼차)!", tone: "2성(↗) → 끝을 올려 '차(↗)'", ex: "我喜欢喝普洱茶。", exKor: "워 시환 허 푸얼차 — 나는 보이차 마시는 걸 좋아해요." },
+  { zh: "酒", py: "jiǔ", kor: "지우", meaning: "술. (맥주 啤酒 píjiǔ, 백주 白酒 báijiǔ)", tone: "3성(∨) → '지우(∨)'", ex: "干杯！", exKor: "깐베이! — 건배!" },
+  { zh: "火", py: "huǒ", kor: "후오", meaning: "불. 소방은 消防 xiāofáng(시아오팡) — 한자가 한국과 똑같아!", tone: "3성(∨) → '후오(∨)'", ex: "小心火灾。", exKor: "시아오신 후오짜이 — 화재 조심하세요." },
+  { zh: "山", py: "shān", kor: "샨", meaning: "산.", tone: "1성(→) → 높고 평평하게 '샨(→)'", ex: "我喜欢爬山。", exKor: "워 시환 파샨 — 나는 등산을 좋아해요." },
+  { zh: "人", py: "rén", kor: "런", meaning: "사람. (한국인 韩国人, 중국인 中国人)", tone: "2성(↗) → '런(↗)' — r은 혀를 만 'ㄹ' 소리.", ex: "他是好人。", exKor: "타 스 하오런 — 그는 좋은 사람이에요." },
+  { zh: "朋友", py: "péngyou", kor: "펑요우", meaning: "친구.", tone: "2성(↗)+경성(·) → '펑(↗)요우(·)'", ex: "我们是好朋友。", exKor: "워먼 스 하오 펑요우 — 우리는 좋은 친구예요." },
+  { zh: "名字", py: "míngzi", kor: "밍쯔", meaning: "이름.", tone: "2성(↗)+경성(·) → '밍(↗)쯔(·)'", ex: "你叫什么名字？", exKor: "니 지아오 션머 밍쯔? — 이름이 뭐예요?" },
+  { zh: "叫", py: "jiào", kor: "지아오", meaning: "(이름이) ~이다, 부르다.", tone: "4성(↘) → '지아오(↘)'", ex: "我叫金民秀。", exKor: "워 지아오 진민시우 — 저는 김민수라고 해요." },
+  { zh: "请", py: "qǐng", kor: "칭", meaning: "~해 주세요 (영어의 please). 문장 앞에 붙여.", tone: "3성(∨) → '칭(∨)'", ex: "请坐。", exKor: "칭 쭈오 — 앉으세요." },
+  { zh: "早上好", py: "zǎoshang hǎo", kor: "짜오샹 하오", meaning: "좋은 아침이에요.", tone: "3성(∨)+경성(·)+3성(∨) → '짜오(∨)샹(·) 하오(∨)'", ex: "早！", exKor: "짜오! — (친한 사이엔 그냥) 굿모닝!" },
+  { zh: "晚安", py: "wǎn'ān", kor: "완안", meaning: "잘 자(요).", tone: "3성(∨)+1성(→) → '완(∨)안(→)'", ex: "晚安，做个好梦。", exKor: "완안, 쭈오거 하오멍 — 잘 자, 좋은 꿈 꿔." },
+  { zh: "加油", py: "jiāyóu", kor: "지아요우", meaning: "파이팅! 힘내! (직역하면 '기름을 넣다')", tone: "1성(→)+2성(↗) → '지아(→)요우(↗)'", ex: "考试加油！", exKor: "카오스 지아요우! — 시험 파이팅!" },
+  { zh: "一 二 三 四 五", py: "yī èr sān sì wǔ", kor: "이 얼 싼 쓰 우", meaning: "1 2 3 4 5.", tone: "이(→) 얼(↘) 싼(→) 쓰(↘) 우(∨)", ex: "一、二、三！", exKor: "이, 얼, 싼! — 하나, 둘, 셋!" },
+  { zh: "六 七 八 九 十", py: "liù qī bā jiǔ shí", kor: "리우 치 빠 지우 스", meaning: "6 7 8 9 10.", tone: "리우(↘) 치(→) 빠(→) 지우(∨) 스(↗)", ex: "十分！", exKor: "스펀! — 10점 만점! (아주 좋다는 뜻으로도 써)" },
+  { zh: "今天", py: "jīntiān", kor: "진티엔", meaning: "오늘. (내일 明天 míngtiān, 어제 昨天 zuótiān)", tone: "1성(→)+1성(→) → 둘 다 높고 평평: '진(→)티엔(→)'", ex: "今天天气很好。", exKor: "진티엔 티엔치 헌 하오 — 오늘 날씨 좋네요." },
+  { zh: "现在", py: "xiànzài", kor: "시엔짜이", meaning: "지금, 현재.", tone: "4성(↘)+4성(↘) → '시엔(↘)짜이(↘)'", ex: "现在几点？", exKor: "시엔짜이 지디엔? — 지금 몇 시예요?" },
+  { zh: "中国", py: "Zhōngguó", kor: "쭝구오", meaning: "중국. (한국 韩国 Hánguó 한구오)", tone: "1성(→)+2성(↗) → '쭝(→)구오(↗)'", ex: "我想去中国旅行。", exKor: "워 시앙 취 쭝구오 뤼싱 — 중국 여행 가고 싶어요." },
+  { zh: "汉语", py: "Hànyǔ", kor: "한위", meaning: "중국어. (中文 Zhōngwén이라고도 해)", tone: "4성(↘)+3성(∨) → '한(↘)위(∨)'", ex: "我在学汉语。", exKor: "워 짜이 쉬에 한위 — 나 중국어 배우는 중이야." },
+  { zh: "学习", py: "xuéxí", kor: "쉬에시", meaning: "공부하다, 배우다.", tone: "2성(↗)+2성(↗) → 둘 다 올려: '쉬에(↗)시(↗)'", ex: "我每天学习。", exKor: "워 메이티엔 쉬에시 — 나는 매일 공부해요." },
+  { zh: "工作", py: "gōngzuò", kor: "꽁쭈오", meaning: "일, 일하다.", tone: "1성(→)+4성(↘) → '꽁(→)쭈오(↘)'", ex: "我在工地工作。", exKor: "워 짜이 꽁띠 꽁쭈오 — 나는 현장(공사장)에서 일해요." },
+  { zh: "多少钱", py: "duōshao qián", kor: "뚜오샤오 치엔", meaning: "얼마예요? (钱 = 돈)", tone: "1성(→)+경성(·)+2성(↗) → '뚜오(→)샤오(·) 치엔(↗)'", ex: "这个多少钱？", exKor: "쩌거 뚜오샤오 치엔? — 이거 얼마예요? (직구할 때 필수!)" },
+  { zh: "这 / 那", py: "zhè / nà", kor: "쩌 / 나", meaning: "이(것) / 저(것).", tone: "둘 다 4성(↘) → '쩌(↘)' '나(↘)'", ex: "这个很好，那个不好。", exKor: "쩌거 헌 하오, 나거 뿌 하오 — 이건 좋고, 저건 별로야." },
+  { zh: "好吃", py: "hǎochī", kor: "하오츠", meaning: "맛있다. (마실 것이 맛있으면 好喝 hǎohē)", tone: "3성(∨)+1성(→) → '하오(∨)츠(→)'", ex: "太好吃了！", exKor: "타이 하오츠 러! — 진짜 맛있다!" },
+  { zh: "漂亮", py: "piàoliang", kor: "피아오리앙", meaning: "예쁘다, 아름답다.", tone: "4성(↘)+경성(·) → '피아오(↘)리앙(·)'", ex: "这里的风景很漂亮。", exKor: "쩌리더 펑징 헌 피아오리앙 — 여기 풍경 정말 예쁘다." },
+  { zh: "喜欢", py: "xǐhuan", kor: "시환", meaning: "좋아하다.", tone: "3성(∨)+경성(·) → '시(∨)환(·)'", ex: "我喜欢喝茶。", exKor: "워 시환 허 차 — 나는 차 마시는 걸 좋아해요." },
+  { zh: "没问题", py: "méi wèntí", kor: "메이 원티", meaning: "문제없어! 괜찮아! (OK의 뉘앙스)", tone: "2성(↗)+4성(↘)+2성(↗) → '메이(↗) 원(↘)티(↗)'", ex: "A: 可以吗？ B: 没问题！", exKor: "돼요? — 문제없어요!" },
+  { zh: "慢慢来", py: "màn màn lái", kor: "만 만 라이", meaning: "천천히 해, 서두르지 마.", tone: "4성(↘)+4성(↘)+2성(↗) → '만(↘)만(↘) 라이(↗)'", ex: "别着急，慢慢来。", exKor: "비에 자오지, 만만라이 — 조급해하지 말고 천천히 해." },
+  { zh: "天气", py: "tiānqì", kor: "티엔치", meaning: "날씨.", tone: "1성(→)+4성(↘) → '티엔(→)치(↘)'", ex: "今天天气怎么样？", exKor: "진티엔 티엔치 쩐머양? — 오늘 날씨 어때요?" },
+];
+
+// 중국어 한 줄 TIP — 10분마다 자동 교체
+const CN_TIPS = [
+  "글자 위의 작대기가 성조야. ā(→ 1성: 높고 평평) á(↗ 2성: 올림) ǎ(∨ 3성: 내렸다 올림) à(↘ 4성: 뚝 떨어뜨림). 이것만 알면 병음의 절반은 끝났어.",
+  "성조가 없는 글자(경성)는 앞 글자에 살짝 얹듯 짧고 가볍게 발음해. 谢谢(xièxie)의 두 번째 xie가 그런 경우야.",
+  "3성이 두 개 연달아 오면 앞의 것은 2성으로 발음해. 你好(nǐ hǎo)를 실제로는 '니(↗)하오(∨)'로 읽는 이유야.",
+  "성조를 틀리면 뜻이 바뀌어. mā(妈 엄마)·má(麻 삼베)·mǎ(马 말)·mà(骂 욕하다) — 같은 '마'인데 네 단어야.",
+  "병음의 x는 '시'에 가깝고, q는 '치'에 가까워. xièxie = 씨에시에, qǐng = 칭.",
+  "zh·ch·sh·r은 혀끝을 살짝 뒤로 만 상태에서 내는 소리야. 완벽하지 않아도 돼 — 혀를 만다는 느낌만 줘도 통해.",
+  "z는 '쯔', c는 '츠'에 가까워. zài(짜이), cài(차이·요리) — 둘을 구분하면 듣기 실력이 확 올라.",
+  "不(bù)는 원래 4성인데, 뒤에 4성이 오면 2성으로 바뀌어. 不是 = bú shì. 규칙이 몸에 배면 자동으로 나와.",
+  "중국어는 동사가 변하지 않아. 과거형·복수형·존댓말 어미가 없어 — 我吃(먹는다)에 了만 붙이면 我吃了(먹었다).",
+  "어순은 영어처럼 '주어+동사+목적어'야. 我(나)+爱(사랑해)+你(너) = 我爱你. 한국어보다 영어에 가까워.",
+  "문장 끝에 吗(ma)만 붙이면 의문문 완성이야. 你好(안녕) → 你好吗?(잘 지내?). 물음표 조사라고 생각하면 편해.",
+  "병음은 발음기호일 뿐이고 실제 표기는 한자야. 중국인에게 병음으로 써 보이면 오히려 못 읽는 경우도 있어.",
+  "우리가 쓰는 한자는 번체(繁體), 중국 본토는 간체(简体)야. 學→学, 門→门처럼 획을 줄인 것 — 모양이 달라도 뿌리는 같아.",
+  "한국 한자어와 발음이 비슷한 단어가 정말 많아. 图书馆(투슈관·도서관), 时间(스지엔·시간), 准备(준베이·준비) — 한자어 감각이 큰 자산이야.",
+  "물건을 셀 땐 '개(个 ge)'에 해당하는 양사를 꼭 넣어. 一个人(한 사람), 两个朋友(친구 두 명). 처음엔 个 하나로 다 버텨도 돼.",
+  "숫자 2는 상황 따라 달라. 순서·번호는 二(èr), 개수를 셀 땐 两(liǎng). '두 개'는 二个가 아니라 两个야.",
+  "ü(위)는 입술을 동그랗게 오므리고 '이' 소리를 내는 발음이야. j·q·x 뒤에서는 점 없이 u로 쓰지만 발음은 그대로 '위'야.",
+  "e는 '에'가 아니라 '어'에 가까워. hē(마시다)는 '헤'가 아니라 '허'. 이거 하나만 고쳐도 발음이 확 자연스러워져.",
+  "-n으로 끝나면 받침 'ㄴ', -ng로 끝나면 받침 'ㅇ'이야. shān(샨·산) vs shàng(샹·위). 한국어 받침 감각 그대로 쓰면 돼.",
+  "중국식 안부 인사는 '吃饭了吗?(밥 먹었어?)'야. 진짜 밥 여부를 묻는 게 아니라 '잘 지내?'라는 뜻 — 한국이랑 똑같지.",
+  "존댓말 어미는 없지만 존중 표현은 있어. 你(니) 대신 您(닌)을 쓰면 '당신→귀하' 느낌이 돼. 어른·고객에게는 您好!",
+  "了(le)는 만능 완료 표시야. 吃了(먹었다), 来了(왔다), 好了(다 됐다). 문법책 한 챕터짜리지만, 처음엔 '~했다'로만 알아도 충분해.",
+  "듣기가 먼저야. 성조는 눈으로 외우는 것보다 귀로 흉내 내는 게 백 배 빨라 — 오늘 단어도 사전 발음을 꼭 한 번 들어봐.",
+  "的(de)는 '~의/~한'을 만드는 접착제야. 我的朋友(나의 친구), 漂亮的花(예쁜 꽃). 한국어 '~의'보다 훨씬 자주 써.",
+  "在(zài)는 '~에 있다'와 '~에서'를 다 담당해. 我在天安(나는 천안에 있어), 在家学习(집에서 공부해).",
+  "1성은 생각보다 '높게' 유지해야 해. 한국어엔 없는 음이라 낮아지기 쉬운데, 노래하듯 '솔' 음정으로 평평하게.",
+  "4성은 화내듯 짧게 떨어뜨리는 소리야. '야!'라고 부를 때의 그 낙차 — 是(shì), 再见(zàijiàn)이 다 4성이야.",
+  "모르는 단어를 만나면 한자를 먼저 봐. 발음은 몰라도 뜻이 짐작되는 게 한자문화권의 특권이야 — 消防车가 뭔지 바로 보이잖아.",
+  "yi·wu·yu로 시작하는 표기는 i·u·ü가 단독으로 쓰일 때의 규칙이야. 一(yī), 五(wǔ), 雨(yǔ) — 표기만 다르고 발음은 같아.",
+  "회화 첫 목표는 완벽한 문장이 아니라 '단어 던지기'야. 多少钱?(얼마?) 好吃!(맛있어!) 谢谢!(고마워!) — 이 세 마디면 여행이 돼.",
 ];
 
 // ══════════════════════════════════════════
@@ -999,7 +1036,7 @@ function dayIdx() {
 function mod(n, m) { return ((n % m) + m) % m; }
 function todayKey() { return `${NOW.getFullYear()}_${NOW.getMonth()}_${NOW.getDate()}`; }
 
-const QUOTE_PHASE = 7, IDIOM_PHASE = 38, ENG_PHASE = 49, HANJA_PHASE = 34;
+const QUOTE_PHASE = 7, IDIOM_PHASE = 38, ENG_PHASE = 49, CN_PHASE = 11;
 
 function ls(key, fallback = null) {
   try {
@@ -1033,8 +1070,7 @@ function initDate() {
 }
 
 // ══════════════════════════════════════════
-// 명언 — 날짜에 고정. 하루에 하나씩 순서대로 순환해서
-// 전체를 다 돌기 전엔 같은 명언이 다시 안 나와.
+// 명언
 // ══════════════════════════════════════════
 function getCurrentQuoteIdx() {
   const offset = ls(`quote_offset_${todayKey()}`, 0);
@@ -1043,7 +1079,7 @@ function getCurrentQuoteIdx() {
 function renderQuote() {
   const idx = getCurrentQuoteIdx();
   const q = QUOTES[idx];
-  document.getElementById('quoteText').textContent = q.type === '하이쿠' ? q.text : `"${q.text}"`;
+  document.getElementById('quoteText').textContent = `"${q.text}"`;
   document.getElementById('quoteAuthor').textContent = q.author;
   document.getElementById('quoteMeta').textContent = `${q.country}  ·  ${q.years}`;
   document.getElementById('quoteMeaning').textContent = q.meaning;
@@ -1085,7 +1121,7 @@ function nextIdiom() { lsSet(`idiom_offset_${todayKey()}`, ls(`idiom_offset_${to
 function prevIdiom() { lsSet(`idiom_offset_${todayKey()}`, ls(`idiom_offset_${todayKey()}`, 0) - 1); renderIdiom(); }
 
 // ══════════════════════════════════════════
-// 영어단어
+// 시험 영어
 // ══════════════════════════════════════════
 function getCurrentWordIdx() {
   const offset = ls(`word_offset_${todayKey()}`, 0);
@@ -1095,48 +1131,44 @@ function renderEnglish() {
   const idx = getCurrentWordIdx();
   const w = ENGLISH[idx];
   document.getElementById('engWord').textContent = w.word;
-  document.getElementById('engPos').textContent = w.pos;
-  document.getElementById('engPron').textContent = w.pron;
+  document.getElementById('engCat').textContent = w.cat;
+  document.getElementById('engPron').textContent = w.kor;
   document.getElementById('engMeaning').textContent = w.meaning;
-  document.getElementById('engExample').textContent = w.example;
-  document.getElementById('engExampleKor').textContent = w.exampleKor;
+  document.getElementById('engTip').textContent = ' ' + w.tip;
   document.getElementById('engIndex').textContent = `${idx + 1} / ${ENGLISH.length}`;
 }
 function nextWord() { lsSet(`word_offset_${todayKey()}`, ls(`word_offset_${todayKey()}`, 0) + 1); renderEnglish(); }
 function prevWord() { lsSet(`word_offset_${todayKey()}`, ls(`word_offset_${todayKey()}`, 0) - 1); renderEnglish(); }
 
 // ══════════════════════════════════════════
-// 한자 — 어제 / 오늘 / 내일
+// 오늘의 중국어
 // ══════════════════════════════════════════
-let hanjaShift = 0;
-function getHanjaIdx(shift) { return mod(dayIdx() + HANJA_PHASE + shift, HANJA.length); }
-function setHanjaShift(s) {
-  hanjaShift = s;
-  document.getElementById('tabPrev').classList.toggle('active', s === -1);
-  document.getElementById('tabToday').classList.toggle('active', s === 0);
-  document.getElementById('tabNext').classList.toggle('active', s === 1);
-  renderHanja();
+function getCurrentCnIdx() {
+  const offset = ls(`cn_offset_${todayKey()}`, 0);
+  return mod(dayIdx() + CN_PHASE + offset, CHINESE.length);
 }
-function renderHanja() {
-  document.getElementById('tabPrevChar').textContent = HANJA[getHanjaIdx(-1)].char;
-  document.getElementById('tabTodayChar').textContent = HANJA[getHanjaIdx(0)].char;
-  document.getElementById('tabNextChar').textContent = HANJA[getHanjaIdx(1)].char;
-  const h = HANJA[getHanjaIdx(hanjaShift)];
-  document.getElementById('hanjaChar').textContent = h.char;
-  document.getElementById('hanjaStroke').textContent = h.stroke;
-  document.getElementById('hanjaKor').textContent = h.kor;
-  document.getElementById('hanjaChi').textContent = h.chi;
-  document.getElementById('hanjaMeaning').textContent = h.meaning;
-  document.getElementById('hanjaGrade').textContent = h.grade === '사찰·비석' ? '🏯 사찰·비석 단골' : `한자검정 ${h.grade}`;
-  document.getElementById('hanjaOrigin').textContent = h.origin;
-  document.getElementById('hanjaExample').textContent = h.example;
-  document.getElementById('hanjaStrokeLink').href = 'https://hanja.dict.naver.com/search?query=' + encodeURIComponent(h.char);
+function renderCn() {
+  const idx = getCurrentCnIdx();
+  const c = CHINESE[idx];
+  const charEl = document.getElementById('cnChar');
+  charEl.textContent = c.zh;
+  charEl.classList.toggle('long', c.zh.replace(/[ /]/g, '').length > 3);
+  document.getElementById('cnPinyin').textContent = c.py;
+  document.getElementById('cnKor').textContent = c.kor;
+  document.getElementById('cnMeaning').textContent = c.meaning;
+  document.getElementById('cnTone').textContent = '🎵 ' + c.tone;
+  document.getElementById('cnExZh').textContent = c.ex;
+  document.getElementById('cnExKor').textContent = c.exKor;
+  document.getElementById('cnLink').href = 'https://zh.dict.naver.com/#/search?query=' + encodeURIComponent(c.zh.split(' ')[0].split('/')[0].trim());
+  document.getElementById('cnIndex').textContent = `${idx + 1} / ${CHINESE.length}`;
 }
-function toggleHanja() {
-  const detail = document.getElementById('hanjaDetail');
-  const btn = document.getElementById('hanjaBtn');
-  const open = detail.classList.toggle('open');
-  btn.textContent = open ? '유래 · 예시 · 획순 닫기 ▴' : '유래 · 예시 · 획순 보기 ▾';
+function nextCn() { lsSet(`cn_offset_${todayKey()}`, ls(`cn_offset_${todayKey()}`, 0) + 1); renderCn(); }
+function prevCn() { lsSet(`cn_offset_${todayKey()}`, ls(`cn_offset_${todayKey()}`, 0) - 1); renderCn(); }
+
+function renderCnTip() {
+  const slot = Math.floor(Date.now() / (10 * 60 * 1000)); // 10분 단위
+  const idx = mod(slot, CN_TIPS.length);
+  document.getElementById('cnTipText').textContent = CN_TIPS[idx];
 }
 
 // ══════════════════════════════════════════
@@ -1295,10 +1327,16 @@ function showToast(msg = '저장됨 ✓') {
 }
 
 // ══════════════════════════════════════════
-// 🐥 픽셀 농장
+// 🐥 픽셀 농장 — 여름밤 에디션
+// (산·나무·낮잠 자는 고양이·나비·반딧불이·노는 병아리들)
 // ══════════════════════════════════════════
 const PX = 3;
-const PALETTE = { y:'#f2c744', d:'#c99a2e', b:'#3a2f1b', O:'#e8853a', o:'#b56a25', w:'#efe6d0', s:'#d9cdb0', p:'#d47f9e', g:'#5d7a42', G:'#48613a' };
+const PALETTE = {
+  y:'#f2c744', d:'#c99a2e', b:'#3a2f1b', O:'#e8853a', o:'#b56a25',
+  w:'#efe6d0', s:'#d9cdb0', p:'#d47f9e', g:'#5d7a42', G:'#48613a',
+  T:'#3f5a33', t:'#54754a', L:'#6b9457', m:'#8a8a99', M:'#6a6a7a', k:'#4c4c5a',
+  P:'#e8a0b8'
+};
 const CHICK_MAP = [
   "..yyyy..",
   ".yyyyyy.",
@@ -1319,6 +1357,32 @@ const EGG_MAP = [
 ];
 const FLOWER_MAP = [ "p.p", ".y.", "p.p", ".g.", ".g." ];
 const GRASS_MAP = [ "g.g", "gGg" ];
+const TREE_MAP = [
+  "...TTTT...",
+  "..TtTTtT..",
+  ".TTtLtTTT.",
+  "TtLTTtTLtT",
+  "TTtTLtTTtT",
+  ".TTtTTtTT.",
+  "..TTtTTT..",
+  "....bb....",
+  "....bb....",
+  "....bb...."
+];
+const CAT_MAP = [
+  "..M.M.......",
+  ".MmmmM...MM.",
+  ".mmmmm..Mmm.",
+  ".mmmmmmmmmM.",
+  "MmmmmmmmmM..",
+  ".MM..MM....."
+];
+const BFLY_MAP = [
+  "P..P",
+  "PwwP",
+  "PwwP",
+  ".ww."
+];
 
 function buildSprite(map, cls) {
   const wrap = document.createElement('div');
@@ -1348,7 +1412,9 @@ function initFarm() {
   const farm = document.getElementById('farm');
   let W = farm.clientWidth;
   const rand = (a, b) => a + Math.random() * (b - a);
+  const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
+  // 풀·꽃
   for (let i = 0; i < 4; i++) {
     const g = buildSprite(GRASS_MAP, 'deco');
     g.style.left = rand(10, W - 20) + 'px';
@@ -1360,8 +1426,48 @@ function initFarm() {
     farm.appendChild(f);
   }
 
+  // 여름 나무 두 그루 (크기 다르게)
+  const tree1 = buildSprite(TREE_MAP, 'tree');
+  tree1.style.left = Math.round(W * 0.09) + 'px';
+  farm.appendChild(tree1);
+  const tree2 = buildSprite(TREE_MAP, 'tree');
+  tree2.style.left = Math.round(W * 0.84) + 'px';
+  tree2.querySelector('.pxinner').style.transform = 'scale(0.72)';
+  tree2.querySelector('.pxinner').style.transformOrigin = 'bottom center';
+  farm.appendChild(tree2);
+
+  // 나무 그늘에서 낮잠 자는 고양이
+  const cat = buildSprite(CAT_MAP, 'cat');
+  const catX = Math.round(W * 0.09) + 34;
+  cat.style.left = catX + 'px';
+  cat.title = 'Zz…';
+  cat.addEventListener('click', () => {
+    cat.classList.add('twitch');
+    setTimeout(() => cat.classList.remove('twitch'), 500);
+    showToast('…냐옹 (잠결) 🐈');
+  });
+  farm.appendChild(cat);
+  const zz = document.createElement('div');
+  zz.className = 'cat-zz';
+  zz.textContent = 'z z';
+  zz.style.left = (catX + 30) + 'px';
+  zz.style.bottom = '36px';
+  farm.appendChild(zz);
+
+  // 반딧불이 (여름밤)
+  for (let i = 0; i < 4; i++) {
+    const ff = document.createElement('div');
+    ff.className = 'firefly';
+    ff.style.left = rand(W * 0.15, W * 0.9) + 'px';
+    ff.style.bottom = rand(26, 62) + 'px';
+    ff.style.animationDelay = (i * 1.3 + Math.random()) + 's';
+    ff.style.animationDuration = rand(3.4, 5.2) + 's';
+    farm.appendChild(ff);
+  }
+
+  // 알
   const egg = buildSprite(EGG_MAP, 'egg');
-  egg.style.left = rand(W * 0.55, W * 0.8) + 'px';
+  egg.style.left = rand(W * 0.55, W * 0.78) + 'px';
   egg.title = '?';
   egg.addEventListener('click', () => {
     egg.classList.remove('wobble'); void egg.offsetWidth; egg.classList.add('wobble');
@@ -1369,31 +1475,73 @@ function initFarm() {
   });
   farm.appendChild(egg);
 
-  const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  // 나비
+  const bfly = buildSprite(BFLY_MAP, 'butterfly');
+  let bx = W * 0.4, bdir = 1, bt = 0;
+  bfly.style.bottom = '40px';
+  farm.appendChild(bfly);
+
+  // 병아리들
   const chicks = [];
   for (let i = 0; i < 3; i++) {
     const el = buildSprite(CHICK_MAP, 'chick');
     el.title = '삐약';
     el.addEventListener('click', () => showToast('삐약! 🐥'));
     farm.appendChild(el);
-    chicks.push({ el, x: rand(20, W - 50), dir: Math.random() < 0.5 ? 1 : -1, v: rand(0.35, 0.75), mode: 'walk', t: 0 });
+    chicks.push({ el, x: rand(30, W - 60), dir: Math.random() < 0.5 ? 1 : -1, v: rand(0.35, 0.75), mode: 'walk', t: 0 });
   }
   const draw = c => { c.el.style.transform = `translateX(${c.x}px) scaleX(${c.dir})`; };
   chicks.forEach(draw);
 
-  if (reduced) return;
+  function peep(c) {
+    const b = document.createElement('div');
+    b.className = 'peep-bubble';
+    b.textContent = '삐약';
+    b.style.left = (c.x + 4) + 'px';
+    b.style.bottom = '44px';
+    farm.appendChild(b);
+    setTimeout(() => b.remove(), 1100);
+  }
+
+  if (reduced) {
+    bfly.style.left = Math.round(W * 0.4) + 'px';
+    return;
+  }
 
   setInterval(() => {
     W = farm.clientWidth;
+
+    // 나비: 사인파로 팔랑팔랑
+    bt += 0.12;
+    bx += bdir * 0.9;
+    if (bx < 10) { bx = 10; bdir = 1; }
+    if (bx > W - 22) { bx = W - 22; bdir = -1; }
+    if (Math.random() < 0.008) bdir *= -1;
+    bfly.style.transform = `translate(${bx}px, ${-Math.sin(bt) * 9}px)`;
+    bfly.classList.toggle('flap', Math.floor(bt * 4) % 2 === 0);
+
     chicks.forEach(c => {
       if (c.mode === 'walk') {
         c.x += c.dir * c.v;
         if (c.x < 6) { c.x = 6; c.dir = 1; }
         if (c.x > W - 32) { c.x = W - 32; c.dir = -1; }
         const r = Math.random();
-        if (r < 0.015) { c.mode = 'peck'; c.t = 7; c.el.classList.add('peck'); }
-        else if (r < 0.03) { c.mode = 'pause'; c.t = Math.floor(rand(8, 30)); }
-        else if (r < 0.04) { c.el.classList.add('hop'); setTimeout(() => c.el.classList.remove('hop'), 180); }
+        if (r < 0.013) { c.mode = 'peck'; c.t = 7; c.el.classList.add('peck'); }
+        else if (r < 0.026) { c.mode = 'pause'; c.t = Math.floor(rand(8, 30)); }
+        else if (r < 0.033) { c.mode = 'chase'; c.t = Math.floor(rand(35, 60)); }
+        else if (r < 0.043) { c.el.classList.add('hop'); setTimeout(() => c.el.classList.remove('hop'), 180); }
+        else if (r < 0.047) { peep(c); }
+      } else if (c.mode === 'chase') {
+        // 나비 쫓아가기
+        c.dir = bx > c.x ? 1 : -1;
+        c.x += c.dir * (c.v + 0.7);
+        if (c.x < 6) c.x = 6;
+        if (c.x > W - 32) c.x = W - 32;
+        if (Math.random() < 0.12) { c.el.classList.add('hop'); setTimeout(() => c.el.classList.remove('hop'), 160); }
+        if (--c.t <= 0 || Math.abs(bx - c.x) < 8) {
+          if (Math.abs(bx - c.x) < 12) peep(c);
+          c.mode = 'walk';
+        }
       } else if (c.mode === 'peck') {
         if (--c.t <= 0) { c.el.classList.remove('peck'); c.mode = 'walk'; }
       } else if (c.mode === 'pause') {
@@ -1402,6 +1550,15 @@ function initFarm() {
       draw(c);
     });
   }, 90);
+
+  // 고양이 꼬리 씰룩 (가끔)
+  setInterval(() => {
+    if (document.visibilityState !== 'visible') return;
+    if (Math.random() < 0.5) {
+      cat.classList.add('twitch');
+      setTimeout(() => cat.classList.remove('twitch'), 600);
+    }
+  }, 9000);
 
   setInterval(() => {
     if (document.visibilityState !== 'visible') return;
@@ -1543,14 +1700,16 @@ initDate();
 renderQuote();
 renderIdiom();
 renderEnglish();
-setHanjaShift(0);
+renderCn();
+renderCnTip();
 migrateToGuestbook();
 renderGb();
 initFarm();
 initialSync();
 
+setInterval(renderCnTip, 60 * 1000); // TIP은 10분 슬롯 기준, 1분마다 확인
 document.addEventListener('visibilitychange', () => {
-  if (document.visibilityState === 'visible') backgroundPull();
+  if (document.visibilityState === 'visible') { backgroundPull(); renderCnTip(); }
 });
 setInterval(() => {
   if (document.visibilityState === 'visible') backgroundPull();
