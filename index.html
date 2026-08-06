@@ -725,7 +725,6 @@ body::before {
     </div>
     <div class="verse-text" id="budText"></div>
     <div class="verse-src" id="budSrc"></div>
-    <div class="verse-note"><span class="verse-note-label">🪷 마음에 새기면</span><span id="budNote"></span></div>
     <div class="quote-index" id="budIndex"></div>
   </div>
 
@@ -742,7 +741,6 @@ body::before {
     </div>
     <div class="verse-text" id="bibText"></div>
     <div class="verse-src" id="bibSrc"></div>
-    <div class="verse-note"><span class="verse-note-label">🕊️ 마음에 새기면</span><span id="bibNote"></span></div>
     <div class="quote-index" id="bibIndex"></div>
   </div>
 
@@ -1430,7 +1428,6 @@ function renderBud() {
   const b = BUDDHA[getCurrentBudIdx()];
   document.getElementById('budText').textContent = b.text;
   document.getElementById('budSrc').textContent = b.src;
-  document.getElementById('budNote').textContent = ' ' + b.note;
   document.getElementById('budIndex').textContent = `${getCurrentBudIdx() + 1} / ${BUDDHA.length}`;
 }
 function nextBud() {
@@ -1451,7 +1448,6 @@ function renderBib() {
   const b = BIBLE[getCurrentBibIdx()];
   document.getElementById('bibText').textContent = b.text;
   document.getElementById('bibSrc').textContent = b.src;
-  document.getElementById('bibNote').textContent = ' ' + b.note;
   document.getElementById('bibIndex').textContent = `${getCurrentBibIdx() + 1} / ${BIBLE.length}`;
 }
 function nextBib() {
