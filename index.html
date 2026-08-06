@@ -115,42 +115,105 @@ body::before {
 }
 .gb-btn:hover { border-color: var(--gold); color: var(--gold); }
 
-/* ── 픽셀 농장 (여름밤) ── */
+/* ── 픽셀 농장 (시간 따라 하늘이 변하는 마당) ── */
 .farm {
   position: relative;
   height: 112px;
   margin: 0 0 34px;
   border-bottom: 1px solid var(--border);
   overflow: hidden;
+  background: linear-gradient(#0b0e1c 0%, #131737 100%);
+  transition: background 2s ease;
 }
+.farm.t-night { background: linear-gradient(#0b0e1c 0%, #131737 100%); }
+.farm.t-dawn  { background: linear-gradient(#272441 0%, #64475c 55%, #a06950 100%); }
+.farm.t-day   { background: linear-gradient(#4a7ba0 0%, #7fa6bf 60%, #a8bfae 100%); }
+.farm.t-dusk  { background: linear-gradient(#2a2340 0%, #6f4458 55%, #bd764c 100%); }
+.sky-orb {
+  position: absolute; z-index: 0; border-radius: 50%;
+  opacity: 0; pointer-events: none;
+  transition: left 2s linear, bottom 2s linear, opacity 2s ease;
+}
+.sky-orb.sun { width: 14px; height: 14px; background: #f5d76e; box-shadow: 0 0 18px 7px rgba(245,215,110,0.4); }
+.sky-orb.moon { width: 11px; height: 11px; background: #e9e6d9; box-shadow: 0 0 12px 4px rgba(233,230,217,0.3); }
+.star {
+  position: absolute; z-index: 0;
+  width: 2px; height: 2px; border-radius: 50%;
+  background: #ccd2ec; display: none;
+  animation: twinkle 3s ease-in-out infinite;
+  pointer-events: none;
+}
+.farm.t-night .star { display: block; }
+@keyframes twinkle { 0%, 100% { opacity: 0.2; } 50% { opacity: 0.9; } }
 .mtn {
   position: absolute; bottom: 18px;
-  pointer-events: none; z-index: 0;
+  pointer-events: none; z-index: 1;
+  transition: background 2s ease;
 }
 .mtn.far {
   left: -4%; width: 60%; height: 62px;
   background: #131826;
   clip-path: polygon(0 100%, 18% 34%, 33% 62%, 52% 12%, 70% 58%, 86% 30%, 100% 100%);
-  opacity: 0.85;
+  opacity: 0.9;
 }
 .mtn.near {
   right: -6%; width: 55%; height: 46px;
   background: #101422;
   clip-path: polygon(0 100%, 22% 40%, 45% 70%, 64% 18%, 82% 55%, 100% 35%, 100% 100%);
 }
+.farm.t-day .mtn.far { background: #54798e; }
+.farm.t-day .mtn.near { background: #3f5f78; }
+.farm.t-dawn .mtn.far { background: #3a3354; }
+.farm.t-dawn .mtn.near { background: #2c2542; }
+.farm.t-dusk .mtn.far { background: #413050; }
+.farm.t-dusk .mtn.near { background: #30243d; }
 .farm-ground {
   position: absolute; bottom: 0; left: 0; right: 0;
   height: 20px;
   background: linear-gradient(#25301c, #1a2214);
   border-top: 2px solid #33402a;
   z-index: 1;
+  transition: background 2s ease, border-color 2s ease;
 }
+.farm.t-day .farm-ground { background: linear-gradient(#37502a, #26351d); border-top-color: #49653a; }
+.farm.t-dawn .farm-ground, .farm.t-dusk .farm-ground { background: linear-gradient(#2c351f, #1e2716); border-top-color: #3d4a30; }
 .pxwrap { position: absolute; bottom: 16px; image-rendering: pixelated; }
 .pxinner { transition: transform 0.15s; }
 .px { width: 3px; height: 3px; background: transparent; }
 .chick { cursor: pointer; z-index: 4; }
 .chick.peck .pxinner { transform: translateY(3px) rotate(14deg); }
 .chick.hop .pxinner { transform: translateY(-5px); }
+.hen { cursor: pointer; z-index: 4; }
+.hen.peck .pxinner { transform: translateY(4px) rotate(9deg); }
+.hen.scratch .pxinner { animation: scratchA 0.5s ease-in-out infinite; }
+@keyframes scratchA {
+  0%, 100% { transform: translateX(0); }
+  30% { transform: translateX(-3px) translateY(1px); }
+  60% { transform: translateX(2px); }
+}
+.flapwing .pxinner { animation: flapA 0.5s ease; }
+@keyframes flapA {
+  0%, 100% { transform: none; }
+  25% { transform: translateY(-3px) rotate(-8deg); }
+  50% { transform: translateY(-5px) rotate(8deg); }
+  75% { transform: translateY(-2px) rotate(-6deg); }
+}
+.chick.dust .pxinner { animation: dustA 0.55s ease-in-out infinite; }
+@keyframes dustA {
+  0%, 100% { transform: rotate(76deg) translateY(4px); }
+  50% { transform: rotate(98deg) translateY(6px); }
+}
+.sleep .pxinner { transform: translateY(2px); opacity: 0.82; }
+.dust-puff {
+  position: absolute; z-index: 3;
+  width: 3px; height: 3px; background: #8a7a5c;
+  animation: puffA 0.7s ease forwards;
+  pointer-events: none;
+}
+@keyframes puffA {
+  0% { opacity: 0.8; transform: translate(0, 0); }
+  100% { opacity: 0; transform: translate(var(--dx, 4px), -9px); }
+}
 .egg { cursor: pointer; z-index: 3; bottom: 15px; }
 .egg.wobble .pxinner { animation: wob 0.8s ease; }
 .deco { z-index: 2; pointer-events: none; bottom: 14px; }
@@ -172,6 +235,7 @@ body::before {
 .butterfly { z-index: 5; pointer-events: none; }
 .butterfly .pxinner { transition: transform 0.1s; }
 .butterfly.flap .pxinner { transform: scaleX(0.55); }
+.farm.t-night .butterfly { display: none; }
 .firefly {
   position: absolute; z-index: 2;
   width: 3px; height: 3px; border-radius: 50%;
@@ -179,7 +243,9 @@ body::before {
   box-shadow: 0 0 6px 2px rgba(232,224,138,0.55);
   animation: glow 4s ease-in-out infinite;
   pointer-events: none;
+  display: none;
 }
+.farm.t-night .firefly, .farm.t-dusk .firefly { display: block; }
 @keyframes glow {
   0%, 100% { opacity: 0; transform: translate(0, 0); }
   35% { opacity: 0.9; transform: translate(4px, -7px); }
@@ -208,9 +274,10 @@ body::before {
   75% { transform: rotate(-4deg); }
 }
 @media (prefers-reduced-motion: reduce) {
-  .pxinner { transition: none; }
+  .pxinner { transition: none; animation: none !important; }
   .egg.wobble .pxinner { animation: none; }
   .firefly, .cat-zz { animation: none; opacity: 0.4; }
+  .star { animation: none; opacity: 0.5; }
 }
 
 /* ── 섹션 라벨 ── */
@@ -574,8 +641,10 @@ body::before {
     </div>
   </header>
 
-  <!-- 픽셀 농장 · 여름밤 -->
-  <div class="farm" id="farm">
+  <!-- 픽셀 농장 · 하루가 흐르는 마당 -->
+  <div class="farm t-night" id="farm">
+    <div class="sky-orb sun" id="sunOrb"></div>
+    <div class="sky-orb moon" id="moonOrb"></div>
     <div class="mtn far"></div>
     <div class="mtn near"></div>
     <div class="farm-ground"></div>
@@ -1327,15 +1396,17 @@ function showToast(msg = '저장됨 ✓') {
 }
 
 // ══════════════════════════════════════════
-// 🐥 픽셀 농장 — 여름밤 에디션
-// (산·나무·낮잠 자는 고양이·나비·반딧불이·노는 병아리들)
+// 🐥 픽셀 농장 — 하루가 흐르는 마당
+// 실제 시각 기준: 새벽(5~7시)·낮(7~17시)·저녁(17~20시)·밤.
+// 해와 달이 시간 따라 하늘을 가로지르고,
+// 엄마 닭과 병아리들은 낮엔 놀고 밤엔 나무 옆에 모여 잠들어.
 // ══════════════════════════════════════════
 const PX = 3;
 const PALETTE = {
   y:'#f2c744', d:'#c99a2e', b:'#3a2f1b', O:'#e8853a', o:'#b56a25',
   w:'#efe6d0', s:'#d9cdb0', p:'#d47f9e', g:'#5d7a42', G:'#48613a',
   T:'#3f5a33', t:'#54754a', L:'#6b9457', m:'#8a8a99', M:'#6a6a7a', k:'#4c4c5a',
-  P:'#e8a0b8'
+  P:'#e8a0b8', r:'#d64545'
 };
 const CHICK_MAP = [
   "..yyyy..",
@@ -1346,6 +1417,20 @@ const CHICK_MAP = [
   ".dyyyyy.",
   "..yyyy..",
   "..o..o.."
+];
+// 엄마 닭 — 빨간 볏·부리 밑 육수, 왼쪽엔 꼬리깃
+const HEN_MAP = [
+  "..........rr..",
+  ".........rrrr.",
+  ".........wwww.",
+  "..w......wbww.",
+  ".ww......wwwwO",
+  ".www.wwwwwwr..",
+  ".swwwwwwwwww..",
+  ".sswwwwwwww...",
+  "..swwwwwww....",
+  "...wwwwww.....",
+  "....oo.oo....."
 ];
 const EGG_MAP = [
   "..ww..",
@@ -1369,13 +1454,16 @@ const TREE_MAP = [
   "....bb....",
   "....bb...."
 ];
+// 웅크려 자는 고양이 — 귀 두 개·줄무늬·앞으로 만 꼬리
 const CAT_MAP = [
-  "..M.M.......",
-  ".MmmmM...MM.",
-  ".mmmmm..Mmm.",
-  ".mmmmmmmmmM.",
-  "MmmmmmmmmM..",
-  ".MM..MM....."
+  ".M.M..........",
+  ".MmMM.........",
+  ".mbmm.MMMMM...",
+  ".mmmmMmmkmmM..",
+  ".MmmmmkmmkmM..",
+  "..mmmmmmmmmM..",
+  ".mmMMMMMMMM...",
+  ".mm..........."
 ];
 const BFLY_MAP = [
   "P..P",
@@ -1408,11 +1496,59 @@ function buildSprite(map, cls) {
   return wrap;
 }
 
+// ── 시간대 & 해·달 ──
+let curPhase = 'night';
+function farmPhase(d) {
+  const h = d.getHours();
+  if (h >= 5 && h < 7) return 'dawn';
+  if (h >= 7 && h < 17) return 'day';
+  if (h >= 17 && h < 20) return 'dusk';
+  return 'night';
+}
+function updateFarmSky() {
+  const farm = document.getElementById('farm');
+  if (!farm) return;
+  const now = new Date();
+  curPhase = farmPhase(now);
+  farm.classList.remove('t-dawn', 't-day', 't-dusk', 't-night');
+  farm.classList.add('t-' + curPhase);
+  const W = farm.clientWidth;
+  const sun = document.getElementById('sunOrb');
+  const moon = document.getElementById('moonOrb');
+  if (!sun || !moon) return;
+  const mins = now.getHours() * 60 + now.getMinutes();
+  const sunRise = 6 * 60, sunSet = 19.5 * 60; // 해: 06:00 ~ 19:30
+  if (mins >= sunRise && mins <= sunSet) {
+    const p = (mins - sunRise) / (sunSet - sunRise);
+    sun.style.opacity = 1;
+    sun.style.left = (10 + p * (W - 34)) + 'px';
+    sun.style.bottom = (28 + Math.sin(p * Math.PI) * 56) + 'px';
+    moon.style.opacity = 0;
+  } else {
+    sun.style.opacity = 0;
+    const nm = mins < sunRise ? mins + 1440 : mins;
+    const p = (nm - sunSet) / (1440 - (sunSet - sunRise));
+    moon.style.opacity = 1;
+    moon.style.left = (10 + p * (W - 30)) + 'px';
+    moon.style.bottom = (32 + Math.sin(p * Math.PI) * 50) + 'px';
+  }
+}
+
 function initFarm() {
   const farm = document.getElementById('farm');
   let W = farm.clientWidth;
   const rand = (a, b) => a + Math.random() * (b - a);
   const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  // 밤하늘 별
+  for (let i = 0; i < 8; i++) {
+    const st = document.createElement('div');
+    st.className = 'star';
+    st.style.left = rand(10, W - 12) + 'px';
+    st.style.top = rand(4, 44) + 'px';
+    st.style.animationDelay = rand(0, 3).toFixed(1) + 's';
+    farm.appendChild(st);
+  }
 
   // 풀·꽃
   for (let i = 0; i < 4; i++) {
@@ -1426,7 +1562,7 @@ function initFarm() {
     farm.appendChild(f);
   }
 
-  // 여름 나무 두 그루 (크기 다르게)
+  // 나무 두 그루 (크기 다르게)
   const tree1 = buildSprite(TREE_MAP, 'tree');
   tree1.style.left = Math.round(W * 0.09) + 'px';
   farm.appendChild(tree1);
@@ -1436,7 +1572,7 @@ function initFarm() {
   tree2.querySelector('.pxinner').style.transformOrigin = 'bottom center';
   farm.appendChild(tree2);
 
-  // 나무 그늘에서 낮잠 자는 고양이
+  // 나무 그늘에서 자는 고양이
   const cat = buildSprite(CAT_MAP, 'cat');
   const catX = Math.round(W * 0.09) + 34;
   cat.style.left = catX + 'px';
@@ -1450,11 +1586,11 @@ function initFarm() {
   const zz = document.createElement('div');
   zz.className = 'cat-zz';
   zz.textContent = 'z z';
-  zz.style.left = (catX + 30) + 'px';
-  zz.style.bottom = '36px';
+  zz.style.left = (catX + 34) + 'px';
+  zz.style.bottom = '38px';
   farm.appendChild(zz);
 
-  // 반딧불이 (여름밤)
+  // 반딧불이 (저녁·밤에만 보임 — CSS가 제어)
   for (let i = 0; i < 4; i++) {
     const ff = document.createElement('div');
     ff.className = 'firefly';
@@ -1475,32 +1611,65 @@ function initFarm() {
   });
   farm.appendChild(egg);
 
-  // 나비
+  // 나비 (낮에만 보임 — CSS가 제어)
   const bfly = buildSprite(BFLY_MAP, 'butterfly');
   let bx = W * 0.4, bdir = 1, bt = 0;
   bfly.style.bottom = '40px';
   farm.appendChild(bfly);
 
+  // 말풍선·흙먼지 헬퍼
+  function bubbleAt(x, text) {
+    const b = document.createElement('div');
+    b.className = 'peep-bubble';
+    b.textContent = text;
+    b.style.left = x + 'px';
+    b.style.bottom = '48px';
+    farm.appendChild(b);
+    setTimeout(() => b.remove(), 1100);
+  }
+  function puffAt(x) {
+    const p = document.createElement('div');
+    p.className = 'dust-puff';
+    p.style.left = x + 'px';
+    p.style.bottom = (15 + Math.random() * 4) + 'px';
+    p.style.setProperty('--dx', (Math.random() * 12 - 6).toFixed(0) + 'px');
+    farm.appendChild(p);
+    setTimeout(() => p.remove(), 700);
+  }
+
+  // 엄마 닭
+  const henEl = buildSprite(HEN_MAP, 'hen');
+  henEl.title = '꼬꼬';
+  const H = { el: henEl, x: rand(W * 0.3, W * 0.55), dir: 1, v: 0.3, mode: 'walk', t: 0 };
+  henEl.addEventListener('click', () => {
+    showToast('꼬꼬! 🐔');
+    if (!reduced && curPhase !== 'night') henCall();
+  });
+  farm.appendChild(henEl);
+  const drawH = () => { H.el.style.transform = `translateX(${H.x}px) scaleX(${H.dir})`; };
+  drawH();
+
   // 병아리들
+  const SLOTS = [-24, 28, -42]; // 엄마 기준 각자 자리
   const chicks = [];
   for (let i = 0; i < 3; i++) {
     const el = buildSprite(CHICK_MAP, 'chick');
     el.title = '삐약';
     el.addEventListener('click', () => showToast('삐약! 🐥'));
     farm.appendChild(el);
-    chicks.push({ el, x: rand(30, W - 60), dir: Math.random() < 0.5 ? 1 : -1, v: rand(0.35, 0.75), mode: 'walk', t: 0 });
+    chicks.push({ el, x: rand(30, W - 60), dir: Math.random() < 0.5 ? 1 : -1, v: rand(0.35, 0.75), mode: 'walk', t: 0, slot: SLOTS[i] });
   }
   const draw = c => { c.el.style.transform = `translateX(${c.x}px) scaleX(${c.dir})`; };
   chicks.forEach(draw);
 
-  function peep(c) {
-    const b = document.createElement('div');
-    b.className = 'peep-bubble';
-    b.textContent = '삐약';
-    b.style.left = (c.x + 4) + 'px';
-    b.style.bottom = '44px';
-    farm.appendChild(b);
-    setTimeout(() => b.remove(), 1100);
+  // 엄마가 부르면 병아리들이 우르르
+  function henCall() {
+    bubbleAt(H.x + 12, '꼬꼬—!');
+    chicks.forEach(c => {
+      c.el.classList.remove('dust', 'peck');
+      c.mode = 'gather';
+      c.t = Math.floor(rand(45, 70));
+    });
   }
 
   if (reduced) {
@@ -1508,19 +1677,87 @@ function initFarm() {
     return;
   }
 
+  const clampC = c => { if (c.x < 6) c.x = 6; if (c.x > W - 32) c.x = W - 32; };
+
   setInterval(() => {
     W = farm.clientWidth;
+    const night = curPhase === 'night';
+    const roostX = Math.min(W - 64, Math.round(W * 0.7)); // 밤에 모이는 홰 자리
 
-    // 나비: 사인파로 팔랑팔랑
-    bt += 0.12;
-    bx += bdir * 0.9;
-    if (bx < 10) { bx = 10; bdir = 1; }
-    if (bx > W - 22) { bx = W - 22; bdir = -1; }
-    if (Math.random() < 0.008) bdir *= -1;
-    bfly.style.transform = `translate(${bx}px, ${-Math.sin(bt) * 9}px)`;
-    bfly.classList.toggle('flap', Math.floor(bt * 4) % 2 === 0);
+    // 나비: 낮 동안만 팔랑팔랑
+    if (!night) {
+      bt += 0.12;
+      bx += bdir * 0.9;
+      if (bx < 10) { bx = 10; bdir = 1; }
+      if (bx > W - 22) { bx = W - 22; bdir = -1; }
+      if (Math.random() < 0.008) bdir *= -1;
+      bfly.style.transform = `translate(${bx}px, ${-Math.sin(bt) * 9}px)`;
+      bfly.classList.toggle('flap', Math.floor(bt * 4) % 2 === 0);
+    }
 
+    // ── 엄마 닭 ──
+    if (night) {
+      H.el.classList.remove('scratch', 'peck');
+      H.mode = 'walk';
+      if (Math.abs(H.x - roostX) > 4) {
+        H.el.classList.remove('sleep');
+        H.dir = roostX > H.x ? 1 : -1;
+        H.x += H.dir * 0.5;
+      } else {
+        H.el.classList.add('sleep');
+        if (Math.random() < 0.004) bubbleAt(H.x + 14, 'z z');
+      }
+    } else {
+      H.el.classList.remove('sleep');
+      if (H.mode === 'walk') {
+        H.x += H.dir * H.v;
+        if (H.x < 6) { H.x = 6; H.dir = 1; }
+        if (H.x > W - 48) { H.x = W - 48; H.dir = -1; }
+        const r = Math.random();
+        if (r < 0.010) { H.mode = 'scratch'; H.t = Math.floor(rand(14, 24)); H.el.classList.add('scratch'); }
+        else if (r < 0.020) { H.mode = 'peck'; H.t = 8; H.el.classList.add('peck'); }
+        else if (r < 0.030) { H.mode = 'pause'; H.t = Math.floor(rand(10, 35)); }
+        else if (r < 0.0335) { henCall(); }
+        else if (r < 0.038) {
+          H.el.classList.add('flapwing');
+          setTimeout(() => H.el.classList.remove('flapwing'), 520);
+          bubbleAt(H.x + 10, '푸드덕');
+        }
+      } else if (H.mode === 'scratch') {
+        // 발로 흙 긁기 → 한 발 물러나 쪼아먹기 (닭 특유의 동작)
+        if (H.t % 4 === 0) puffAt(H.x + (H.dir > 0 ? 8 : 30));
+        if (--H.t <= 0) {
+          H.el.classList.remove('scratch');
+          H.x -= H.dir * 4;
+          H.mode = 'peck'; H.t = 9; H.el.classList.add('peck');
+        }
+      } else if (H.mode === 'peck') {
+        if (--H.t <= 0) { H.el.classList.remove('peck'); H.mode = 'walk'; }
+      } else if (H.mode === 'pause') {
+        if (--H.t <= 0) { if (Math.random() < 0.5) H.dir *= -1; H.mode = 'walk'; }
+      }
+    }
+    drawH();
+
+    // ── 병아리들 ──
     chicks.forEach(c => {
+      if (night) {
+        // 엄마 옆 각자 자리에서 잠
+        c.el.classList.remove('peck', 'dust');
+        const target = roostX + c.slot;
+        if (Math.abs(c.x - target) > 3) {
+          c.el.classList.remove('sleep');
+          c.dir = target > c.x ? 1 : -1;
+          c.x += c.dir * 0.6;
+          clampC(c);
+        } else {
+          c.el.classList.add('sleep');
+          if (Math.random() < 0.003) bubbleAt(c.x + 4, 'z');
+        }
+        draw(c);
+        return;
+      }
+      c.el.classList.remove('sleep');
       if (c.mode === 'walk') {
         c.x += c.dir * c.v;
         if (c.x < 6) { c.x = 6; c.dir = 1; }
@@ -1530,16 +1767,37 @@ function initFarm() {
         else if (r < 0.026) { c.mode = 'pause'; c.t = Math.floor(rand(8, 30)); }
         else if (r < 0.033) { c.mode = 'chase'; c.t = Math.floor(rand(35, 60)); }
         else if (r < 0.043) { c.el.classList.add('hop'); setTimeout(() => c.el.classList.remove('hop'), 180); }
-        else if (r < 0.047) { peep(c); }
+        else if (r < 0.047) { bubbleAt(c.x + 4, '삐약'); }
+        else if (r < 0.052) {
+          // 날개 파닥파닥
+          c.el.classList.add('flapwing');
+          setTimeout(() => c.el.classList.remove('flapwing'), 520);
+        }
+        else if (r < 0.0555) { c.mode = 'dust'; c.t = Math.floor(rand(30, 55)); c.el.classList.add('dust'); }
+        else if (r < 0.062) { c.dir = H.x > c.x ? 1 : -1; } // 엄마 쪽으로 슬쩍
+      } else if (c.mode === 'gather') {
+        const target = H.x + c.slot;
+        c.dir = target > c.x ? 1 : -1;
+        c.x += c.dir * (c.v + 0.9);
+        clampC(c);
+        if (Math.random() < 0.12) { c.el.classList.add('hop'); setTimeout(() => c.el.classList.remove('hop'), 160); }
+        if (--c.t <= 0 || Math.abs(target - c.x) < 5) { bubbleAt(c.x + 4, '삐약'); c.mode = 'walk'; }
+      } else if (c.mode === 'dust') {
+        // 모래목욕 — 누워서 버둥버둥, 흙이 폴폴
+        if (c.t % 6 === 0) puffAt(c.x + rand(0, 16));
+        if (--c.t <= 0) {
+          c.el.classList.remove('dust');
+          c.el.classList.add('flapwing'); // 일어나서 흙 털기
+          setTimeout(() => c.el.classList.remove('flapwing'), 520);
+          c.mode = 'walk';
+        }
       } else if (c.mode === 'chase') {
-        // 나비 쫓아가기
         c.dir = bx > c.x ? 1 : -1;
         c.x += c.dir * (c.v + 0.7);
-        if (c.x < 6) c.x = 6;
-        if (c.x > W - 32) c.x = W - 32;
+        clampC(c);
         if (Math.random() < 0.12) { c.el.classList.add('hop'); setTimeout(() => c.el.classList.remove('hop'), 160); }
         if (--c.t <= 0 || Math.abs(bx - c.x) < 8) {
-          if (Math.abs(bx - c.x) < 12) peep(c);
+          if (Math.abs(bx - c.x) < 12) bubbleAt(c.x + 4, '삐약');
           c.mode = 'walk';
         }
       } else if (c.mode === 'peck') {
@@ -1562,6 +1820,7 @@ function initFarm() {
 
   setInterval(() => {
     if (document.visibilityState !== 'visible') return;
+    if (curPhase === 'night') return; // 밤엔 알도 조용히
     egg.classList.remove('wobble'); void egg.offsetWidth; egg.classList.add('wobble');
   }, 24000);
 }
@@ -1705,11 +1964,13 @@ renderCnTip();
 migrateToGuestbook();
 renderGb();
 initFarm();
+updateFarmSky();
 initialSync();
 
 setInterval(renderCnTip, 60 * 1000); // TIP은 10분 슬롯 기준, 1분마다 확인
+setInterval(updateFarmSky, 60 * 1000); // 하늘·해·달도 1분마다 갱신
 document.addEventListener('visibilitychange', () => {
-  if (document.visibilityState === 'visible') { backgroundPull(); renderCnTip(); }
+  if (document.visibilityState === 'visible') { backgroundPull(); renderCnTip(); updateFarmSky(); }
 });
 setInterval(() => {
   if (document.visibilityState === 'visible') backgroundPull();
