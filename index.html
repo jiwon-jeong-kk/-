@@ -108,13 +108,12 @@ body {
 }
 
 /* ── 고양이 무대 — 화면 전체 ── */
-.stage { position: fixed; inset: 0; pointer-events: none; z-index: 40; overflow: hidden; }
+.wrapper { position: relative; }
+.stage { position: absolute; inset: 0; pointer-events: none; z-index: 40; overflow: visible; }
 .pxwrap { position: absolute; image-rendering: pixelated; }
 .pxwrap .pxinner { position: relative; transform-origin: center; }
 .pxwrap .px { position: absolute; left: 0; top: 0; width: 2px; height: 2px; }
-.cat { transition: left 0.12s linear; will-change: left; }
-.cat.lane-floor { bottom: calc(6px + env(safe-area-inset-bottom)); }
-.cat.lane-roof  { top: calc(2px + env(safe-area-inset-top)); }
+.cat { transition: left 0.12s linear, top 0.6s ease; will-change: left, top; }
 .cat .pxinner.flip { transform: scaleX(-1); }
 .cat.zz::after {
   content: "z"; position: absolute; right: -8px; top: -12px;
@@ -269,8 +268,8 @@ body {
   </section>
 
   <div class="foot" id="foot"></div>
+  <div class="stage" id="stage"></div>
 </div>
-<div class="stage" id="stage"></div>
 <div class="toast" id="toast"></div>
 
 <script>
@@ -806,13 +805,31 @@ const dayRand = seeded(dayIdx() + 7);
 const MOODS = ['lazy', 'lazy', 'normal', 'normal', 'normal', 'playful'];
 const CAT_MOOD = [ MOODS[Math.floor(dayRand() * MOODS.length)], MOODS[Math.floor(dayRand() * MOODS.length)] ];
 
+// 선반(바닥) 목록 — 각 섹션 위의 가로줄, 그리고 맨 아래 마무리 줄 아래.
+// 글이 늘어나거나 글꼴이 늦게 와서 높이가 바뀌면 다시 재.
 const cats = [];
-const stageW = () => window.innerWidth;
+let floors = [];
+function measureFloors() {
+  const wrap = document.querySelector('.wrapper');
+  const wrapRect = wrap.getBoundingClientRect();
+  const list = [];
+  document.querySelectorAll('.piece').forEach((el, i) => {
+    if (i === 0) return; // 첫 섹션 위엔 줄이 없어
+    const r = el.getBoundingClientRect();
+    list.push(r.top - wrapRect.top); // 줄 위치 = 섹션 윗선
+  });
+  const foot = document.getElementById('foot');
+  const fr = foot.getBoundingClientRect();
+  list.push(fr.bottom - wrapRect.top + 46); // 맨 아래 땅
+  floors = list;
+  cats.forEach(c => placeY(c));
+}
+const stageW = () => document.querySelector('.wrapper').clientWidth - 44; // 좌우 여백 제외
 
 function makeCat(i, remap) {
   const stage = document.getElementById('stage');
   const el = document.createElement('div');
-  el.className = 'pxwrap cat lane-floor';
+  el.className = 'pxwrap cat';
   const inner = document.createElement('div'); inner.className = 'pxinner';
   const px = document.createElement('div'); px.className = 'px';
   inner.appendChild(px); el.appendChild(inner); stage.appendChild(el);
@@ -824,10 +841,16 @@ function makeCat(i, remap) {
   };
   const sizes = { standA: [18, 9], standB: [18, 9], sit: [15, 10], sleep: [14, 8] };
   const cat = { el, inner, px, frames, sizes, x: 30 + i * 120 + Math.random() * 60, dir: 1, state: 'sit',
-                until: 0, target: 0, step: 0, mood: CAT_MOOD[i], frame: null, lane: 'floor' };
+                until: 0, target: 0, step: 0, mood: CAT_MOOD[i], frame: null, floor: i % 2 };
   setFrame(cat, 'sit');
-  cat.el.style.left = cat.x + 'px';
+  cat.el.style.left = (22 + cat.x) + 'px';
   return cat;
+}
+function placeY(cat) {
+  if (!floors.length) return;
+  cat.floor = Math.min(cat.floor, floors.length - 1);
+  const h = cat.sizes[cat.frame || 'sit'][1] * PX;
+  cat.el.style.top = (floors[cat.floor] - h - 1) + 'px';
 }
 function setFrame(cat, f) {
   if (cat.frame === f) return;
@@ -836,13 +859,7 @@ function setFrame(cat, f) {
   const [w, h] = cat.sizes[f];
   cat.el.style.width = cat.inner.style.width = (w * PX) + 'px';
   cat.el.style.height = cat.inner.style.height = (h * PX) + 'px';
-}
-function setLane(cat, lane) {
-  if (cat.lane === lane) return;
-  cat.lane = lane;
-  cat.el.classList.toggle('lane-floor', lane === 'floor');
-  cat.el.classList.toggle('lane-roof', lane === 'roof');
-  // 처마 위에선 거꾸로 서지 않도록 — 그냥 같은 모양으로 위에 앉아 있는 셈
+  placeY(cat);
 }
 function pick(cat) {
   const night = isNight();
@@ -857,12 +874,12 @@ function pick(cat) {
     cat.until = Date.now() + (night ? 90000 + Math.random() * 240000 : 25000 + Math.random() * 70000);
   } else if (r < sleepP + walkP) {
     cat.state = 'walk';
-    // 가끔(1/6) 처마로 올라가거나 내려옴 — 화면 끝에서 순간이동으로 처리
-    if (Math.random() < 1 / 6) {
-      setLane(cat, cat.lane === 'floor' ? 'roof' : 'floor');
-      cat.x = Math.random() < 0.5 ? -40 : W + 10;
+    // 가끔(1/5) 다른 선반으로 옮겨 감 — 폴짝.
+    if (floors.length > 1 && Math.random() < 1 / 5) {
+      let f; do { f = Math.floor(Math.random() * floors.length); } while (f === cat.floor);
+      cat.floor = f; placeY(cat);
     }
-    cat.target = 6 + Math.random() * (W - 48);
+    cat.target = 4 + Math.random() * (W - 44);
     cat.until = Date.now() + 25000;
   } else {
     cat.state = 'sit';
@@ -882,7 +899,7 @@ function tickCats() {
     cat.x += cat.dir * 1.5;
     cat.step++;
     setFrame(cat, (cat.step >> 2) % 2 ? 'standA' : 'standB');
-    cat.el.style.left = cat.x + 'px';
+    cat.el.style.left = (22 + cat.x) + 'px';
   });
   cats.forEach(cat => cat.inner.classList.toggle('flip', cat.dir < 0));
 }
@@ -890,13 +907,17 @@ function initCats() {
   const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   cats.push(makeCat(0, {}));
   cats.push(makeCat(1, CHEESE));
+  measureFloors();
   cats.forEach(c => {
+    c.floor = Math.floor(Math.random() * floors.length); placeY(c);
     pick(c);
     if (isNight() && Math.random() < 0.75) { c.state = 'sleep'; c.until = Date.now() + 150000; c.el.classList.add('zz'); }
   });
   if (!reduced) setInterval(tickCats, 90);
   else cats.forEach(c => { c.state = 'sleep'; setFrame(c, 'sleep'); });
-  window.addEventListener('resize', () => cats.forEach(c => { c.x = Math.min(c.x, stageW() - 40); c.el.style.left = c.x + 'px'; }));
+  window.addEventListener('resize', measureFloors);
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(measureFloors);
+  setInterval(measureFloors, 5000); // 방명록이 늘어나도 선반이 따라감
 }
 // ══════════════════════════════════════════
 // ☁️ JSONBin 동기화 — 반드시 "받아서 합치기 → 올리기" 순서만 사용
