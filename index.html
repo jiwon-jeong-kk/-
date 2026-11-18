@@ -13,7 +13,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Nanum+Myeongjo:wght@400;700;800&family=Noto+Sans+KR:wght@300;400;500;700&display=swap" rel="stylesheet">
 <style>
-/* ── v8 · 새벽 한지 ─────────────────────────
+/* ── v9 · 새벽 한지 ─────────────────────────
    아침에 가장 먼저 보는 종이 한 장.
    상자·화살표·해설 없이, 글귀만 숨 쉬게.
 ──────────────────────────────────────────── */
@@ -75,7 +75,7 @@ body {
 /* ── 머리 ── */
 .header {
   display: flex; justify-content: space-between; align-items: flex-end;
-  padding: 10px 0 34px;
+  padding: 10px 0 40px;
 }
 .brand {
   font-size: 11px; letter-spacing: 0.22em; color: var(--muted);
@@ -104,28 +104,11 @@ body {
 .season-panel .hanja { color: var(--muted); margin-left: 6px; font-size: 12px; }
 .season-panel .when { color: var(--muted); font-size: 12px; margin-left: 6px; }
 
-/* ── 고양이 무대 — 화면 전체 ── */
+/* ── 고양이 무대 — 화면 전체 (v9: 선으로 그린 고양이) ── */
 .wrapper { position: relative; }
 .stage { position: absolute; inset: 0; pointer-events: none; z-index: 40; overflow: visible; }
-.pxwrap { position: absolute; image-rendering: pixelated; }
-.pxwrap .pxinner { position: relative; transform-origin: center; }
-.pxwrap .px { position: absolute; left: 0; top: 0; width: 2px; height: 2px; }
-.cat { transition: left 0.1s linear, top 0.45s cubic-bezier(.3,1.4,.5,1); will-change: left, top; }
-.cat .pxinner { transform-origin: 50% 100%; }
-.cat .pxinner.flip { transform: scaleX(-1); }
-.cat.breathe .pxinner { animation: breathe 3.2s ease-in-out infinite; }
-.cat.breathe .pxinner.flip { animation: breatheFlip 3.2s ease-in-out infinite; }
-@keyframes breathe { 0%,100% { transform: scaleY(1);} 50% { transform: scaleY(.93);} }
-@keyframes breatheFlip { 0%,100% { transform: scaleX(-1) scaleY(1);} 50% { transform: scaleX(-1) scaleY(.93);} }
-.prop { pointer-events: none; }
-.yarn { transition: left .5s cubic-bezier(.2,.8,.3,1); }
-.yarn .pxinner { transition: transform .5s ease; }
-.cat.zz::after {
-  content: "z"; position: absolute; right: -8px; top: -12px;
-  font-size: 10px; font-family: 'Noto Sans KR', sans-serif; color: var(--muted);
-  animation: zz 2.4s infinite;
-}
-@keyframes zz { 0% { opacity: 0; transform: translateY(2px);} 30% { opacity: 1;} 100% { opacity: 0; transform: translateY(-8px);} }
+.stage svg { position: absolute; left: 0; top: 0; overflow: visible; will-change: transform; }
+.stage .zz { font-family: 'Noto Sans KR', sans-serif; font-weight: 400; fill: var(--muted); }
 
 /* ── 글귀 ── */
 .piece { padding: 6px 0 40px; animation: fadeUp .6s ease both; }
@@ -227,7 +210,7 @@ body {
 
   <header class="header">
     <div>
-      <div class="brand" onclick="location.reload()">오늘의 행복<b>v8</b></div>
+      <div class="brand" onclick="location.reload()">오늘의 행복<b>v9</b></div>
       <div class="date" id="headerDate"></div>
       <div class="date-sub"><span id="headerDay"></span><span class="season" id="headerSeason" onclick="toggleSeason()"></span></div>
     </div>
@@ -812,365 +795,570 @@ function showToast(msg = '저장됨 ✓') {
 }
 
 // ══════════════════════════════════════════
-// 고양이 둘 — 종이 위 가로줄이 바닥이고, 캣타워·밥그릇·실뭉치가 있어.
-//  · 켜자마자 뭔가 하고 있어 (멈춰 보이지 않게)
-//  · 걷기 4프레임, 앉아서 꼬리 흔들기, 그루밍, 기지개, 자면서 숨쉬기
-//  · 밥 먹기, 물 마시기, 실뭉치 치기, 캣타워 오르기
+// 고양이 둘 v9 — 점(픽셀) 대신 선으로 그린 고양이.
+//  · 몸·다리·꼬리·머리를 따로 그려 매 순간 이어 붙여서 걸음이 끊기지 않아
+//  · 발이 땅에 닿아 있는 동안은 미끄러지지 않아 (걸은 거리만큼만 다리가 돌아)
+//  · 줄을 옮길 땐 화면 가장자리로 걸어 나갔다가 다른 줄로 걸어 들어와
+//  · 캣타워·밥그릇은 맨 위 날짜 아래 줄. 판에서 판으로 뛰어올라
+//  · 실뭉치는 치면 굴러가고, 쫓아가서 또 쳐. 가끔 엉덩이를 흔들다 덮쳐
+//  · 우다다, 서로 쫓기, 식빵, 그루밍, 기지개, 밥·물
 //  · 밤(21~05시)엔 거의 자. 그날 기분은 날짜로 정해져.
 // ══════════════════════════════════════════
-const PX = 2;
-const PALETTE = {
-  m:'#8e8e9d', M:'#5c5c6c', k:'#474754',     // 회색 줄무늬
-  c:'#e4a24f', C:'#b9772e', q:'#9c5f22',     // 치즈
-  w:'#f4efe2', b:'#2b2b36', n:'#d98c9c',
-  // 소품
-  Y:'#c94c6b', y:'#e88aa0',                  // 실뭉치
-  R:'#b85c4a', K:'#8b5a2b', U:'#5f8db8', W:'#a9cfe8', // 밥그릇·사료·물그릇·물
-  h:'#c4a884', H:'#8c7259', f:'#ddd0bb', F:'#b7a58c',   // 캣타워 기둥·판·카펫
+const CAT_S = 1;            // 고양이 크기 배율 (1 = 앉은 키 약 38px)
+const PAD = 22;             // wrapper 좌우 여백
+const EDGE = 62;            // 화면 밖으로 완전히 나가는 거리
+const SVGNS = 'http://www.w3.org/2000/svg';
+const stageW = () => document.querySelector('.wrapper').clientWidth - PAD * 2;
+function svgEl(tag, attrs, parent) {
+  const e = document.createElementNS(SVGNS, tag);
+  if (attrs) for (const k in attrs) e.setAttribute(k, attrs[k]);
+  if (parent) parent.appendChild(e);
+  return e;
+}
+const rnd = (a, b) => a + Math.random() * (b - a);
+const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
+const frac = v => v - Math.floor(v);
+const R1 = v => Math.round(v * 10) / 10;
+
+// 털빛: 회색 줄무늬, 치즈
+const COATS = [
+  { body: '#82828f', far: '#6c6c79', stripe: '#565663', ear: '#d9a0aa', eye: '#24242c', nose: '#d98c9c' },
+  { body: '#e2a556', far: '#c98d43', stripe: '#b8772e', ear: '#f2c1ae', eye: '#3a2a1c', nose: '#d98c9c' },
+];
+
+// ── 자세 ── (오른쪽을 보는 기준, 발바닥이 y=0, 위쪽이 음수)
+// h=엉덩이, s=어깨, k=머리, nh/fh=가까운·먼 뒷발, nf/ff=가까운·먼 앞발, t=꼬리
+const STAND = { hx: -12, hy: -17.5, sx: 11, sy: -18, br: 7.3, hr: 0, kx: 19.5, ky: -25, kr: 0,
+                nhx: -13, nhy: 0, fhx: -10, fhy: 0, nfx: 11, nfy: 0, ffx: 14, ffy: 0, lg: 1,
+                tx: -18, ty: -20.5, ta: 50, tc: 40, tl: 21, eye: 1 };
+const SIT   = { hx: -5, hy: -8.6, sx: 4, sy: -18.5, br: 7.4, hr: 8.6, kx: 8, ky: -27, kr: 0,
+                nhx: -1, nhy: 0, fhx: 1.5, fhy: 0, nfx: 7, nfy: 0, ffx: 9.5, ffy: 0, lg: 1,
+                tx: -12, ty: -1.9, ta: 0, tc: 55, tl: 18, eye: 1 };
+const POSES = {
+  stand: STAND,
+  sit: SIT,
+  groom: Object.assign({}, SIT, { kx: 9.5, ky: -23.5, kr: 42, nfx: 13, nfy: -14 }),
+  loaf: { hx: -8.5, hy: -8.2, sx: 7.5, sy: -8.6, br: 8.2, hr: 0, kx: 13.5, ky: -16, kr: 0,
+          nhx: -9, nhy: 0, fhx: -7, fhy: 0, nfx: 8, nfy: 0, ffx: 9, ffy: 0, lg: 0,
+          tx: -15.5, ty: -1.9, ta: 0, tc: 70, tl: 13, eye: 1 },
+  sleep: { hx: -8, hy: -7.6, sx: 6.5, sy: -7.6, br: 7.6, hr: 0, kx: 12.5, ky: -6.4, kr: 26,
+           nhx: -9, nhy: 0, fhx: -7, fhy: 0, nfx: 8, nfy: 0, ffx: 9, ffy: 0, lg: 0,
+           tx: -14.5, ty: -1.9, ta: 0, tc: 95, tl: 12, eye: 0 },
+  eat: Object.assign({}, STAND, { sy: -14, kx: 17.5, ky: -7.2, kr: 38, ta: 15, tc: 25 }),
+  stretch: Object.assign({}, STAND, { hy: -18.5, sx: 9, sy: -7.6, kx: 17, ky: -9, kr: -12, nfx: 19, ffx: 21.5, ta: 75, tc: 30 }),
+  crouch: Object.assign({}, STAND, { hx: -11, hy: -10.6, sx: 9, sy: -9.8, kx: 16.5, ky: -13.5, kr: 4,
+                                    nhx: -12, fhx: -9.5, nfx: 11, ffx: 13.5, tx: -17, ty: -12.5, ta: 2, tc: 16 }),
+  jump: Object.assign({}, STAND, { sy: -18.5, kx: 20, ky: -23.5, kr: -6, nfx: 20, nfy: -11, ffx: 22.5, ffy: -12.5,
+                                  nhx: -21, nhy: -9, fhx: -19, fhy: -8, ta: 6, tc: -8 }),
 };
+const PK = Object.keys(STAND);
 
-// ── 고양이 스프라이트 (오른쪽을 보는 기준) ──
-const BODY = [
-  "..............M.M.",
-  "..............MMM.",
-  "MM............MbM.",
-  ".MM.MMMMMMMMMMMMM.",
-  "..MMmmmkmmkmmmmmm.",
-  "...Mmmmmmmmmmmmmn.",
-  "....mmmmmmmmmmmm..",
-];
-const BODY_TAILUP = [
-  ".M............M.M.",
-  ".MM...........MMM.",
-  "..M...........MbM.",
-  "..M.MMMMMMMMMMMMM.",
-  "..MMmmmkmmkmmmmmm.",
-  "...Mmmmmmmmmmmmmn.",
-  "....mmmmmmmmmmmm..",
-];
-const LEGS = [
-  [ "....MM.MM..MM.MM..", "....MM.MM..MM.MM.." ],
-  [ "...MM..MM.MM..MM..", "..MM....MMM....MM." ],
-  [ "....MM.MM..MM.MM..", "....MM.MM..MM.MM.." ],
-  [ ".....MMMM...MMMM..", "....MM..MM.MM..MM." ],
-];
-const SIT_A = [
-  "...........M.M.",
-  "...........MMM.",
-  "...........MbM.",
-  "........MMMMMM.",
-  "M......MmmkmmM.",
-  "MM....MmmmmmmM.",
-  ".MM...MmmkmmmM.",
-  "..MMMMmmmmmmmM.",
-  ".....MmmMmmMM..",
-  ".....MM.MM.M...",
-];
-const SIT_B = [
-  "...........M.M.",
-  "...........MMM.",
-  "...........MbM.",
-  ".M......MMMMMM.",
-  ".MM....MmmkmmM.",
-  "..M...MmmmmmmM.",
-  "..M...MmmkmmmM.",
-  "..MMMMmmmmmmmM.",
-  ".....MmmMmmMM..",
-  ".....MM.MM.M...",
-];
-const GROOM = [
-  "...............",
-  "...............",
-  "...........M.M.",
-  ".M.......MMMMM.",
-  ".MM....MmMbMmM.",
-  "..M...MmmmmmmM.",
-  "..M...MmmkmmmM.",
-  "..MMMMmmmmmmmM.",
-  ".....MmmMmmMM..",
-  ".....MM.MM.M...",
-];
-const SLEEP = [
-  ".M.M..........",
-  ".MmMM.........",
-  ".mbmm.MMMMM...",
-  ".mmmmMmmkmmM..",
-  ".MmmmmkmmkmM..",
-  "..mmmmmmmmmM..",
-  ".mmMMMMMMMM...",
-  ".mm...........",
-];
-const STRETCH = [
-  ".M...................",
-  ".MM.........M.M......",
-  "..M.........MMM......",
-  "..M..MMMMMMMMbM......",
-  "..MMMmmmmmmmmmmm.....",
-  ".....Mmmmmkmmmmmm....",
-  "....MM.MM....mmmmmn..",
-  "....MM.MM.......MM.MM",
-];
-const EAT = [
-  ".M................",
-  ".MM...............",
-  "..M...............",
-  "..M.MMMMMMMMMMM...",
-  "..MMmmmkmmkmmmmM..",
-  "....mmmmmmmmmmmMM.",
-  "....MM.MM..MM.MbM.",
-  "....MM.MM..MM.MMn.",
-];
-// ── 소품 ──
-const YARN = [ "..YY..", ".YyYY.", "YYyYyY", "YyYYyY", ".YYyY.", "..YY.." ];
-const BOWL_FOOD = [ "..KKKKKK..", ".RRRRRRRR.", ".RRRRRRRR.", "..RRRRRR.." ];
-const BOWL_WATER = [ "..WWWWWW..", ".UUUUUUUU.", ".UUUUUUUU.", "..UUUUUU.." ];
-// 캣타워: 위 판 → 기둥 → 중간 판(왼쪽) → 기둥 → 아래 판(오른쪽) → 기둥 → 받침
-function towerMap() {
-  const W = 24, rows = [];
-  const line = (segs) => { const r = Array(W).fill('.'); segs.forEach(([x0, x1, ch]) => { for (let x = x0; x <= x1; x++) r[x] = ch; }); rows.push(r.join('')); };
-  line([[6, 17, 'f']]); line([[6, 17, 'H']]);                 // 0-1 맨 위 판
-  for (let i = 0; i < 9; i++) line([[11, 12, 'h']]);           // 2-10 기둥
-  line([[0, 12, 'f']]); line([[0, 12, 'H']]);                  // 11-12 중간 판 (왼쪽)
-  for (let i = 0; i < 9; i++) line([[11, 12, 'h']]);           // 13-21 기둥
-  line([[11, 23, 'f']]); line([[11, 23, 'H']]);                // 22-23 아래 판 (오른쪽)
-  for (let i = 0; i < 7; i++) line([[11, 12, 'h']]);           // 24-30 기둥
-  line([[3, 20, 'F']]); line([[3, 20, 'H']]);                  // 31-32 받침
-  return rows;
+// ── 걸음새 ── off: 네 발이 땅을 딛는 순서, duty: 발이 땅에 붙어 있는 비율, stride: 한 바퀴에 가는 거리
+const GAITS = {
+  walk: { speed: 26,  stride: 21, duty: 0.62, lift: 2.6, off: { nh: 0, nf: 0.25, fh: 0.5, ff: 0.75 }, ta: 55, tc: 35 },
+  trot: { speed: 58,  stride: 29, duty: 0.50, lift: 3.6, off: { nh: 0, nf: 0.5,  fh: 0.5, ff: 0 },    ta: 28, tc: 22 },
+  run:  { speed: 150, stride: 52, duty: 0.34, lift: 6.0, off: { nh: 0, fh: 0.09, nf: 0.5, ff: 0.59 }, ta: 8,  tc: -4 },
+};
+function footOffset(ph, g) {
+  const reach = g.stride * g.duty / 2;
+  if (ph < g.duty) return [reach * (1 - 2 * ph / g.duty), 0];           // 딛는 동안: 몸이 가는 만큼 뒤로
+  const u = (ph - g.duty) / (1 - g.duty);                              // 드는 동안: 앞으로 가져옴
+  return [reach * (-Math.cos(Math.PI * u)), -g.lift * Math.sin(Math.PI * u)];
 }
-const TOWER = towerMap();
-// 고양이가 앉을 수 있는 판: [판 윗줄 y, 왼쪽 x, 오른쪽 x] (셀 단위)
-const TOWER_PLATFORMS = [ [0, 6, 17], [11, 0, 12], [22, 11, 23] ];
 
-const CHEESE = { m:'c', M:'C', k:'q' };
-function recolor(map, remap) { return map.map(row => [...row].map(ch => remap[ch] || ch).join('')); }
-function shadowsOf(map) {
-  const s = [];
-  map.forEach((row, y) => [...row].forEach((c, x) => { if (PALETTE[c]) s.push(`${x*PX}px ${y*PX}px 0 ${PALETTE[c]}`); }));
-  return s.join(',');
-}
-function buildSprite(map, cls) {
-  const wrap = document.createElement('div');
-  wrap.className = 'pxwrap ' + (cls || '');
-  const inner = document.createElement('div'); inner.className = 'pxinner';
-  const px = document.createElement('div'); px.className = 'px';
-  px.style.boxShadow = shadowsOf(map);
-  const w = map[0].length * PX, h = map.length * PX;
-  wrap.style.width = w + 'px'; wrap.style.height = h + 'px';
-  inner.style.width = w + 'px'; inner.style.height = h + 'px';
-  inner.appendChild(px); wrap.appendChild(inner);
-  return wrap;
-}
+// ── 캣타워 ── 맨 위 줄(날짜 아래) 오른쪽 끝에 세움
+const TOWER_W = 78;
+const PERCH = [ { cx: 58, y: -34 }, { cx: 19, y: -68 }, { cx: 42, y: -102 } ];  // 아래(오른쪽)·가운데(왼쪽)·맨 위
+const TOWER_GX = 22;        // 타워에 오르내릴 때 서는 땅 위치 (타워 왼쪽 끝 기준)
+const BOWL_FOOD_X = 20, BOWL_WATER_X = 58;
 
 function isNight() { const h = new Date().getHours(); return h >= 21 || h < 5; }
 function seeded(seed) { let x = (seed * 9301 + 49297) % 233280; return () => { x = (x * 9301 + 49297) % 233280; return x / 233280; }; }
 const dayRand = seeded(dayIdx() + 7);
 const MOODS = ['lazy', 'normal', 'normal', 'playful', 'playful'];
 const CAT_MOOD = [ MOODS[Math.floor(dayRand() * MOODS.length)], MOODS[Math.floor(dayRand() * MOODS.length)] ];
-const YARN_FLOOR_PICK = dayRand();
 
 // ── 무대 좌표 ──
-// floors[i] = 가로줄의 y (wrapper 기준). x는 wrapper 좌우 여백 22px 안쪽.
+// floors[i] = 가로줄의 y (wrapper 기준). 0번 줄이 날짜 바로 아래 줄이고, 타워·밥그릇이 여기 있어.
 const cats = [];
 let floors = [];
-let tower = { el: null, x: 0, y: 0 };          // 타워 왼쪽 위 (wrapper 기준)
-let bowls = { food: null, water: null, x: 0, floor: 0 };
-let yarn = { el: null, x: 0, floor: 0, spin: 0 };
-const PAD = 22;
-const stageW = () => document.querySelector('.wrapper').clientWidth - PAD * 2;
+let wrapDocTop = 0;
+const tower = { el: null, toy: null, x: 0 };
+const bowls = { food: null, water: null };
+const yarn = { el: null, ball: null, thread: null, x: 80, v: 0, rot: 0, floor: 1, lag: 80 };
+
+function groundY(floor, perch) {
+  if (perch >= 0) return floors[0] + PERCH[perch].y;
+  return floors[Math.min(floor, floors.length - 1)];
+}
+function floorVisible(i) {
+  const y = floors[i] + wrapDocTop - window.scrollY;
+  return y > 70 && y < window.innerHeight - 6;
+}
+function visibleFloors() { const v = []; floors.forEach((_, i) => { if (floorVisible(i)) v.push(i); }); return v; }
+function place(el, x, y) { el.style.transform = `translate3d(${R1(x)}px,${R1(y)}px,0)`; }
 
 function measureFloors() {
   const wrap = document.querySelector('.wrapper');
   const wr = wrap.getBoundingClientRect();
+  wrapDocTop = wr.top + window.scrollY;
   const list = [];
-  document.querySelectorAll('.piece').forEach(el => list.push(el.getBoundingClientRect().top - wr.top));
-  const fr = document.getElementById('foot').getBoundingClientRect();
-  list.push(fr.bottom - wr.top + 82);
+  document.querySelectorAll('.piece').forEach(el => list.push(el.offsetTop));   // 글귀가 떠오르는 동안에도 줄 위치가 흔들리지 않게
   floors = list;
-  // 타워: 맨 아래 땅, 오른쪽에 세움
-  const ground = floors[floors.length - 1];
-  tower.y = ground - TOWER.length * PX - 1;
-  tower.x = stageW() - TOWER[0].length * PX - 2;
-  if (tower.el) { tower.el.style.left = (PAD + tower.x) + 'px'; tower.el.style.top = tower.y + 'px'; }
-  // 밥그릇·물그릇: 맨 아래 땅, 왼쪽
-  bowls.floor = floors.length - 1;
-  bowls.x = 6;
-  if (bowls.food) { bowls.food.style.left = (PAD + bowls.x) + 'px'; bowls.food.style.top = (floors[bowls.floor] - 8) + 'px'; }
-  if (bowls.water) { bowls.water.style.left = (PAD + bowls.x + 28) + 'px'; bowls.water.style.top = (floors[bowls.floor] - 8) + 'px'; }
-  // 실뭉치
-  yarn.floor = Math.min(yarn.floor, floors.length - 1);
-  if (yarn.el) { yarn.el.style.left = (PAD + yarn.x) + 'px'; yarn.el.style.top = (floors[yarn.floor] - 12) + 'px'; }
-  cats.forEach(c => placeY(c));
-}
-
-function makeCat(i, remap) {
-  const stage = document.getElementById('stage');
-  const el = document.createElement('div');
-  el.className = 'pxwrap cat';
-  const inner = document.createElement('div'); inner.className = 'pxinner';
-  const px = document.createElement('div'); px.className = 'px';
-  inner.appendChild(px); el.appendChild(inner); stage.appendChild(el);
-  const F = (map) => shadowsOf(recolor(map, remap));
-  const frames = {
-    walk0: F(BODY.concat(LEGS[0])), walk1: F(BODY.concat(LEGS[1])), walk2: F(BODY.concat(LEGS[2])), walk3: F(BODY.concat(LEGS[3])),
-    walkU0: F(BODY_TAILUP.concat(LEGS[0])), walkU1: F(BODY_TAILUP.concat(LEGS[1])), walkU2: F(BODY_TAILUP.concat(LEGS[2])), walkU3: F(BODY_TAILUP.concat(LEGS[3])),
-    sitA: F(SIT_A), sitB: F(SIT_B), groom: F(GROOM), sleep: F(SLEEP), stretch: F(STRETCH), eat: F(EAT),
-  };
-  const sizes = {
-    walk0: [18, 9], walk1: [18, 9], walk2: [18, 9], walk3: [18, 9],
-    walkU0: [18, 9], walkU1: [18, 9], walkU2: [18, 9], walkU3: [18, 9],
-    sitA: [15, 10], sitB: [15, 10], groom: [15, 10], sleep: [14, 8], stretch: [21, 8], eat: [18, 8],
-  };
-  const cat = { el, inner, px, frames, sizes, x: 0, dir: 1, state: 'sit', until: 0, target: 0, step: 0,
-                mood: CAT_MOOD[i], frame: null, floor: 0, perch: -1, tailUp: false, sub: 0, t: 0, speed: 1.2, pauseUntil: 0 };
-  return cat;
-}
-function catY(cat) {
-  const h = cat.sizes[cat.frame || 'sitA'][1] * PX;
-  if (cat.perch >= 0) return tower.y + TOWER_PLATFORMS[cat.perch][0] * PX - h;
-  return floors[cat.floor] - h - 1;
-}
-function placeY(cat) {
   if (!floors.length) return;
-  cat.floor = Math.min(cat.floor, floors.length - 1);
-  cat.el.style.top = catY(cat) + 'px';
-}
-function placeX(cat) { cat.el.style.left = (PAD + cat.x) + 'px'; }
-function setFrame(cat, f) {
-  if (cat.frame === f) return;
-  cat.frame = f;
-  cat.px.style.boxShadow = cat.frames[f];
-  const [w, h] = cat.sizes[f];
-  cat.el.style.width = cat.inner.style.width = (w * PX) + 'px';
-  cat.el.style.height = cat.inner.style.height = (h * PX) + 'px';
-  placeY(cat);
-}
-function face(cat, dir) { cat.dir = dir; cat.inner.classList.toggle('flip', dir < 0); }
-function setState(cat, s, ms) {
-  cat.state = s; cat.until = Date.now() + ms; cat.t = 0; cat.sub = 0;
-  cat.el.classList.toggle('zz', s === 'sleep');
-  cat.el.classList.toggle('breathe', s === 'sleep');
-}
-const now = () => Date.now();
-
-// ── 행동 고르기 ──
-function pick(cat, first) {
-  const night = isNight();
   const W = stageW();
-  const r = Math.random();
-  const lazy = cat.mood === 'lazy', playful = cat.mood === 'playful';
-  const otherEating = cats.some(c => c !== cat && (c.state === 'eat' || c.state === 'drink'));
-
-  // 자고 일어났으면 기지개부터
-  if (cat.state === 'sleep' && !first) { setState(cat, 'stretch', 1800); return; }
-
-  let p = [];
-  p.push(['sleep', night ? 0.6 : lazy ? 0.32 : playful ? 0.08 : 0.18]);
-  p.push(['groom', 0.12]);
-  p.push(['sit', night ? 0.2 : 0.2]);
-  p.push(['walk', night ? 0.1 : playful ? 0.3 : 0.22]);
-  p.push(['eat', otherEating ? 0.02 : night ? 0.02 : 0.08]);
-  p.push(['yarn', night ? 0.01 : playful ? 0.18 : lazy ? 0.04 : 0.1]);
-  p.push(['tower', night ? 0.04 : playful ? 0.16 : 0.1]);
-  const total = p.reduce((a, [, v]) => a + v, 0);
-  let acc = 0, choice = 'sit';
-  for (const [k, v] of p) { acc += v / total; if (r < acc) { choice = k; break; } }
-
-  if (choice === 'sleep') { setState(cat, 'sleep', night ? 120000 + Math.random() * 300000 : 30000 + Math.random() * 90000); }
-  else if (choice === 'groom') { setState(cat, 'groom', 5000 + Math.random() * 8000); }
-  else if (choice === 'sit') { setState(cat, 'sit', 6000 + Math.random() * 20000); }
-  else if (choice === 'walk') {
-    // 가끔 다른 줄로 옮겨 감
-    if (cat.perch >= 0 || (floors.length > 1 && Math.random() < 0.3)) {
-      let f; do { f = Math.floor(Math.random() * floors.length); } while (f === cat.floor && cat.perch < 0);
-      hop(cat, f, -1);
-    }
-    cat.target = 4 + Math.random() * (W - 48);
-    cat.speed = playful ? 1.5 : 1.1;
-    setState(cat, 'walk', 30000);
-  }
-  else if (choice === 'eat') {
-    if (cat.perch >= 0 || cat.floor !== bowls.floor) hop(cat, bowls.floor, -1);
-    cat.sub = Math.random() < 0.5 ? 0 : 1;                       // 0 = 밥, 1 = 물
-    cat.target = bowls.x + (cat.sub ? 46 : 18);                   // 그릇 오른쪽에 서서 고개 숙임
-    cat.speed = 1.3;
-    setState(cat, 'goeat', 30000);
-  }
-  else if (choice === 'yarn') {
-    if (cat.perch >= 0 || cat.floor !== yarn.floor) hop(cat, yarn.floor, -1);
-    cat.target = yarn.x - 34 + Math.random() * 60 - 10;
-    cat.speed = 1.6;
-    setState(cat, 'goyarn', 30000);
-  }
-  else if (choice === 'tower') {
-    if (cat.perch >= 0) { // 이미 타워 위면 다른 판으로 갈아타거나 내려옴
-      if (Math.random() < 0.5) { hop(cat, bowls.floor, (cat.perch + 1 + Math.floor(Math.random() * 2)) % 3); setState(cat, 'sit', 8000 + Math.random() * 20000); }
-      else { hop(cat, bowls.floor, -1); cat.target = 10 + Math.random() * (W - 80); cat.speed = 1.2; setState(cat, 'walk', 30000); }
-      return;
-    }
-    if (cat.floor !== bowls.floor) hop(cat, bowls.floor, -1);
-    cat.target = tower.x - 30;
-    cat.speed = 1.3;
-    setState(cat, 'gotower', 30000);
-  }
-}
-function hop(cat, floor, perch) {
-  cat.floor = floor; cat.perch = perch;
-  if (perch >= 0) {
-    const [, x0, x1] = TOWER_PLATFORMS[perch];
-    cat.x = tower.x + x0 * PX + Math.random() * ((x1 - x0) * PX - 30);
-    placeX(cat);
-  }
-  placeY(cat);
+  tower.x = W - TOWER_W;
+  if (tower.el) place(tower.el, PAD + tower.x, floors[0] - 106);
+  if (bowls.food) place(bowls.food, PAD + BOWL_FOOD_X - 11, floors[0] - 10);
+  if (bowls.water) place(bowls.water, PAD + BOWL_WATER_X - 11, floors[0] - 10);
+  yarn.floor = clamp(yarn.floor, Math.min(1, floors.length - 1), floors.length - 1);
+  yarn.x = clamp(yarn.x, 10, W - 10);
 }
 
-function tickCats() {
-  const t = now();
-  cats.forEach(cat => {
-    cat.t++;
-    if (t > cat.until) pick(cat, false);
-    const s = cat.state;
-    if (s === 'sleep') { setFrame(cat, 'sleep'); return; }
-    if (s === 'stretch') { setFrame(cat, 'stretch'); return; }
-    if (s === 'groom') { setFrame(cat, (cat.t >> 3) % 3 === 0 ? 'sitA' : 'groom'); return; }
-    if (s === 'sit') {
-      // 가만히 앉아 꼬리만 가끔 흔들고, 아주 가끔 고개 돌리기
-      const swish = (cat.t % 60) < 12 && (cat.t >> 2) % 2;
-      setFrame(cat, swish ? 'sitB' : 'sitA');
-      if (cat.t % 150 === 0 && Math.random() < 0.4) face(cat, -cat.dir);
-      return;
+// ── 소품 그리기 ──
+function buildTower(stage) {
+  const s = svgEl('svg', { viewBox: '0 -106 78 106', width: 78, height: 106 }, stage);
+  const post = '#c4a884', rope = '#a88f6c', dark = '#8c7259', felt = '#ddd0bb', base = '#b7a58c';
+  svgEl('rect', { x: 36, y: -98, width: 7, height: 95, fill: post }, s);          // 가운데 기둥
+  svgEl('rect', { x: 62, y: -30, width: 6, height: 27, fill: post }, s);          // 오른쪽 짧은 기둥
+  for (let y = -94; y < -4; y += 3.2) svgEl('line', { x1: 36, y1: y, x2: 43, y2: y + 1.2, stroke: rope, 'stroke-width': 0.7 }, s);
+  for (let y = -27; y < -4; y += 3.2) svgEl('line', { x1: 62, y1: y, x2: 68, y2: y + 1.1, stroke: rope, 'stroke-width': 0.7 }, s);
+  svgEl('rect', { x: 6, y: -4, width: 64, height: 4, rx: 1.5, fill: base }, s);    // 받침
+  const plat = (x, y, w) => {
+    svgEl('rect', { x, y: y + 2.2, width: w, height: 3.3, rx: 1.6, fill: dark }, s);
+    svgEl('rect', { x, y, width: w, height: 3.4, rx: 1.7, fill: felt }, s);
+  };
+  plat(36, -34, 42); plat(0, -68, 44); plat(20, -102, 44);
+  // 맨 위 판에 매달린 방울
+  const toy = svgEl('g', {}, s);
+  svgEl('line', { x1: 24, y1: -96.5, x2: 24, y2: -84, stroke: dark, 'stroke-width': 0.6 }, toy);
+  svgEl('circle', { cx: 24, cy: -82, r: 2.6, fill: '#c94c6b' }, toy);
+  tower.toy = toy;
+  return s;
+}
+function buildBowl(stage, water) {
+  const s = svgEl('svg', { viewBox: '0 0 22 10', width: 22, height: 10 }, stage);
+  svgEl('ellipse', { cx: 11, cy: 4.2, rx: 7.6, ry: water ? 1.6 : 2.8, fill: water ? '#a9cfe8' : '#8b5a2b' }, s);
+  svgEl('path', { d: 'M1.5 4 H20.5 L18 9.2 Q17.6 10 16.8 10 H5.2 Q4.4 10 4 9.2 Z', fill: water ? '#5f8db8' : '#b85c4a' }, s);
+  svgEl('rect', { x: 1, y: 3.2, width: 20, height: 1.7, rx: 0.85, fill: water ? '#7ba6cc' : '#cf7461' }, s);
+  return s;
+}
+function buildYarn(stage) {
+  const s = svgEl('svg', { viewBox: '-10 -10 20 20', width: 20, height: 20 }, stage);
+  yarn.thread = svgEl('path', { d: '', fill: 'none', stroke: '#c94c6b', 'stroke-width': 0.9, 'stroke-linecap': 'round' }, s);
+  const b = svgEl('g', {}, s);
+  svgEl('circle', { cx: 0, cy: 0, r: 6.5, fill: '#c94c6b' }, b);
+  [ 'M-5.6 -2.6 Q0 -6 5.4 -3', 'M-6.2 0.8 Q-0.5 -2.6 6.2 0.2', 'M-5 4 Q0.5 0.6 5.6 3.2', 'M-2.6 -5.8 Q-5 0 -2 5.9', 'M2.8 -5.6 Q0.6 0.4 3.4 5.4' ]
+    .forEach(d => svgEl('path', { d, fill: 'none', stroke: '#e88aa0', 'stroke-width': 0.9, 'stroke-linecap': 'round' }, b));
+  yarn.ball = b;
+  return s;
+}
+
+// ── 고양이 한 마리 만들기 ──
+function makeCat(i) {
+  const coat = COATS[i];
+  const stage = document.getElementById('stage');
+  const svg = svgEl('svg', { viewBox: '-48 -66 96 78', width: 96 * CAT_S, height: 78 * CAT_S }, stage);
+  const g = svgEl('g', {}, svg);
+  const line = (color, w, parent) => svgEl('path', { d: '', fill: 'none', stroke: color, 'stroke-width': w, 'stroke-linecap': 'round', 'stroke-linejoin': 'round' }, parent || g);
+  const c = { i, coat, svg, g };
+  c.eTail = line(coat.body, 3.5);
+  c.eLegFH = line(coat.far, 4.4); c.ePawFH = svgEl('ellipse', { fill: coat.far }, g);
+  c.eLegFF = line(coat.far, 4.4); c.ePawFF = svgEl('ellipse', { fill: coat.far }, g);
+  c.eBody = line(coat.body, 15);
+  c.eHaunch = svgEl('circle', { fill: coat.body, r: 0 }, g);
+  c.eStripes = [0, 1, 2].map(() => line(coat.stripe, 1.9));
+  c.eLegNH = line(coat.body, 4.4); c.ePawNH = svgEl('ellipse', { fill: coat.body }, g);
+  c.eLegNF = line(coat.body, 4.4); c.ePawNF = svgEl('ellipse', { fill: coat.body }, g);
+  c.eNeck = line(coat.body, 8.6);
+  // 머리 (머리 중심이 원점)
+  const h = svgEl('g', {}, g); c.eHead = h;
+  svgEl('polygon', { points: '-4.6,-4 -2.8,-10.6 1,-5.4', fill: coat.far }, h);            // 먼 귀
+  svgEl('polygon', { points: '-1.6,-4.8 1.9,-11.2 4.9,-4.4', fill: coat.body }, h);        // 가까운 귀
+  svgEl('polygon', { points: '0.5,-5.6 2,-9.2 3.5,-5.2', fill: coat.ear }, h);
+  svgEl('circle', { cx: 0, cy: 0, r: 6.6, fill: coat.body }, h);
+  svgEl('ellipse', { cx: 5, cy: 2, rx: 3.5, ry: 2.7, fill: coat.body }, h);                // 주둥이
+  svgEl('path', { d: 'M-0.6 -6.1 L-0.1 -4', fill: 'none', stroke: coat.stripe, 'stroke-width': 1.1, 'stroke-linecap': 'round' }, h);
+  svgEl('path', { d: 'M-2.8 -5.5 L-2.5 -3.6', fill: 'none', stroke: coat.stripe, 'stroke-width': 1.1, 'stroke-linecap': 'round' }, h);
+  c.eEye = svgEl('ellipse', { cx: 3.1, cy: -1, rx: 1.05, ry: 1.4, fill: coat.eye }, h);
+  c.eEyeShut = svgEl('path', { d: 'M1.9 -0.8 Q3.1 0.3 4.3 -0.8', fill: 'none', stroke: coat.eye, 'stroke-width': 0.8, 'stroke-linecap': 'round' }, h);
+  svgEl('circle', { cx: 8.1, cy: 1.3, r: 0.95, fill: coat.nose }, h);
+  svgEl('path', { d: 'M6.6 2.7 L11.6 1.9 M6.6 3.2 L11.2 4.3', fill: 'none', stroke: coat.stripe, 'stroke-width': 0.4, 'stroke-linecap': 'round', opacity: 0.7 }, h);
+  // 잘 때 z
+  c.eZ = [0, 1].map(k => { const z = svgEl('text', { class: 'zz', 'font-size': k ? 7 : 9, opacity: 0 }, svg); z.textContent = 'z'; return z; });
+
+  Object.assign(c, {
+    x: 40, floor: 0, perch: -1, face: 1, fc: 1, pitch: 0, air: false, airY: 0,
+    p: Object.assign({}, STAND), goal: 'stand', anim: '', snap: 9,
+    moving: false, mv: 0, gait: 'walk', phase: Math.random(), batU: 0,
+    q: [], mood: CAT_MOOD[i], seed: i * 2.4 + 0.7, blink: rnd(2, 6), shown: true,
+  });
+  return c;
+}
+
+// ── 이번 순간의 자세 계산 ──
+function poseOf(c, dt, t) {
+  const goal = POSES[c.goal] || STAND;
+  const k = 1 - Math.exp(-dt * c.snap);
+  const cp = c.p;
+  for (const key of PK) cp[key] += (goal[key] - cp[key]) * k;
+  const p = Object.assign({}, cp);
+
+  // 걷기·뛰기
+  c.mv += ((c.moving ? 1 : 0) - c.mv) * (1 - Math.exp(-dt * 14));
+  if (c.mv > 0.01) {
+    const g = GAITS[c.gait], m = c.mv;
+    for (const L of ['nh', 'fh', 'nf', 'ff']) {
+      const o = footOffset(frac(c.phase + g.off[L]), g);
+      p[L + 'x'] += o[0] * m; p[L + 'y'] += o[1] * m;
     }
-    if (s === 'eat' || s === 'drink') { setFrame(cat, (cat.t >> 3) % 4 === 0 ? 'walk0' : 'eat'); return; }
-    if (s === 'playyarn') {
-      // 앞발로 톡톡 — 실뭉치가 굴러감
-      setFrame(cat, (cat.t >> 2) % 2 ? 'walk1' : 'sitA');
-      if (cat.t % 14 === 0) {
-        const push = cat.dir * (12 + Math.random() * 22);
-        yarn.x = Math.max(4, Math.min(stageW() - 20, yarn.x + push));
-        yarn.spin += push * 6;
-        yarn.el.style.left = (PAD + yarn.x) + 'px';
-        yarn.el.firstChild.style.transform = `rotate(${yarn.spin}deg)`;
-        // 실뭉치 따라가기
-        if (Math.random() < 0.6) { cat.target = yarn.x - 30 * cat.dir; cat.speed = 1.8; cat.state = 'goyarn'; }
+    const w = c.phase * Math.PI * 2;
+    if (c.gait === 'run') {
+      const s = Math.sin(w + 0.6);
+      p.sy += 2.0 * s * m; p.hy -= 2.0 * s * m; p.ky += 1.4 * s * m;
+      const up = Math.abs(Math.sin(w)) * 1.6 * m; p.sy -= up; p.hy -= up; p.ky -= up; p.ty -= up;
+      p.kx += 1.5 * m;
+    } else {
+      const a = c.gait === 'trot' ? 0.8 : 0.5;
+      p.hy += a * Math.sin(w * 2) * m; p.sy += a * Math.sin(w * 2 + 1.3) * m;
+      p.ky += (a + 0.2) * Math.sin(w * 2 + 0.7) * m; p.ty += a * Math.sin(w * 2) * m;
+    }
+    p.ta += (g.ta - p.ta) * m; p.tc += (g.tc - p.tc) * m;
+  }
+
+  // 자세별 잔움직임
+  const s1 = Math.sin(t * 1.3 + c.seed);
+  switch (c.anim) {
+    case 'eat':   { const n = Math.sin(t * 9); p.ky += 0.9 * n; p.kr += 4 * n; p.tc += 8 * s1; break; }
+    case 'groom': { const n = Math.sin(t * 7.5); p.ky += 1.3 * n; p.kr += 6 * n; p.nfy += 0.8 * n; p.tc += 6 * s1; break; }
+    case 'wiggle':{ p.hx += 1.0 * Math.sin(t * 27); p.tc += 22 * Math.sin(t * 13); break; }
+    case 'watch': { p.tc += 26 * Math.sin(t * 9); break; }
+    case 'bat':   { const u = Math.sin(Math.PI * c.batU); p.nfx += 8.5 * u; p.nfy -= 6.5 * u; p.sy += 1.2 * u; p.ky += 1.5 * u; p.kx += 1 * u; break; }
+    case 'sleep': { const b = Math.sin(t * 1.7 + c.seed); p.br *= 1 + 0.04 * b; p.hy -= 0.3 * b; p.sy -= 0.3 * b; break; }
+    case 'loaf':  { const b = Math.sin(t * 1.9 + c.seed); p.br *= 1 + 0.025 * b; p.tc += 10 * s1; break; }
+    case 'sit':   { p.tc += 16 * s1; p.kr += 3 * Math.sin(t * 0.6 + c.seed * 2); break; }
+    case 'stretch': { p.tc += 8 * s1; break; }
+    default: { p.tc += 9 * s1; }
+  }
+  // 눈 깜빡임
+  c.blink -= dt;
+  if (c.blink < 0) c.blink = rnd(2.5, 7);
+  if (c.blink < 0.13 || (c.anim === 'loaf' && Math.sin(t * 0.35 + c.seed) > 0.55)) p.eye = 0;
+  return p;
+}
+
+function drawLeg(leg, paw, jx, jy, fx, fy, bow, lg) {
+  if (lg < 0.06) { leg.setAttribute('d', ''); paw.setAttribute('rx', 0); paw.setAttribute('ry', 0); return; }
+  const ey = fy - 2.2;
+  const cx = (jx + fx) / 2 + bow, cy = (jy + ey) / 2 + Math.abs(bow) * 0.4;
+  leg.setAttribute('d', `M${R1(jx)} ${R1(jy)}Q${R1(cx)} ${R1(cy)} ${R1(fx)} ${R1(ey)}`);
+  leg.setAttribute('stroke-width', R1(4.4 * lg));
+  paw.setAttribute('cx', R1(fx + 1.1)); paw.setAttribute('cy', R1(fy - 1.6));
+  paw.setAttribute('rx', R1(2.9 * lg)); paw.setAttribute('ry', R1(1.6 * lg));
+}
+function drawCat(c, p, t) {
+  // 몸통
+  c.eBody.setAttribute('d', `M${R1(p.hx)} ${R1(p.hy)}L${R1(p.sx)} ${R1(p.sy)}`);
+  c.eBody.setAttribute('stroke-width', R1(p.br * 2));
+  c.eHaunch.setAttribute('cx', R1(p.hx - 0.5)); c.eHaunch.setAttribute('cy', R1(p.hy)); c.eHaunch.setAttribute('r', R1(Math.max(0, p.hr)));
+  // 다리
+  const hjx = p.hx - 0.5, hjy = p.hy + 2, sjx = p.sx + 1.5, sjy = p.sy + 2;
+  drawLeg(c.eLegFH, c.ePawFH, hjx + 2, hjy, p.fhx, p.fhy, -3.0, p.lg);
+  drawLeg(c.eLegFF, c.ePawFF, sjx + 1.5, sjy, p.ffx, p.ffy, 1.0, p.lg);
+  drawLeg(c.eLegNH, c.ePawNH, hjx, hjy, p.nhx, p.nhy, -3.2, p.lg);
+  drawLeg(c.eLegNF, c.ePawNF, sjx, sjy, p.nfx, p.nfy, 1.0, p.lg);
+  // 꼬리
+  const D = a => { const r = a * Math.PI / 180; return [-Math.cos(r), -Math.sin(r)]; };
+  const seg = p.tl / 3, d0 = D(p.ta), d1 = D(p.ta + p.tc * 0.5), d2 = D(p.ta + p.tc);
+  const x1 = p.tx + seg * d0[0], y1 = p.ty + seg * d0[1];
+  const x2 = x1 + seg * d1[0], y2 = y1 + seg * d1[1];
+  const x3 = x2 + seg * d2[0], y3 = Math.min(-1.8, y2 + seg * d2[1]);
+  c.eTail.setAttribute('d', `M${R1(p.hx - 3)} ${R1(p.hy)}L${R1(p.tx)} ${R1(p.ty)}C${R1(x1)} ${R1(Math.min(-1.8, y1))} ${R1(x2)} ${R1(Math.min(-1.8, y2))} ${R1(x3)} ${R1(y3)}`);
+  // 등 줄무늬
+  const bx = p.sx - p.hx, by = p.sy - p.hy, bl = Math.hypot(bx, by) || 1;
+  const ux = bx / bl, uy = by / bl, nx = uy, ny = -ux;
+  [0.2, 0.47, 0.74].forEach((f, i) => {
+    const px = p.hx + bx * f, py = p.hy + by * f;
+    c.eStripes[i].setAttribute('d', `M${R1(px + nx * (p.br - 0.4))} ${R1(py + ny * (p.br - 0.4))}L${R1(px + nx * (p.br - 5.6) - ux * 1.3)} ${R1(py + ny * (p.br - 5.6) - uy * 1.3)}`);
+  });
+  // 목·머리
+  c.eNeck.setAttribute('d', `M${R1(p.sx + 2)} ${R1(p.sy - 1.5)}L${R1(p.kx - 1)} ${R1(p.ky + 2)}`);
+  c.eHead.setAttribute('transform', `translate(${R1(p.kx)} ${R1(p.ky)}) rotate(${R1(p.kr)})`);
+  const open = p.eye > 0.5;
+  c.eEye.setAttribute('visibility', open ? 'visible' : 'hidden');
+  c.eEyeShut.setAttribute('visibility', open ? 'hidden' : 'visible');
+  // z z
+  const asleep = c.anim === 'sleep';
+  c.eZ.forEach((z, k) => {
+    if (!asleep) { if (z._on) { z.setAttribute('opacity', 0); z._on = false; } return; }
+    const u = frac(t / 2.6 + k * 0.45);
+    z.setAttribute('x', R1(c.fc * (p.kx + 3) + 2 + k * 3 + u * 3));
+    z.setAttribute('y', R1(p.ky - 9 - u * 9 - k * 2));
+    z.setAttribute('opacity', R1(u < 0.25 ? u * 4 : (1 - u) / 0.75) * 0.9);
+    z._on = true;
+  });
+}
+function renderCat(c, dt, t) {
+  const p = poseOf(c, dt, t);
+  c.fc += (c.face - c.fc) * (1 - Math.exp(-dt * 20));
+  const gy = c.air ? c.airY : groundY(c.floor, c.perch);
+  // 보이는 곳에 있을 때만 그림
+  const sy = gy + wrapDocTop - window.scrollY;
+  const W = stageW();
+  const on = sy > -90 && sy < window.innerHeight + 160 && c.x > -EDGE - 4 && c.x < W + EDGE + 4;
+  if (on !== c.shown) { c.svg.style.display = on ? '' : 'none'; c.shown = on; }
+  if (!on) return;
+  place(c.svg, PAD + c.x - 48 * CAT_S, gy - 66 * CAT_S);
+  let sx = c.fc; if (Math.abs(sx) < 0.35) sx = sx < 0 ? -0.35 : 0.35;      // 돌아설 때 종잇장처럼 얇아지지 않게
+  c.g.setAttribute('transform', `scale(${Math.round(sx * 100) / 100} 1) rotate(${R1(c.pitch)} 0 -14)`);
+  // 폰에선 화면 밖으로 그냥 걸어 나가고, 넓은 화면(PC)에서만 글 폭 가장자리에서 흐려짐
+  const out = c.x < 0 ? -c.x : c.x > W ? c.x - W : 0;
+  const wide = window.innerWidth - W - PAD * 2 > 16;
+  c.svg.style.opacity = wide && out > 0 ? clamp(1 - (out - 14) / 30, 0, 1) : 1;
+  drawCat(c, p, t);
+}
+
+// ── 동작 ── 고양이마다 "할 일 목록(q)"이 있고, 앞에서부터 하나씩 해.
+const P = (pose, dur, extra) => Object.assign({ k: 'pose', pose, dur }, extra || {});
+const G = (x, gait, extra) => Object.assign({ k: 'go', x, gait: gait || 'walk' }, extra || {});
+const val = v => typeof v === 'function' ? v() : v;
+
+function moveToward(c, tx, gait, dt) {
+  // 앉거나 누워 있었으면 먼저 일어남
+  c.goal = 'stand'; c.anim = 'move'; c.snap = 11;
+  if (Math.abs(c.p.hy - STAND.hy) > 2.2) { c.moving = false; return false; }
+  const g = GAITS[gait], dx = tx - c.x, step = g.speed * CAT_S * dt;
+  if (Math.abs(dx) <= step + 0.3) { c.x = tx; c.moving = false; return true; }
+  const dir = dx > 0 ? 1 : -1;
+  if (dir !== c.face) { c.face = dir; }
+  c.gait = gait; c.moving = true;
+  c.x += dir * step; c.phase += step / CAT_S / g.stride;
+  return false;
+}
+function climbActs(from, to) {     // 타워 판 사이를 한 칸씩 뛰어 오르내림 (-1 = 땅)
+  const acts = []; let cur = from;
+  while (cur !== to) {
+    const nxt = cur < to ? cur + 1 : cur - 1;
+    acts.push(P('crouch', rnd(0.3, 0.55), { anim: 'wiggle', toPerch: nxt }));
+    acts.push({ k: 'jump', perch: nxt, floor: 0 });
+    cur = nxt;
+  }
+  return acts;
+}
+function floorActs(from, fromX, to) {  // 다른 줄로: 가장자리로 걸어 나갔다가 들어옴
+  if (from === to) return [];
+  const left = (from === 0 || to === 0) ? true : fromX < stageW() / 2;   // 0번 줄 오른쪽엔 타워가 있어서 왼쪽으로만
+  return [
+    G(() => left ? -EDGE : stageW() + EDGE, 'trot'),
+    { k: 'call', fn: c => { c.floor = to; } },
+    P('stand', rnd(0.5, 1.6), { hidden: true }),
+  ];
+}
+function planTo(c, floor) {            // 지금 있는 곳에서 floor 줄의 땅까지
+  let acts = [], fl = c.floor, x = c.x;
+  if (c.perch >= 0) { acts = climbActs(c.perch, -1); fl = 0; x = tower.x + TOWER_GX; }
+  return acts.concat(floorActs(fl, x, floor));
+}
+const randX = f => f === 0 ? rnd(78, Math.max(90, tower.x - 16)) : rnd(16, stageW() - 16);
+
+function stepAct(c, a, dt, t) {
+  if (!a.on) {
+    a.on = true; a.el = 0;
+    if (a.k === 'pose') {
+      if (a.toPerch !== undefined) { const tx = a.toPerch >= 0 ? tower.x + PERCH[a.toPerch].cx : tower.x + TOWER_GX; if (Math.abs(tx - c.x) > 2) c.face = tx > c.x ? 1 : -1; }
+      if (a.face) c.face = a.face;
+      if (a.pose === 'sit' && c.perch < 0 && !a.face && Math.random() < 0.3) c.face = -c.face;
+    }
+    if (a.k === 'jump') {
+      a.fx = c.x; a.ff = c.floor; a.fp = c.perch;
+      a.tx = a.perch >= 0 ? tower.x + PERCH[a.perch].cx : (a.x !== undefined ? val(a.x) : tower.x + TOWER_GX);
+      const dy = groundY(a.floor, a.perch) - groundY(a.ff, a.fp);
+      a.T = 0.34 + 0.0022 * Math.hypot(a.tx - a.fx, dy);
+      a.h = a.h || (11 + 0.16 * Math.abs(dy));
+      if (Math.abs(a.tx - a.fx) > 2) c.face = a.tx > a.fx ? 1 : -1;
+    }
+    if (a.k === 'yarn') { a.s = 'chase'; a.pounce = Math.random() < 0.45; }
+  }
+  a.el += dt;
+  switch (a.k) {
+    case 'pose':
+      c.moving = false; c.goal = a.pose; c.anim = a.anim || a.pose; c.snap = a.pose === 'crouch' ? 16 : 9;
+      return a.el >= a.dur;
+    case 'go':
+      return moveToward(c, val(a.x), a.gait, dt);
+    case 'call':
+      a.fn(c); return true;
+    case 'jump': {
+      const u = Math.min(1, a.el / a.T);
+      const y0 = groundY(a.ff, a.fp), y1 = groundY(a.floor, a.perch);
+      c.moving = false; c.goal = 'jump'; c.anim = 'jump'; c.snap = 22; c.air = true;
+      c.x = a.fx + (a.tx - a.fx) * u;
+      c.airY = y0 + (y1 - y0) * u - a.h * 4 * u * (1 - u);
+      const vy = (y1 - y0) - a.h * 4 * (1 - 2 * u), vx = Math.abs(a.tx - a.fx) + 26;
+      c.pitch = clamp(Math.atan2(vy, vx) * 180 / Math.PI * 0.75, -38, 38);
+      if (u >= 1) { c.air = false; c.pitch = 0; c.floor = a.floor; c.perch = a.perch; c.x = a.tx; c.goal = 'crouch'; c.snap = 16; return true; }
+      return false;
+    }
+    case 'yarn': {
+      const W = stageW();
+      if (a.sub) {                                         // 덮치는 중
+        if (stepAct(c, a.sub, dt, t)) { a.sub = null; yarn.v = c.face * rnd(140, 220); a.s = 'watch'; a.w = rnd(0.3, 0.6); }
+        return false;
       }
-      return;
+      if (a.el >= a.dur && a.s !== 'bat') { c.moving = false; c.batU = 0; return true; }
+      const dx = yarn.x - c.x, ad = Math.abs(dx), dir = dx >= 0 ? 1 : -1;
+      if (a.s === 'bat') {                                 // 앞발로 톡
+        a.b += dt / 0.26; c.moving = false; c.goal = 'stand'; c.anim = 'bat'; c.batU = Math.min(1, a.b);
+        if (!a.hit && a.b >= 0.5) { a.hit = true; yarn.v = c.face * rnd(80, 200); }
+        if (a.b >= 1) { c.batU = 0; a.s = 'watch'; a.w = rnd(0.25, 0.7); }
+        return false;
+      }
+      if (a.s === 'watch') {                               // 굴러가는 걸 지켜봄
+        c.moving = false; c.goal = 'crouch'; c.anim = 'watch'; c.snap = 14; c.face = dir; a.w -= dt;
+        if (a.w <= 0) { a.s = 'chase'; a.pounce = Math.random() < 0.45; }
+        return false;
+      }
+      if (a.s === 'stalk') {                               // 엉덩이 흔들기 → 덮치기
+        c.moving = false; c.goal = 'crouch'; c.anim = 'wiggle'; c.snap = 14; c.face = dir; a.w -= dt;
+        if (a.w <= 0) { a.sub = { k: 'jump', x: clamp(yarn.x - dir * 9, 12, W - 12), floor: c.floor, perch: -1, h: 13 }; a.s = 'chase'; a.pounce = false; }
+        return false;
+      }
+      if (ad <= 17 && Math.abs(yarn.v) < 45) { c.face = dir; a.s = 'bat'; a.b = 0; a.hit = false; c.moving = false; return false; }
+      if (a.pounce && ad > 36 && ad < 82 && Math.abs(yarn.v) < 8) { a.s = 'stalk'; a.w = rnd(0.6, 1.1); c.moving = false; return false; }
+      moveToward(c, yarn.x - dir * 14, ad > 75 ? 'run' : 'trot', dt);
+      return false;
     }
-    // ── 걷기류: walk / goeat / goyarn / gotower ──
-    if (cat.pauseUntil > t) { setFrame(cat, cat.tailUp ? 'walkU0' : 'walk0'); return; }
-    const dx = cat.target - cat.x;
-    if (Math.abs(dx) < 2) {
-      if (s === 'goeat') { face(cat, -1); setState(cat, cat.sub ? 'drink' : 'eat', 7000 + Math.random() * 9000); }
-      else if (s === 'goyarn') { face(cat, yarn.x > cat.x ? 1 : -1); setState(cat, 'playyarn', 5000 + Math.random() * 7000); }
-      else if (s === 'gotower') { const perch = Math.floor(Math.random() * 3); hop(cat, bowls.floor, perch); setState(cat, 'sit', 10000 + Math.random() * 25000); }
-      else setState(cat, 'sit', 4000 + Math.random() * 14000);
-      return;
+    case 'chase': {
+      const o = a.o, dx = o.x - c.x;
+      if (a.el > a.dur || o.floor !== c.floor || o.perch >= 0 || Math.abs(dx) < 30) { c.moving = false; return true; }
+      moveToward(c, o.x, 'run', dt);
+      return false;
     }
-    face(cat, dx > 0 ? 1 : -1);
-    cat.x += cat.dir * cat.speed;
-    if (cat.t % 90 === 0) cat.tailUp = Math.random() < 0.5;
-    if (s === 'walk' && cat.t % 120 === 0 && Math.random() < 0.35) cat.pauseUntil = t + 900 + Math.random() * 1500; // 걷다가 잠깐 멈춤
-    const fi = (cat.t >> 1) % 4;
-    setFrame(cat, (cat.tailUp ? 'walkU' : 'walk') + fi);
-    placeX(cat);
+  }
+  return true;
+}
+
+// ── 다음에 뭘 할지 고르기 ──
+function idleNow(o) { return o.perch < 0 && !o.air && o.q.length === 1 && o.q[0].k === 'pose' && o.q[0].pose !== 'sleep' && !o.q[0].hidden; }
+function choose(c) {
+  const night = isNight(), W = stageW();
+  const lazy = c.mood === 'lazy', playful = c.mood === 'playful';
+  const o = cats.find(k => k !== c);
+  const push = (...items) => items.forEach(x => Array.isArray(x) ? c.q.push(...x) : c.q.push(x));
+  const nap = () => night ? rnd(120, 400) : rnd(20, 60);
+  const fresh = !night && performance.now() < 90000 ? 0.3 : 1;   // 막 켰을 땐 덜 자고 더 움직임
+
+  // 타워 위에 있을 때
+  if (c.perch >= 0) {
+    const r = Math.random();
+    if (r < (night ? 0.8 : lazy ? 0.3 : 0.12)) push(P('sleep', nap()), P('sit', rnd(2, 4)));
+    else if (r < 0.4) push(P('loaf', rnd(8, 22)));
+    else if (r < 0.5) push(P('groom', rnd(4, 9)), P('sit', rnd(1, 3)));
+    else if (r < 0.6) push(P('sit', rnd(5, 12)));
+    else if (r < 0.72) { const to = (c.perch + 1 + Math.floor(Math.random() * 2)) % 3; push(climbActs(c.perch, to), P('sit', rnd(4, 10))); }
+    else push(climbActs(c.perch, -1), G(() => randX(0), 'walk'), P('sit', rnd(2, 5)));
+    return;
+  }
+
+  // 보고 있는 줄로 슬슬 따라옴
+  const vis = visibleFloors();
+  if (!night && vis.length && !vis.includes(c.floor) && Math.random() < 0.7) {
+    const f = vis[Math.floor(Math.random() * vis.length)];
+    push(planTo(c, f), G(() => randX(f), 'walk'), P('sit', rnd(2, 6)));
+    return;
+  }
+
+  const bowlBusy = cats.some(k => k !== c && k.q[0] && k.q.some(a => a.pose === 'eat'));
+  const canChase = !night && idleNow(o) && o.floor === c.floor;
+  const opts = [
+    ['sleep', night ? 0.6 : (lazy ? 0.2 : playful ? 0.04 : 0.09) * fresh],
+    ['loaf',  night ? 0.14 : 0.09 * fresh],
+    ['sit',   0.11],
+    ['groom', 0.1],
+    ['walk',  night ? 0.06 : 0.2],
+    ['eat',   bowlBusy || night ? 0.02 : 0.1],
+    ['yarn',  night ? 0.01 : playful ? 0.22 : lazy ? 0.07 : 0.15],
+    ['tower', night ? 0.05 : 0.13],
+    ['zoom',  night ? 0 : playful ? 0.1 : lazy ? 0.02 : 0.05],
+    ['chase', !canChase ? 0 : playful ? 0.25 : lazy ? 0.06 : 0.12],
+  ];
+  const total = opts.reduce((s, [, v]) => s + v, 0);
+  let r = Math.random() * total, pickd = 'sit';
+  for (const [k, v] of opts) { if (r < v) { pickd = k; break; } r -= v; }
+
+  if (pickd === 'sleep') push(P('sleep', nap()), P('stretch', 1.7), P('sit', rnd(1.5, 4)));
+  else if (pickd === 'loaf') push(P('loaf', rnd(8, 22)));
+  else if (pickd === 'sit') push(P('sit', rnd(4, 11)));
+  else if (pickd === 'groom') push(P('sit', 0.7), P('groom', rnd(4, 9)), P('sit', rnd(1, 3)));
+  else if (pickd === 'walk') {
+    let f = c.floor;
+    if (floors.length > 1 && Math.random() < 0.3) {
+      const pool = vis.length && Math.random() < 0.75 ? vis : floors.map((_, i) => i);
+      f = pool[Math.floor(Math.random() * pool.length)];
+    }
+    push(planTo(c, f), G(() => randX(f), 'walk'), P(Math.random() < 0.5 ? 'sit' : 'stand', rnd(1.5, 5)));
+  }
+  else if (pickd === 'eat') {
+    const water = Math.random() < 0.4;
+    push(planTo(c, 0), G((water ? BOWL_WATER_X : BOWL_FOOD_X) + 22, 'trot'), P('stand', 0.25, { face: -1 }),
+         P('eat', rnd(6, 12), { face: -1 }), P('stand', 0.6), G(() => randX(0), 'walk'), P('sit', 1), P('groom', rnd(2.5, 5)), P('sit', rnd(1, 3)));
+  }
+  else if (pickd === 'yarn') {
+    push(planTo(c, yarn.floor), { k: 'yarn', dur: rnd(9, 18) }, P('sit', rnd(2, 5)));
+    // 옆에서 쉬던 녀석도 가끔 끼어듦
+    if (idleNow(o) && Math.random() < (o.mood === 'playful' ? 0.6 : o.mood === 'lazy' ? 0.15 : 0.35))
+      o.q = [P('stand', rnd(0.8, 2.5))].concat(planTo(o, yarn.floor), [{ k: 'yarn', dur: rnd(7, 14) }, P('sit', rnd(2, 5))]);
+  }
+  else if (pickd === 'tower') {
+    const to = Math.floor(Math.random() * 3);
+    const rest = Math.random();
+    push(planTo(c, 0), G(() => tower.x + TOWER_GX, 'trot'), climbActs(-1, to),
+         rest < 0.35 ? P('loaf', rnd(12, 30)) : rest < 0.55 ? P('sleep', nap()) : P('sit', rnd(8, 22)));
+  }
+  else if (pickd === 'zoom') {
+    const lo = 16, hi = c.floor === 0 ? tower.x - 14 : W - 16;
+    const first = c.x < (lo + hi) / 2 ? hi : lo, n = 2 + Math.floor(Math.random() * 3);
+    for (let i = 0; i < n; i++) push(G(i % 2 ? (first === hi ? lo : hi) : first, 'run'));
+    push(P('stand', 0.6), P('sit', rnd(2, 5)));
+  }
+  else if (pickd === 'chase') {
+    const lo = 16, hi = c.floor === 0 ? tower.x - 14 : W - 16;
+    const away = o.x > c.x ? hi : lo;
+    o.q = [P('crouch', 0.16, { face: o.x > c.x ? 1 : -1 }), G(away, 'run'), G(away === hi ? Math.max(lo, hi - rnd(60, 140)) : Math.min(hi, lo + rnd(60, 140)), 'trot'), P('sit', rnd(3, 7))];
+    push({ k: 'chase', o, dur: 6 }, P('stand', 0.5), P('sit', rnd(2, 5)));
+  }
+}
+
+// ── 한 순간 ──
+function stepYarn(dt) {
+  const W = stageW();
+  if (yarn.v) {
+    yarn.x += yarn.v * dt;
+    yarn.rot += yarn.v * dt / 6.5 * 180 / Math.PI;
+    yarn.v *= Math.exp(-1.5 * dt);
+    if (yarn.x < 9) { yarn.x = 9; yarn.v = Math.abs(yarn.v) * 0.6; }
+    if (yarn.x > W - 9) { yarn.x = W - 9; yarn.v = -Math.abs(yarn.v) * 0.6; }
+    if (Math.abs(yarn.v) < 4) yarn.v = 0;
+  }
+  yarn.lag += (yarn.x - yarn.lag) * (1 - Math.exp(-dt * 3));
+  const d = clamp(yarn.lag - yarn.x, -24, 24) || -12;
+  place(yarn.el, PAD + yarn.x - 10, groundY(yarn.floor, -1) - 16.5);
+  yarn.ball.setAttribute('transform', `rotate(${R1(yarn.rot)})`);
+  yarn.thread.setAttribute('d', `M0 5.5 Q${R1(d * 0.4)} ${d > 0 ? 3 : 3} ${R1(d * 0.7)} 5.6 T${R1(d)} 5.8`);
+}
+let catClock = 0;
+function frameCats(ts) {
+  requestAnimationFrame(frameCats);
+  if (ts - catClock < 30) return;                       // 1초에 서른 번쯤
+  const dt = Math.min(0.06, (ts - catClock) / 1000); catClock = ts;
+  const t = ts / 1000;
+  if (!floors.length) return;
+  stepYarn(dt);
+  if (tower.toy) tower.toy.setAttribute('transform', `rotate(${R1(Math.sin(t * 1.4) * 5)} 24 -96.5)`);
+  cats.forEach(c => {
+    if (!c.q.length) choose(c);
+    if (c.q.length && stepAct(c, c.q[0], dt, t)) c.q.shift();
+    renderCat(c, dt, t);
   });
 }
 
@@ -1178,48 +1366,57 @@ function initCats() {
   const stage = document.getElementById('stage');
   const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-  // 소품
-  tower.el = buildSprite(TOWER, 'prop tower'); stage.appendChild(tower.el);
-  bowls.food = buildSprite(BOWL_FOOD, 'prop'); stage.appendChild(bowls.food);
-  bowls.water = buildSprite(BOWL_WATER, 'prop'); stage.appendChild(bowls.water);
-  yarn.el = buildSprite(YARN, 'prop yarn'); stage.appendChild(yarn.el);
-
-  cats.push(makeCat(0, {}));
-  cats.push(makeCat(1, CHEESE));
+  tower.el = buildTower(stage);
+  cats.push(makeCat(0));
+  cats.push(makeCat(1));
+  bowls.food = buildBowl(stage, false);     // 그릇·실뭉치는 고양이 앞에 그려야 밥에 입을 대는 것처럼 보여
+  bowls.water = buildBowl(stage, true);
+  yarn.el = buildYarn(stage);
   measureFloors();
-
-  // 실뭉치는 그날 정해진 줄에
-  yarn.floor = Math.floor(YARN_FLOOR_PICK * floors.length);
-  yarn.x = 30 + Math.random() * (stageW() - 120);
-  measureFloors();
-
-  // 첫 장면 — 멈춰 보이지 않게. 밤이면 둘 다 자고(숨 쉬는 게 보여), 낮이면 하나는 반드시 움직이는 중.
   const W = stageW();
-  cats.forEach((c, i) => {
-    c.floor = Math.floor(Math.random() * floors.length);
-    c.x = 20 + Math.random() * (W - 70);
-    face(c, Math.random() < 0.5 ? 1 : -1);
-    setFrame(c, 'sitA'); placeX(c); placeY(c);
-  });
-  if (isNight()) {
-    cats.forEach(c => setState(c, 'sleep', 120000 + Math.random() * 300000));
-    if (Math.random() < 0.3) { hop(cats[1], bowls.floor, 0); }
+  yarn.floor = Math.min(1, floors.length - 1);
+  yarn.x = yarn.lag = rnd(60, W - 60);
+
+  // 첫 장면 — 켜자마자 보이는 줄에서 뭔가 하고 있게.
+  const top = visibleFloors(); if (!top.length) top.push(0);
+  const anyTop = () => top[Math.floor(Math.random() * top.length)];
+  const settle = (c, pose) => { Object.assign(c.p, POSES[pose]); c.goal = pose; c.anim = pose; };
+  if (isNight() || reduced) {
+    cats.forEach((c, i) => {
+      c.floor = anyTop(); c.x = randX(c.floor); c.face = Math.random() < 0.5 ? 1 : -1; c.fc = c.face;
+      if (i === 1 && Math.random() < 0.4) { c.floor = 0; c.perch = 2; c.x = tower.x + PERCH[2].cx; }
+      settle(c, 'sleep'); c.q = [P('sleep', reduced ? 1e9 : rnd(120, 400)), P('sit', 3)];
+    });
   } else {
-    const mover = cats[Math.floor(Math.random() * 2)];
-    const other = cats.find(c => c !== mover);
+    const mover = cats[Math.floor(Math.random() * 2)], other = cats.find(c => c !== mover);
     const r = Math.random();
-    if (r < 0.4) { mover.target = 4 + Math.random() * (W - 48); mover.speed = 1.2; setState(mover, 'walk', 30000); }
-    else if (r < 0.7) { hop(mover, yarn.floor, -1); mover.target = yarn.x - 34; mover.speed = 1.6; setState(mover, 'goyarn', 30000); }
-    else { hop(mover, bowls.floor, -1); mover.target = bowls.x + 18; mover.sub = 0; mover.speed = 1.3; setState(mover, 'goeat', 30000); }
+    if (r < 0.35) {            // 걸어 들어오는 중
+      mover.floor = anyTop(); mover.x = -EDGE; mover.face = mover.fc = 1;
+      const f = mover.floor; mover.q = [G(() => randX(f), 'walk'), P('sit', rnd(3, 8))];
+    } else if (r < 0.7) {      // 실뭉치
+      mover.floor = yarn.floor; mover.x = clamp(yarn.x + (Math.random() < 0.5 ? -90 : 90), 16, W - 16);
+      mover.q = [{ k: 'yarn', dur: rnd(10, 18) }, P('sit', rnd(2, 5))];
+    } else {                   // 밥
+      mover.floor = 0; mover.x = rnd(110, Math.max(120, tower.x - 30)); mover.face = mover.fc = -1;
+      mover.q = [G(BOWL_FOOD_X + 22, 'trot'), P('eat', rnd(7, 12), { face: -1 }), P('stand', 0.6), G(() => randX(0), 'walk'), P('sit', 1), P('groom', 4), P('sit', 2)];
+    }
     const r2 = Math.random();
-    if (r2 < 0.35) { hop(other, bowls.floor, Math.floor(Math.random() * 3)); setState(other, 'sit', 15000 + Math.random() * 20000); }
-    else if (r2 < 0.6) setState(other, 'groom', 6000 + Math.random() * 6000);
-    else if (r2 < 0.8) setState(other, 'sleep', 40000 + Math.random() * 60000);
-    else { other.target = 4 + Math.random() * (W - 48); other.speed = 1.1; setState(other, 'walk', 30000); }
+    if (r2 < 0.4) {            // 타워 위
+      other.floor = 0; other.perch = Math.floor(Math.random() * 3); other.x = tower.x + PERCH[other.perch].cx;
+      other.face = other.fc = other.perch === 1 ? -1 : 1;
+      const pz = Math.random() < 0.5 ? 'loaf' : 'sit'; settle(other, pz); other.q = [P(pz, rnd(12, 30))];
+    } else {
+      other.floor = anyTop(); other.x = randX(other.floor); other.face = other.fc = Math.random() < 0.5 ? 1 : -1;
+      const pz = r2 < 0.6 ? 'groom' : r2 < 0.8 ? 'sleep' : 'loaf';
+      settle(other, pz === 'groom' ? 'sit' : pz);
+      other.q = pz === 'sleep' ? [P('sleep', rnd(40, 100)), P('stretch', 1.7), P('sit', 3)] : pz === 'groom' ? [P('groom', rnd(6, 12)), P('sit', 3)] : [P('loaf', rnd(12, 30))];
+    }
   }
 
-  if (!reduced) setInterval(tickCats, 95);
-  else cats.forEach(c => { setState(c, 'sleep', 1e9); setFrame(c, 'sleep'); });
+  // 첫 그림은 바로 그려 둠 (움직임 줄이기 설정이면 이 그림 그대로 둠)
+  stepYarn(0);
+  cats.forEach(c => { stepAct(c, c.q[0], 0, 0); renderCat(c, 0.05, 0); });
+  if (!reduced) requestAnimationFrame(ts => { catClock = ts; requestAnimationFrame(frameCats); });
   window.addEventListener('resize', measureFloors);
   if (document.fonts && document.fonts.ready) document.fonts.ready.then(measureFloors);
   if (window.ResizeObserver) new ResizeObserver(measureFloors).observe(document.querySelector('.wrapper'));
