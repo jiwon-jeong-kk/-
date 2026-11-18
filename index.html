@@ -844,7 +844,7 @@ const POSES = {
   sleep: { hx: -8, hy: -7.6, sx: 6.5, sy: -7.6, br: 7.6, hr: 0, kx: 12.5, ky: -6.4, kr: 26,
            nhx: -9, nhy: 0, fhx: -7, fhy: 0, nfx: 8, nfy: 0, ffx: 9, ffy: 0, lg: 0,
            tx: -14.5, ty: -1.9, ta: 0, tc: 95, tl: 12, eye: 0 },
-  eat: Object.assign({}, STAND, { sy: -14, kx: 17.5, ky: -7.2, kr: 38, ta: 15, tc: 25 }),
+  eat: Object.assign({}, STAND, { sy: -14.5, kx: 16.4, ky: -12.6, kr: 38, ta: 15, tc: 25 }),   // 코끝이 그릇 안 사료 높이(-6쯤)에 닿음
   stretch: Object.assign({}, STAND, { hy: -18.5, sx: 9, sy: -7.6, kx: 17, ky: -9, kr: -12, nfx: 19, ffx: 21.5, ta: 75, tc: 30 }),
   crouch: Object.assign({}, STAND, { hx: -11, hy: -10.6, sx: 9, sy: -9.8, kx: 16.5, ky: -13.5, kr: 4,
                                     nhx: -12, fhx: -9.5, nfx: 11, ffx: 13.5, tx: -17, ty: -12.5, ta: 2, tc: 16 }),
@@ -991,7 +991,7 @@ function makeCat(i) {
     x: 40, floor: 0, perch: -1, face: 1, fc: 1, pitch: 0, air: false, airY: 0,
     p: Object.assign({}, STAND), goal: 'stand', anim: '', snap: 9,
     moving: false, mv: 0, gait: 'walk', phase: Math.random(), batU: 0,
-    q: [], mood: CAT_MOOD[i], seed: i * 2.4 + 0.7, blink: rnd(2, 6), shown: true,
+    q: [], mood: CAT_MOOD[i], seed: i * 2.4 + 0.7, blink: rnd(2, 6), shown: true, sinceTurn: 9,
   });
   return c;
 }
@@ -999,6 +999,7 @@ function makeCat(i) {
 // ── 이번 순간의 자세 계산 ──
 function poseOf(c, dt, t) {
   const goal = POSES[c.goal] || STAND;
+  c.sinceTurn += dt;
   const k = 1 - Math.exp(-dt * c.snap);
   const cp = c.p;
   for (const key of PK) cp[key] += (goal[key] - cp[key]) * k;
@@ -1029,7 +1030,7 @@ function poseOf(c, dt, t) {
   // 자세별 잔움직임
   const s1 = Math.sin(t * 1.3 + c.seed);
   switch (c.anim) {
-    case 'eat':   { const n = Math.sin(t * 9); p.ky += 0.9 * n; p.kr += 4 * n; p.tc += 8 * s1; break; }
+    case 'eat':   { const n = Math.sin(t * 9); p.ky += 0.7 * n; p.kr += 3 * n; p.tc += 8 * s1; break; }
     case 'groom': { const n = Math.sin(t * 7.5); p.ky += 1.3 * n; p.kr += 6 * n; p.nfy += 0.8 * n; p.tc += 6 * s1; break; }
     case 'wiggle':{ p.hx += 1.0 * Math.sin(t * 27); p.tc += 22 * Math.sin(t * 13); break; }
     case 'watch': { p.tc += 26 * Math.sin(t * 9); break; }
@@ -1100,7 +1101,7 @@ function drawCat(c, p, t) {
 }
 function renderCat(c, dt, t) {
   const p = poseOf(c, dt, t);
-  c.fc += (c.face - c.fc) * (1 - Math.exp(-dt * 20));
+  c.fc = c.face;
   const gy = c.air ? c.airY : groundY(c.floor, c.perch);
   // 보이는 곳에 있을 때만 그림
   const sy = gy + wrapDocTop - window.scrollY;
@@ -1109,8 +1110,7 @@ function renderCat(c, dt, t) {
   if (on !== c.shown) { c.svg.style.display = on ? '' : 'none'; c.shown = on; }
   if (!on) return;
   place(c.svg, PAD + c.x - 48 * CAT_S, gy - 66 * CAT_S);
-  let sx = c.fc; if (Math.abs(sx) < 0.35) sx = sx < 0 ? -0.35 : 0.35;      // 돌아설 때 종잇장처럼 얇아지지 않게
-  c.g.setAttribute('transform', `scale(${Math.round(sx * 100) / 100} 1) rotate(${R1(c.pitch)} 0 -14)`);
+  c.g.setAttribute('transform', `scale(${c.face} 1) rotate(${R1(c.pitch)} 0 -14)`);
   // 폰에선 화면 밖으로 그냥 걸어 나가고, 넓은 화면(PC)에서만 글 폭 가장자리에서 흐려짐
   const out = c.x < 0 ? -c.x : c.x > W ? c.x - W : 0;
   const wide = window.innerWidth - W - PAD * 2 > 16;
@@ -1119,6 +1119,13 @@ function renderCat(c, dt, t) {
 }
 
 // ── 동작 ── 고양이마다 "할 일 목록(q)"이 있고, 앞에서부터 하나씩 해.
+// 돌아서기 — 한 번 돌면 0.5초 동안은 다시 돌지 않아 (제자리에서 좌우로 떨리는 것 방지)
+function turn(c, dir, force) {
+  if (dir === c.face) return true;
+  if (!force && c.sinceTurn < 0.5) return false;
+  c.face = dir; c.sinceTurn = 0;
+  return true;
+}
 const P = (pose, dur, extra) => Object.assign({ k: 'pose', pose, dur }, extra || {});
 const G = (x, gait, extra) => Object.assign({ k: 'go', x, gait: gait || 'walk' }, extra || {});
 const val = v => typeof v === 'function' ? v() : v;
@@ -1130,7 +1137,7 @@ function moveToward(c, tx, gait, dt) {
   const g = GAITS[gait], dx = tx - c.x, step = g.speed * CAT_S * dt;
   if (Math.abs(dx) <= step + 0.3) { c.x = tx; c.moving = false; return true; }
   const dir = dx > 0 ? 1 : -1;
-  if (dir !== c.face) { c.face = dir; }
+  if (!turn(c, dir)) { c.moving = false; return false; }      // 방금 돌았으면 잠깐 서 있다가 돎
   c.gait = gait; c.moving = true;
   c.x += dir * step; c.phase += step / CAT_S / g.stride;
   return false;
@@ -1139,7 +1146,7 @@ function climbActs(from, to) {     // 타워 판 사이를 한 칸씩 뛰어 오
   const acts = []; let cur = from;
   while (cur !== to) {
     const nxt = cur < to ? cur + 1 : cur - 1;
-    acts.push(P('crouch', rnd(0.3, 0.55), { anim: 'wiggle', toPerch: nxt }));
+    acts.push(P('crouch', rnd(0.45, 0.8), { anim: 'wiggle', toPerch: nxt }));
     acts.push({ k: 'jump', perch: nxt, floor: 0 });
     cur = nxt;
   }
@@ -1165,17 +1172,18 @@ function stepAct(c, a, dt, t) {
   if (!a.on) {
     a.on = true; a.el = 0;
     if (a.k === 'pose') {
-      if (a.toPerch !== undefined) { const tx = a.toPerch >= 0 ? tower.x + PERCH[a.toPerch].cx : tower.x + TOWER_GX; if (Math.abs(tx - c.x) > 2) c.face = tx > c.x ? 1 : -1; }
-      if (a.face) c.face = a.face;
-      if (a.pose === 'sit' && c.perch < 0 && !a.face && Math.random() < 0.3) c.face = -c.face;
+      if (a.toPerch !== undefined) { const tx = a.toPerch >= 0 ? tower.x + PERCH[a.toPerch].cx : tower.x + TOWER_GX; if (Math.abs(tx - c.x) > 2) turn(c, tx > c.x ? 1 : -1, true); }
+      if (a.face) turn(c, a.face, true);
+      if (a.pose === 'sit' && c.perch < 0 && !a.face && Math.random() < 0.3) turn(c, -c.face);
     }
+    if (a.k === 'go') a.tx = val(a.x);          // 갈 곳은 출발할 때 한 번만 정함 (매 순간 다시 정하면 좌우로 떨림)
     if (a.k === 'jump') {
       a.fx = c.x; a.ff = c.floor; a.fp = c.perch;
       a.tx = a.perch >= 0 ? tower.x + PERCH[a.perch].cx : (a.x !== undefined ? val(a.x) : tower.x + TOWER_GX);
       const dy = groundY(a.floor, a.perch) - groundY(a.ff, a.fp);
       a.T = 0.34 + 0.0022 * Math.hypot(a.tx - a.fx, dy);
       a.h = a.h || (11 + 0.16 * Math.abs(dy));
-      if (Math.abs(a.tx - a.fx) > 2) c.face = a.tx > a.fx ? 1 : -1;
+      if (Math.abs(a.tx - a.fx) > 2) turn(c, a.tx > a.fx ? 1 : -1, true);
     }
     if (a.k === 'yarn') { a.s = 'chase'; a.pounce = Math.random() < 0.45; }
   }
@@ -1185,7 +1193,7 @@ function stepAct(c, a, dt, t) {
       c.moving = false; c.goal = a.pose; c.anim = a.anim || a.pose; c.snap = a.pose === 'crouch' ? 16 : 9;
       return a.el >= a.dur;
     case 'go':
-      return moveToward(c, val(a.x), a.gait, dt);
+      return moveToward(c, a.tx, a.gait, dt);
     case 'call':
       a.fn(c); return true;
     case 'jump': {
@@ -1208,22 +1216,28 @@ function stepAct(c, a, dt, t) {
       if (a.el >= a.dur && a.s !== 'bat') { c.moving = false; c.batU = 0; return true; }
       const dx = yarn.x - c.x, ad = Math.abs(dx), dir = dx >= 0 ? 1 : -1;
       if (a.s === 'bat') {                                 // 앞발로 톡
-        a.b += dt / 0.26; c.moving = false; c.goal = 'stand'; c.anim = 'bat'; c.batU = Math.min(1, a.b);
+        a.b += dt / 0.26; c.moving = false; c.goal = 'stand'; c.anim = 'bat'; c.snap = 11; c.batU = Math.min(1, a.b);
         if (!a.hit && a.b >= 0.5) { a.hit = true; yarn.v = c.face * rnd(80, 200); }
         if (a.b >= 1) { c.batU = 0; a.s = 'watch'; a.w = rnd(0.25, 0.7); }
         return false;
       }
       if (a.s === 'watch') {                               // 굴러가는 걸 지켜봄
-        c.moving = false; c.goal = 'crouch'; c.anim = 'watch'; c.snap = 14; c.face = dir; a.w -= dt;
+        c.moving = false; c.goal = 'crouch'; c.anim = 'watch'; c.snap = 14; if (ad > 10) turn(c, dir); a.w -= dt;
         if (a.w <= 0) { a.s = 'chase'; a.pounce = Math.random() < 0.45; }
         return false;
       }
       if (a.s === 'stalk') {                               // 엉덩이 흔들기 → 덮치기
-        c.moving = false; c.goal = 'crouch'; c.anim = 'wiggle'; c.snap = 14; c.face = dir; a.w -= dt;
-        if (a.w <= 0) { a.sub = { k: 'jump', x: clamp(yarn.x - dir * 9, 12, W - 12), floor: c.floor, perch: -1, h: 13 }; a.s = 'chase'; a.pounce = false; }
+        c.moving = false; c.goal = 'crouch'; c.anim = 'wiggle'; c.snap = 14; if (ad > 10) turn(c, dir); a.w -= dt;
+        if (a.w <= 0) { a.sub = { k: 'jump', x: clamp(yarn.x - c.face * 9, 12, W - 12), floor: c.floor, perch: -1, h: 13 }; a.s = 'chase'; a.pounce = false; }
         return false;
       }
-      if (ad <= 17 && Math.abs(yarn.v) < 45) { c.face = dir; a.s = 'bat'; a.b = 0; a.hit = false; c.moving = false; return false; }
+      if (ad <= 17) {                                      // 발 닿는 거리 — 뒷걸음질하지 않고 그 자리에서
+        c.moving = false;
+        if (ad > 5 && !turn(c, dir)) return false;         // 공이 등 뒤에 있으면 돌아설 때까지 기다림
+        if (Math.abs(yarn.v) < 45) { a.s = 'bat'; a.b = 0; a.hit = false; }
+        else { c.goal = 'crouch'; c.anim = 'watch'; c.snap = 14; }
+        return false;
+      }
       if (a.pounce && ad > 36 && ad < 82 && Math.abs(yarn.v) < 8) { a.s = 'stalk'; a.w = rnd(0.6, 1.1); c.moving = false; return false; }
       moveToward(c, yarn.x - dir * 14, ad > 75 ? 'run' : 'trot', dt);
       return false;
@@ -1317,8 +1331,13 @@ function choose(c) {
   }
   else if (pickd === 'zoom') {
     const lo = 16, hi = c.floor === 0 ? tower.x - 14 : W - 16;
-    const first = c.x < (lo + hi) / 2 ? hi : lo, n = 2 + Math.floor(Math.random() * 3);
-    for (let i = 0; i < n; i++) push(G(i % 2 ? (first === hi ? lo : hi) : first, 'run'));
+    let right = c.x < (lo + hi) / 2;
+    const n = 2 + Math.floor(Math.random() * 2);
+    for (let i = 0; i < n; i++) {
+      push(G(right ? rnd(Math.max(lo, hi - 70), hi) : rnd(lo, Math.min(hi, lo + 70)), 'run'));
+      if (i < n - 1) push(P('crouch', rnd(0.6, 1.3), { anim: 'wiggle' }));
+      right = !right;
+    }
     push(P('stand', 0.6), P('sit', rnd(2, 5)));
   }
   else if (pickd === 'chase') {
